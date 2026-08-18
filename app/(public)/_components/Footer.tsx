@@ -53,7 +53,7 @@ export default function Footer() {
 
           <p className="text-xs font-bold tracking-widest uppercase mb-4"
              style={{ color: 'rgba(255,255,255,0.2)' }}>
-            Empowering <span style={{ color: '#C9A84C' }}>Tomorrow's Leaders</span>
+            Empowering <span style={{ color: '#8B0000' }}>Tomorrow's Leaders</span>
           </p>
 
           {/* Social placeholder */}

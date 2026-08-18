@@ -33,7 +33,7 @@ export default function AboutPage() {
       <section style={{ background: '#0A0A0F', paddingTop: '92px', paddingBottom: '80px' }}>
         <div className="max-w-7xl mx-auto px-5 sm:px-10">
           <p className="text-[10px] font-black tracking-[0.25em] uppercase mb-5"
-             style={{ color: '#C9A84C' }}>
+             style={{ color: '#8B0000' }}>
             About KL SAC
           </p>
           <h1
@@ -87,7 +87,7 @@ export default function AboutPage() {
                     <div key={s.label}>
                       <div
                         className="font-black leading-none mb-1"
-                        style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', color: s.gold ? '#C9A84C' : '#2A2A30', letterSpacing: '-0.03em' }}>
+                        style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', color: s.gold ? '#8B0000' : '#2A2A30', letterSpacing: '-0.03em' }}>
                         {s.value}
                       </div>
                       <div className="text-sm" style={{ color: 'rgba(255,255,255,0.38)' }}>{s.label}</div>
@@ -231,8 +231,8 @@ export default function AboutPage() {
 
               <div className="p-8 rounded-2xl" style={{ background: '#0A0A0F', border: '2px solid #1A1A24' }}>
                 <div className="flex items-center gap-2 mb-5">
-                  <div className="w-2 h-2 rounded-full" style={{ background: '#C9A84C' }} />
-                  <span className="text-xs font-black tracking-widest uppercase" style={{ color: '#C9A84C' }}>
+                  <div className="w-2 h-2 rounded-full" style={{ background: '#8B0000' }} />
+                  <span className="text-xs font-black tracking-widest uppercase" style={{ color: '#8B0000' }}>
                     Student Dashboard (ERP)
                   </span>
                 </div>
@@ -246,7 +246,7 @@ export default function AboutPage() {
                     'Manage your student profile',
                   ].map(item => (
                     <li key={item} className="flex items-start gap-2">
-                      <span style={{ color: '#C9A84C', flexShrink: 0 }}>·</span>
+                      <span style={{ color: '#8B0000', flexShrink: 0 }}>·</span>
                       {item}
                     </li>
                   ))}
@@ -256,7 +256,7 @@ export default function AboutPage() {
                   target="_blank"
                   rel="noopener"
                   className="inline-flex items-center gap-2 text-xs font-bold transition-opacity hover:opacity-75"
-                  style={{ color: '#C9A84C' }}>
+                  style={{ color: '#8B0000' }}>
                   Go to Student Dashboard
                   <ArrowUpRight size={12} />
                 </Link>
@@ -281,7 +281,7 @@ export default function AboutPage() {
             <Link
               href="/contact"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-bold transition-all hover:scale-[1.03]"
-              style={{ background: '#C9A84C', color: '#0D0D0D' }}>
+              style={{ background: '#8B0000', color: '#ffffff' }}>
               Contact SAC
               <ArrowRight size={14} />
             </Link>

@@ -59,7 +59,7 @@ export default function CollaboratePage() {
       {/* ─── Hero ─────────────────────────────────────────────────────── */}
       <section style={{ background: '#0A0A0F', paddingTop: '92px', paddingBottom: '72px' }}>
         <div className="max-w-7xl mx-auto px-5 sm:px-10">
-          <p className="text-[10px] font-black tracking-[0.25em] uppercase mb-5" style={{ color: '#C9A84C' }}>
+          <p className="text-[10px] font-black tracking-[0.25em] uppercase mb-5" style={{ color: '#8B0000' }}>
             Collaborate
           </p>
           <h1
@@ -73,7 +73,7 @@ export default function CollaboratePage() {
           <Link
             href="/contact"
             className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full font-bold text-base transition-all hover:scale-[1.03]"
-            style={{ background: '#C9A84C', color: '#0A0A0F' }}>
+            style={{ background: '#8B0000', color: '#ffffff' }}>
             Get in Touch
             <ArrowUpRight size={16} />
           </Link>

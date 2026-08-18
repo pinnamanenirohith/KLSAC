@@ -5,7 +5,7 @@ import { STUDENT_STORIES, STORY_SLUGS } from '@/lib/content/site-content';
 import { FadeIn } from '../../_components/FadeIn';
 
 const DOMAIN_COLORS: Record<string, string> = {
-  TEC: '#3B82F6', LCH: '#A855F7', HWB: '#22C55E', ESO: '#F59E0B', IIE: '#C9A84C',
+  TEC: '#8B0000', LCH: '#B91C1C', HWB: '#7C0000', ESO: '#991B1B', IIE: '#C53030',
 };
 
 export function generateStaticParams() {

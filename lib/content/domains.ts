@@ -29,9 +29,9 @@ export const DOMAINS: Domain[] = [
       'The Technology Domain exists at the intersection of curiosity and creation. At KL SAC, we believe technology is not just a career path — it is a way of thinking. Our five clubs build a community where students learn to code with precision, secure digital ecosystems, craft web products, engineer sustainable mobility, and design automated systems that transform industries. Every workshop, every hackathon, every late-night build session is an opportunity to move from knowing to doing.',
     description:
       'Five clubs driving technological excellence through competitive programming, cybersecurity, web development, electric mobility, and industrial automation.',
-    color: '#3B82F6',
-    accentBg: 'rgba(59,130,246,0.08)',
-    textColor: '#1D4ED8',
+    color: '#8B0000',
+    accentBg: 'rgba(139,0,0,0.07)',
+    textColor: '#7A0000',
     competencies: [
       'Competitive Programming',
       'Cybersecurity & Ethical Hacking',
@@ -60,9 +60,9 @@ export const DOMAINS: Domain[] = [
       'The Liberal Arts, Cultural & Hobby domain is SAC\'s largest — and perhaps most visible — domain. It is the space where student creativity finds its fullest expression: in music, dance, drama, film, photography, fashion, adventure, and competitive gaming. These eleven clubs share a conviction that creative excellence is not a diversion from education — it is essential to it. A student who performs on stage develops confidence that no classroom can teach. A photographer who frames a moment learns to see the world with new clarity.',
     description:
       'Eleven clubs celebrating creative expression across music, dance, drama, film, photography, fashion, gaming, adventure, and the performing arts.',
-    color: '#A855F7',
-    accentBg: 'rgba(168,85,247,0.08)',
-    textColor: '#7E22CE',
+    color: '#B91C1C',
+    accentBg: 'rgba(185,28,28,0.07)',
+    textColor: '#991515',
     competencies: [
       'Musical Performance & Composition',
       'Dance & Movement Arts',
@@ -100,9 +100,9 @@ export const DOMAINS: Domain[] = [
       'A student who is physically active, mentally balanced, and emotionally resilient performs better in every dimension of life. The Health & Wellbeing domain at KL SAC exists because we believe wellness is not a luxury — it is a foundation. Our three clubs address the full spectrum of student wellness: SafeLife equips students with life-saving skills, Yoga Club creates daily practices of physical and mental balance, and Marathon Club builds the endurance and community that come from a shared commitment to movement.',
     description:
       'Three clubs committed to student wellness through first aid education, yoga and mindfulness, and campus running and fitness communities.',
-    color: '#22C55E',
-    accentBg: 'rgba(34,197,94,0.08)',
-    textColor: '#15803D',
+    color: '#7C0000',
+    accentBg: 'rgba(124,0,0,0.07)',
+    textColor: '#6B0000',
     competencies: [
       'First Aid & Emergency Response',
       'Yoga Practice & Mindfulness',
@@ -125,9 +125,9 @@ export const DOMAINS: Domain[] = [
       'KL University\'s purpose extends beyond the academic programme — and so does SAC\'s. The Extension & Social Outreach domain exists to remind students that a university education is a privilege that comes with the responsibility to serve. Our four clubs connect students with communities, heritage, governance, and values: Yuva Tourism Club explores India\'s cultural wealth, SVR Club engages in direct community service, KL Youth Policy Club prepares students for civic leadership, and Spiritual Sciences Club nurtures the values that underpin all leadership.',
     description:
       'Four clubs connecting students with cultural heritage, community service, civic leadership, and values-based personal development.',
-    color: '#F59E0B',
-    accentBg: 'rgba(245,158,11,0.08)',
-    textColor: '#B45309',
+    color: '#991B1B',
+    accentBg: 'rgba(153,27,27,0.07)',
+    textColor: '#881818',
     competencies: [
       'Community Development',
       'Cultural Heritage Awareness',
@@ -155,9 +155,9 @@ export const DOMAINS: Domain[] = [
       'Ideas are only the beginning. The Innovation, Incubation & Entrepreneurship domain at KL SAC exists to support students who want to take their ideas beyond the classroom — and into the world. ACIC and TBI provide the structured ecosystem that student entrepreneurs need: mentorship from industry professionals, access to incubation infrastructure, guidance on funding and market strategy, and a community of fellow builders. This domain embodies KL SAC\'s highest aspiration: that the students who pass through these clubs don\'t just graduate — they create.',
     description:
       'Two incubation centres supporting student entrepreneurs through mentorship, prototyping, industry connections, and structured venture-building programmes.',
-    color: '#C9A84C',
-    accentBg: 'rgba(201,168,76,0.08)',
-    textColor: '#92400E',
+    color: '#C53030',
+    accentBg: 'rgba(197,48,48,0.07)',
+    textColor: '#B02A2A',
     competencies: [
       'Startup Strategy & Planning',
       'Product Development & Prototyping',

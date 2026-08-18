@@ -7,14 +7,14 @@ export const metadata = {
 };
 
 const DOMAIN_COLORS: Record<string, string> = {
-  TEC: '#3B82F6', LCH: '#A855F7', HWB: '#22C55E', ESO: '#F59E0B', IIE: '#C9A84C',
+  TEC: '#8B0000', LCH: '#B91C1C', HWB: '#7C0000', ESO: '#991B1B', IIE: '#C53030',
 };
 
 const LEVEL_STYLES: Record<string, { bg: string; color: string }> = {
-  International: { bg: '#FEF3C7', color: '#92400E' },
-  National:      { bg: '#EFF6FF', color: '#1D4ED8' },
-  State:         { bg: '#F0FDF4', color: '#15803D' },
-  University:    { bg: '#F4F4F5', color: '#52525B' },
+  International: { bg: 'rgba(139,0,0,0.08)', color: '#8B0000' },
+  National:      { bg: 'rgba(139,0,0,0.08)', color: '#8B0000' },
+  State:         { bg: 'rgba(124,0,0,0.08)', color: '#7C0000' },
+  University:    { bg: '#F4F4F5',            color: '#52525B' },
 };
 
 export default function AchievementsPage() {
@@ -23,7 +23,7 @@ export default function AchievementsPage() {
       {/* ─── Hero ─────────────────────────────────────────────────────── */}
       <section style={{ background: '#0A0A0F', paddingTop: '92px', paddingBottom: '72px' }}>
         <div className="max-w-7xl mx-auto px-5 sm:px-10">
-          <p className="text-[10px] font-black tracking-[0.25em] uppercase mb-5" style={{ color: '#C9A84C' }}>
+          <p className="text-[10px] font-black tracking-[0.25em] uppercase mb-5" style={{ color: '#8B0000' }}>
             Achievements
           </p>
           <h1

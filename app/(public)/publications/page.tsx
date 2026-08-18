@@ -8,10 +8,10 @@ export const metadata = {
 };
 
 const TYPE_COLORS: Record<string, string> = {
-  'Annual Report': '#3B82F6',
-  'Magazine':      '#A855F7',
-  'Research':      '#22C55E',
-  'Newsletter':    '#F59E0B',
+  'Annual Report': '#8B0000',
+  'Magazine':      '#B91C1C',
+  'Research':      '#7C0000',
+  'Newsletter':    '#991B1B',
 };
 
 export default function PublicationsPage() {

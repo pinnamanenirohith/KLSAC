@@ -56,11 +56,11 @@ export default async function EventsPage() {
           <div className="max-w-7xl mx-auto px-5 sm:px-10 pb-20">
             <FadeIn>
               <div className="flex items-center gap-3 mb-8">
-                <span className="w-2.5 h-2.5 rounded-full" style={{ background: '#22C55E' }} />
+                <span className="w-2.5 h-2.5 rounded-full" style={{ background: '#8B0000' }} />
                 <h2 className="font-black text-xl" style={{ color: '#0D0D0D' }}>Upcoming Events</h2>
                 <span
                   className="text-xs font-bold px-2.5 py-0.5 rounded-full"
-                  style={{ background: '#F0FDF4', color: '#15803D' }}>
+                  style={{ background: 'rgba(139,0,0,0.08)', color: '#8B0000' }}>
                   {upcoming.length}
                 </span>
               </div>
@@ -142,7 +142,7 @@ function EventRow({ ev, dim }: { ev: any; dim: boolean }) {
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs" style={{ color: '#A1A1AA' }}>
           <span className="font-black uppercase text-[10px]" style={{ color }}>{ev.domain}</span>
           {ev.venue && <><span>·</span><span>{ev.venue}</span></>}
-          {ev.sdc_credits > 0 && <><span>·</span><span className="font-semibold" style={{ color: '#C9A84C' }}>{ev.sdc_credits} SDC Credits</span></>}
+          {ev.sdc_credits > 0 && <><span>·</span><span className="font-semibold" style={{ color: '#8B0000' }}>{ev.sdc_credits} SDC Credits</span></>}
         </div>
         {ev.description && (
           <p className="text-sm mt-2 line-clamp-1" style={{ color: '#71717A' }}>

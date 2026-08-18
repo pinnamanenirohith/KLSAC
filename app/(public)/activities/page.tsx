@@ -6,9 +6,9 @@ import { DEMO_ACTIVITIES, DOMAIN_META } from '@/lib/demo-data';
 const DOMAIN_ORDER = ['all', 'TEC', 'LCH', 'HWB', 'ESO', 'IIE'];
 
 const DIFFICULTY_COLOR: Record<string, string> = {
-  Beginner:     '#22c55e',
-  Intermediate: '#f59e0b',
-  Advanced:     '#ef4444',
+  Beginner:     '#7C0000',
+  Intermediate: '#991B1B',
+  Advanced:     '#8B0000',
 };
 
 export default function ActivitiesPage() {
@@ -127,7 +127,7 @@ export default function ActivitiesPage() {
                   {/* Meta */}
                   <div className="grid grid-cols-2 gap-2 text-xs mt-auto pt-3"
                        style={{ borderTop: '1px solid #f0f0f0', color: '#71717a' }}>
-                    <span className="flex items-center gap-1.5 font-semibold" style={{ color: '#c9a84c' }}>
+                    <span className="flex items-center gap-1.5 font-semibold" style={{ color: '#8B0000' }}>
                       <Zap size={12} /> {act.sdc_credits ?? 0} SDC Credits
                     </span>
                     <span className="flex items-center gap-1.5">

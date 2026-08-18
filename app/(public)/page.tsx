@@ -76,10 +76,10 @@ export default async function HomePage() {
             <div className="inline-flex items-center gap-2 mb-8 animate-fade-in">
               <span
                 className="h-px w-8"
-                style={{ background: '#C9A84C' }} />
+                style={{ background: '#8B0000' }} />
               <span
                 className="text-[10px] font-black tracking-[0.25em] uppercase"
-                style={{ color: '#C9A84C' }}>
+                style={{ color: '#8B0000' }}>
                 KL University · Student Activity Center
               </span>
             </div>
@@ -152,7 +152,7 @@ export default async function HomePage() {
                   className="font-black leading-none mb-2"
                   style={{
                     fontSize: 'clamp(2.5rem, 5vw, 4rem)',
-                    color:    s.value ? (s.gold ? '#C9A84C' : '#fff') : '#2A2A30',
+                    color:    s.value ? '#fff' : '#2A2A30',
                     letterSpacing: '-0.03em',
                   }}>
                   {s.value ?? '—'}
@@ -330,7 +330,7 @@ export default async function HomePage() {
                        style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 100%)' }}>
                     <span
                       className="text-[10px] font-black tracking-widest uppercase mb-2 inline-block"
-                      style={{ color: DOMAINS.find(d => d.code === STUDENT_STORIES[0].domainCode)?.color ?? '#C9A84C' }}>
+                      style={{ color: DOMAINS.find(d => d.code === STUDENT_STORIES[0].domainCode)?.color ?? '#8B0000' }}>
                       {STUDENT_STORIES[0].clubName}
                     </span>
                     <h3 className="font-black text-xl leading-snug" style={{ color: '#fff' }}>
@@ -355,7 +355,7 @@ export default async function HomePage() {
                   <Link href={`/stories/${story.slug}`} className="group block h-full">
                     <div
                       className="rounded-xl overflow-hidden h-40 flex items-end mb-4 relative"
-                      style={{ background: i === 0 ? 'linear-gradient(135deg, #1a001a 0%, #7E22CE 100%)' : 'linear-gradient(135deg, #001a0a 0%, #15803D 100%)' }}>
+                      style={{ background: i === 0 ? 'linear-gradient(135deg, #2D0000 0%, #8B0000 100%)' : 'linear-gradient(135deg, #1a0000 0%, #7C0000 100%)' }}>
                       <div className="absolute inset-0 flex items-center justify-center opacity-10">
                         <span className="text-xs font-bold tracking-widest uppercase" style={{ color: '#fff' }}>
                           Photography Required
@@ -498,7 +498,7 @@ export default async function HomePage() {
                 <Fragment key={step}>
                   <span
                     className="font-black text-xs sm:text-sm tracking-wider uppercase"
-                    style={{ color: i === FRAMEWORK_STEPS.length - 1 ? '#C9A84C' : 'rgba(255,255,255,0.6)' }}>
+                    style={{ color: '#fff' }}>
                     {step}
                   </span>
                   {i < FRAMEWORK_STEPS.length - 1 && (
@@ -522,7 +522,7 @@ export default async function HomePage() {
                   target="_blank"
                   rel="noopener"
                   className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-bold transition-all hover:scale-[1.03]"
-                  style={{ background: '#C9A84C', color: '#0D0D0D' }}>
+                  style={{ background: '#8B0000', color: '#ffffff' }}>
                   View My AI Career Roadmap
                   <ArrowUpRight size={14} />
                 </Link>
@@ -543,7 +543,7 @@ export default async function HomePage() {
         <div className="max-w-7xl mx-auto px-5 sm:px-10 py-24">
           <FadeIn className="flex items-end justify-between mb-12 gap-6">
             <div>
-              <p className="text-[10px] font-black tracking-[0.22em] uppercase mb-4" style={{ color: '#C9A84C' }}>
+              <p className="text-[10px] font-black tracking-[0.22em] uppercase mb-4" style={{ color: '#8B0000' }}>
                 Recognition
               </p>
               <h2
@@ -555,7 +555,7 @@ export default async function HomePage() {
             <Link
               href="/achievements"
               className="hidden sm:inline-flex items-center gap-2 font-bold text-sm shrink-0 mb-1 transition-opacity hover:opacity-70"
-              style={{ color: '#C9A84C' }}>
+              style={{ color: '#8B0000' }}>
               View all
               <ArrowRight size={14} />
             </Link>
@@ -566,7 +566,7 @@ export default async function HomePage() {
               className="rounded-2xl p-6 sm:p-8"
               style={{ background: '#111118', border: '1px solid rgba(255,255,255,0.06)' }}>
               <div className="flex items-center gap-3 mb-6">
-                <div className="w-2 h-2 rounded-full" style={{ background: '#C9A84C' }} />
+                <div className="w-2 h-2 rounded-full" style={{ background: '#8B0000' }} />
                 <p className="text-sm font-semibold" style={{ color: 'rgba(255,255,255,0.35)' }}>
                   Official achievement records will appear here.
                 </p>
@@ -580,8 +580,8 @@ export default async function HomePage() {
                     <span
                       className="text-[10px] font-black tracking-widest uppercase px-2.5 py-1 rounded shrink-0"
                       style={{
-                        background: level === 'National' ? 'rgba(201,168,76,0.15)' : level === 'State' ? 'rgba(59,130,246,0.12)' : 'rgba(255,255,255,0.06)',
-                        color:      level === 'National' ? '#C9A84C'               : level === 'State' ? '#3B82F6'               : 'rgba(255,255,255,0.4)',
+                        background: level === 'National' ? 'rgba(255,255,255,0.1)'  : level === 'State' ? 'rgba(255,255,255,0.07)' : 'rgba(255,255,255,0.06)',
+                        color:      level === 'National' ? '#FFFFFF'                : level === 'State' ? 'rgba(255,255,255,0.7)'  : 'rgba(255,255,255,0.4)',
                       }}>
                       {level}
                     </span>
@@ -683,8 +683,8 @@ export default async function HomePage() {
                         background: i === 0
                           ? 'linear-gradient(135deg, #5B0000 0%, #8B0000 100%)'
                           : i === 1
-                          ? 'linear-gradient(135deg, #1D4ED8 0%, #3B82F6 100%)'
-                          : 'linear-gradient(135deg, #15803D 0%, #22C55E 100%)',
+                          ? 'linear-gradient(135deg, #8B0000 0%, #B91C1C 100%)'
+                          : 'linear-gradient(135deg, #8B0000 0%, #B91C1C 100%)',
                       }}>
                       <span className="text-[10px] font-bold tracking-widest uppercase opacity-20" style={{ color: '#fff' }}>
                         Image Required

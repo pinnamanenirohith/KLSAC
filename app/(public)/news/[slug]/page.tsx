@@ -74,7 +74,7 @@ export default async function NewsArticlePage({ params }: { params: Promise<{ sl
             className="w-full rounded-2xl"
             style={{
               height: '280px',
-              background: 'linear-gradient(135deg, #8B000012, #C9A84C0A)',
+              background: 'rgba(139,0,0,0.05)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',

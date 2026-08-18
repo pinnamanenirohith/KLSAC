@@ -24,11 +24,11 @@ const TYPE_CONFIG = {
   },
   event:   {
     icon:        Calendar,
-    border:      '#3b82f6',
-    bg:          '#eff6ff',
+    border:      '#8B0000',
+    bg:          '#fff5f5',
     label:       'Event',
-    labelColor:  '#2563eb',
-    badgeBg:     '#dbeafe',
+    labelColor:  '#8B0000',
+    badgeBg:     'rgba(139,0,0,0.1)',
   },
   general: {
     icon:        Megaphone,

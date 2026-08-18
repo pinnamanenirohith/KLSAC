@@ -93,9 +93,9 @@ export const DEMO_ANNOUNCEMENTS = [
 ];
 
 export const DOMAIN_META: Record<string, { label: string; color: string; bg: string }> = {
-  TEC: { label: 'Technology',                          color: '#3b82f6', bg: 'bg-blue-100 text-blue-800' },
-  LCH: { label: 'Liberal Arts, Cultural & Hobby',      color: '#a855f7', bg: 'bg-purple-100 text-purple-800' },
-  HWB: { label: 'Health & Wellbeing',                  color: '#22c55e', bg: 'bg-green-100 text-green-800' },
-  ESO: { label: 'Extension & Social Outreach',         color: '#f59e0b', bg: 'bg-yellow-100 text-yellow-800' },
-  IIE: { label: 'Innovation, Incubation & Entrepreneurship', color: '#c9a84c', bg: 'bg-amber-100 text-amber-800' },
+  TEC: { label: 'Technology',                          color: '#8B0000', bg: 'bg-red-100 text-red-900' },
+  LCH: { label: 'Liberal Arts, Cultural & Hobby',      color: '#B91C1C', bg: 'bg-red-100 text-red-900' },
+  HWB: { label: 'Health & Wellbeing',                  color: '#7C0000', bg: 'bg-red-100 text-red-900' },
+  ESO: { label: 'Extension & Social Outreach',         color: '#991B1B', bg: 'bg-red-100 text-red-900' },
+  IIE: { label: 'Innovation, Incubation & Entrepreneurship', color: '#C53030', bg: 'bg-red-100 text-red-900' },
 };

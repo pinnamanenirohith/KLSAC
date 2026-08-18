@@ -47,7 +47,7 @@ export default function NewsPage() {
                 {/* Image placeholder */}
                 <div
                   className="lg:col-span-2 min-h-56"
-                  style={{ background: 'linear-gradient(135deg, #8B000012, #C9A84C0A)' }}>
+                  style={{ background: 'rgba(139,0,0,0.05)' }}>
                   <div className="w-full h-full flex items-center justify-center">
                     <span className="font-black text-4xl" style={{ color: '#E4E4E7' }}>KL</span>
                   </div>

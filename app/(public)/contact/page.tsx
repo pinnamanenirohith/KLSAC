@@ -100,7 +100,7 @@ export default function ContactPage() {
                     target="_blank"
                     rel="noopener"
                     className="inline-flex items-center gap-1.5 text-xs font-bold"
-                    style={{ color: '#C9A84C' }}>
+                    style={{ color: '#8B0000' }}>
                     Open Student Dashboard
                     <ArrowUpRight size={12} />
                   </Link>

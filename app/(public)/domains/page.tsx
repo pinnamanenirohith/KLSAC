@@ -14,7 +14,7 @@ export default function DomainsPage() {
       {/* ─── Hero ─────────────────────────────────────────────────────── */}
       <section style={{ background: '#0A0A0F', paddingTop: '92px', paddingBottom: '72px' }}>
         <div className="max-w-7xl mx-auto px-5 sm:px-10">
-          <p className="text-[10px] font-black tracking-[0.25em] uppercase mb-5" style={{ color: '#C9A84C' }}>
+          <p className="text-[10px] font-black tracking-[0.25em] uppercase mb-5" style={{ color: '#8B0000' }}>
             Discovery
           </p>
           <h1
