@@ -280,7 +280,7 @@ export default function Navbar() {
           )}
 
           {/* Standard links */}
-          {[{ href: '/about', label: 'About SAC' }, ...NAV_LINKS].map(l => (
+          {NAV_LINKS.map(l => (
             <Link
               key={l.href}
               href={l.href}
