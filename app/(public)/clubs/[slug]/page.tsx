@@ -1,9 +1,12 @@
-﻿import { notFound } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { ArrowLeft, ArrowRight, ArrowUpRight, CheckCircle2 } from 'lucide-react';
+import {
+  ArrowLeft, ArrowRight, ArrowUpRight, CheckCircle2,
+  Camera, Calendar, MapPin, Zap, Trophy, Users,
+} from 'lucide-react';
 import { getClubBySlug, CLUB_SLUGS } from '@/lib/content/clubs';
 import { getDomainByCode } from '@/lib/content/domains';
-import { DEMO_CLUBS } from '@/lib/demo-data';
+import { DEMO_CLUBS, DEMO_ACTIVITIES } from '@/lib/demo-data';
 import { FadeIn } from '../../_components/FadeIn';
 
 export function generateStaticParams() {
@@ -14,11 +17,15 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const club = getClubBySlug(slug);
   if (!club) return {};
-  return {
-    title: `${club.name}`,
-    description: club.tagline,
-  };
+  return { title: club.name, description: club.tagline };
 }
+
+const OFFICE_ROLES = [
+  { role: 'Club Coordinator',     abbr: 'CC'  },
+  { role: 'Vice-Coordinator',     abbr: 'VC'  },
+  { role: 'Secretary',            abbr: 'SEC' },
+  { role: 'Treasurer',            abbr: 'TR'  },
+];
 
 export default async function ClubDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -28,10 +35,14 @@ export default async function ClubDetailPage({ params }: { params: Promise<{ slu
   const domain = getDomainByCode(club.domainCode);
   if (!domain) notFound();
 
-  // Get member count from demo data
   const demoClub = DEMO_CLUBS.find(dc => dc.name === club.name);
   const memberCount = demoClub?.memberCount ?? null;
   const memberLimit = demoClub?.memberLimit ?? null;
+
+  const today = new Date().toISOString().split('T')[0];
+  const upcomingEvents = DEMO_ACTIVITIES.filter(
+    a => a.domain === club.domainCode && a.activity_date >= today,
+  );
 
   return (
     <>
@@ -96,8 +107,7 @@ export default async function ClubDetailPage({ params }: { params: Promise<{ slu
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-16">
             <div className="lg:col-span-2">
               <FadeIn>
-                <p className="text-[10px] font-black tracking-[0.22em] uppercase mb-6"
-                   style={{ color: domain.color }}>
+                <p className="text-[10px] font-black tracking-[0.22em] uppercase mb-6" style={{ color: domain.color }}>
                   About the Club
                 </p>
                 <div className="flex flex-col gap-5">
@@ -112,10 +122,8 @@ export default async function ClubDetailPage({ params }: { params: Promise<{ slu
 
             <div>
               <FadeIn delay={0.1}>
-                {/* Purpose */}
                 <div className="rounded-2xl p-6 mb-6" style={{ background: '#F7F7F8', border: '1px solid #E4E4E7' }}>
-                  <p className="text-[10px] font-black tracking-[0.18em] uppercase mb-3"
-                     style={{ color: '#A1A1AA' }}>
+                  <p className="text-[10px] font-black tracking-[0.18em] uppercase mb-3" style={{ color: '#A1A1AA' }}>
                     Our Purpose
                   </p>
                   <p className="text-sm leading-relaxed" style={{ color: '#3F3F46' }}>
@@ -123,7 +131,6 @@ export default async function ClubDetailPage({ params }: { params: Promise<{ slu
                   </p>
                 </div>
 
-                {/* Domain link */}
                 <Link
                   href={`/domains/${domain.slug}`}
                   className="flex items-center gap-3 p-4 rounded-xl transition-colors hover:bg-gray-50 group"
@@ -149,12 +156,69 @@ export default async function ClubDetailPage({ params }: { params: Promise<{ slu
         </div>
       </section>
 
-      {/* ─── Competencies ─────────────────────────────────────────────── */}
+      {/* ─── Activity Gallery ─────────────────────────────────────────── */}
       <section style={{ background: '#F7F7F8' }}>
         <div className="max-w-7xl mx-auto px-5 sm:px-10 py-20">
           <FadeIn>
-            <p className="text-[10px] font-black tracking-[0.22em] uppercase mb-8"
-               style={{ color: domain.color }}>
+            <div className="flex items-end justify-between mb-10 flex-wrap gap-4">
+              <div>
+                <p className="text-[10px] font-black tracking-[0.22em] uppercase mb-3" style={{ color: domain.color }}>
+                  Club Gallery
+                </p>
+                <h2
+                  className="font-black leading-tight"
+                  style={{ fontSize: 'clamp(1.5rem, 3vw, 2.25rem)', color: '#0D0D0D', letterSpacing: '-0.02em' }}>
+                  Behind the scenes.
+                </h2>
+              </div>
+              <span
+                className="text-xs font-semibold px-3 py-1.5 rounded-full"
+                style={{ background: domain.accentBg, color: domain.color }}>
+                Updated regularly
+              </span>
+            </div>
+          </FadeIn>
+
+          <FadeIn>
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 mb-4">
+              {[0, 1, 2, 3, 4, 5, 6, 7].map(i => (
+                <div
+                  key={i}
+                  className="relative rounded-xl overflow-hidden flex flex-col items-center justify-center gap-2"
+                  style={{
+                    aspectRatio: i < 2 ? '16/9' : '4/3',
+                    gridColumn: i < 2 ? 'span 2' : 'span 1',
+                    background: i % 2 === 0 ? `${domain.color}10` : `${domain.color}07`,
+                    border: `1.5px dashed ${domain.color}22`,
+                  }}>
+                  <Camera size={i < 2 ? 28 : 20} style={{ color: `${domain.color}38` }} />
+                  <span className="text-[9px] font-black tracking-[0.2em] uppercase" style={{ color: `${domain.color}38` }}>
+                    {i < 2 ? 'Featured' : 'Photo'}
+                  </span>
+                </div>
+              ))}
+            </div>
+            <p className="text-xs text-center" style={{ color: '#A1A1AA' }}>
+              Event photos submitted by club members via the{' '}
+              <Link
+                href="https://sac.kluniversity.in"
+                target="_blank"
+                rel="noopener"
+                className="font-bold hover:underline"
+                style={{ color: domain.color }}>
+                Student Dashboard
+              </Link>
+              {' '}will appear here.
+            </p>
+          </FadeIn>
+        </div>
+      </section>
+
+      {/* ─── Competencies ─────────────────────────────────────────────── */}
+      <section style={{ background: '#fff' }}>
+        <div className="max-w-7xl mx-auto px-5 sm:px-10 py-20">
+          <FadeIn>
+            <p className="text-[10px] font-black tracking-[0.22em] uppercase mb-8" style={{ color: domain.color }}>
               Competencies You'll Develop
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -169,11 +233,116 @@ export default async function ClubDetailPage({ params }: { params: Promise<{ slu
         </div>
       </section>
 
-      {/* ─── Activities ───────────────────────────────────────────────── */}
+      {/* ─── Upcoming Events ──────────────────────────────────────────── */}
+      <section style={{ background: '#F7F7F8' }}>
+        <div className="max-w-7xl mx-auto px-5 sm:px-10 py-20">
+          <FadeIn>
+            <div className="flex items-end justify-between mb-10 flex-wrap gap-4">
+              <div>
+                <p className="text-[10px] font-black tracking-[0.22em] uppercase mb-3" style={{ color: domain.color }}>
+                  Upcoming Events & Posters
+                </p>
+                <h2
+                  className="font-black leading-tight"
+                  style={{ fontSize: 'clamp(1.5rem, 3vw, 2.25rem)', color: '#0D0D0D', letterSpacing: '-0.02em' }}>
+                  Mark your calendar.
+                </h2>
+              </div>
+              <Link
+                href="/activities"
+                className="text-xs font-bold hover:opacity-70 transition-opacity"
+                style={{ color: domain.color }}>
+                All events →
+              </Link>
+            </div>
+          </FadeIn>
+
+          {upcomingEvents.length > 0 ? (
+            <FadeIn>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                {upcomingEvents.slice(0, 3).map(event => {
+                  const date = new Date(event.activity_date);
+                  const month = date.toLocaleString('en-US', { month: 'short' }).toUpperCase();
+                  const day = date.getDate();
+                  return (
+                    <div
+                      key={event.code}
+                      className="rounded-2xl overflow-hidden flex flex-col"
+                      style={{ border: '1px solid #E4E4E7', background: '#fff' }}>
+                      {/* Poster top stripe */}
+                      <div className="h-2" style={{ background: `linear-gradient(90deg, ${domain.color}, ${domain.color}88)` }} />
+                      <div className="px-6 pt-5 pb-4 flex-1 flex flex-col">
+                        <div className="flex items-start justify-between gap-3 mb-4">
+                          <div
+                            className="rounded-xl px-3 py-2 text-center min-w-[3.5rem]"
+                            style={{ background: `${domain.color}12` }}>
+                            <p className="text-[9px] font-black tracking-widest uppercase" style={{ color: domain.color }}>{month}</p>
+                            <p className="text-2xl font-black leading-none" style={{ color: domain.color }}>{day}</p>
+                          </div>
+                          <span
+                            className="text-[9px] font-black tracking-widest uppercase px-2.5 py-1 rounded-full mt-1"
+                            style={{ background: domain.accentBg, color: domain.color }}>
+                            {event.difficulty}
+                          </span>
+                        </div>
+                        <h3 className="font-black text-base leading-snug mb-2" style={{ color: '#0D0D0D' }}>
+                          {event.title}
+                        </h3>
+                        <p className="text-sm leading-relaxed flex-1 mb-4" style={{ color: '#71717A' }}>
+                          {event.description.length > 100
+                            ? event.description.slice(0, 100) + '…'
+                            : event.description}
+                        </p>
+                        <div className="flex items-center gap-1.5 text-xs mb-1" style={{ color: '#A1A1AA' }}>
+                          <MapPin size={11} />
+                          <span className="truncate">{event.venue}</span>
+                        </div>
+                        <div className="flex items-center gap-1.5 text-xs font-bold" style={{ color: domain.color }}>
+                          <Zap size={11} />
+                          {event.sdc_credits} SDC credits
+                        </div>
+                      </div>
+                      <div
+                        className="px-6 py-3"
+                        style={{ borderTop: '1px solid #E4E4E7', background: '#FAFAFA' }}>
+                        <Link
+                          href="https://sac.kluniversity.in"
+                          target="_blank"
+                          rel="noopener"
+                          className="flex items-center justify-center gap-2 w-full py-2 rounded-xl text-sm font-bold transition-all hover:opacity-80"
+                          style={{ background: domain.color, color: '#fff' }}>
+                          Register on Dashboard
+                          <ArrowUpRight size={13} />
+                        </Link>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </FadeIn>
+          ) : (
+            <FadeIn>
+              <div
+                className="rounded-2xl p-14 text-center"
+                style={{ background: '#fff', border: '1.5px dashed #D1D1D6' }}>
+                <Calendar size={32} className="mx-auto mb-4" style={{ color: '#D1D1D6' }} />
+                <p className="font-bold text-sm mb-1" style={{ color: '#71717A' }}>
+                  No upcoming events posted yet.
+                </p>
+                <p className="text-xs" style={{ color: '#A1A1AA' }}>
+                  Event posters will appear here once scheduled.
+                </p>
+              </div>
+            </FadeIn>
+          )}
+        </div>
+      </section>
+
+      {/* ─── What We Do ───────────────────────────────────────────────── */}
       <section style={{ background: '#fff' }}>
         <div className="max-w-7xl mx-auto px-5 sm:px-10 py-20">
           <FadeIn>
-            <p className="text-[10px] font-black tracking-[0.22em] uppercase mb-8" style={{ color: '#8B0000' }}>
+            <p className="text-[10px] font-black tracking-[0.22em] uppercase mb-8" style={{ color: domain.color }}>
               What We Do
             </p>
             <div className="max-w-2xl" style={{ borderTop: '1px solid #E4E4E7' }}>
@@ -197,12 +366,125 @@ export default async function ClubDetailPage({ params }: { params: Promise<{ slu
         </div>
       </section>
 
+      {/* ─── Achievements ─────────────────────────────────────────────── */}
+      <section style={{ background: '#F7F7F8' }}>
+        <div className="max-w-7xl mx-auto px-5 sm:px-10 py-20">
+          <FadeIn>
+            <div className="flex items-end justify-between mb-10 flex-wrap gap-4">
+              <div>
+                <p className="text-[10px] font-black tracking-[0.22em] uppercase mb-3" style={{ color: domain.color }}>
+                  Club Achievements
+                </p>
+                <h2
+                  className="font-black leading-tight"
+                  style={{ fontSize: 'clamp(1.5rem, 3vw, 2.25rem)', color: '#0D0D0D', letterSpacing: '-0.02em' }}>
+                  Honours & recognition.
+                </h2>
+              </div>
+              <Link
+                href="/achievements"
+                className="text-xs font-bold hover:opacity-70 transition-opacity"
+                style={{ color: domain.color }}>
+                All achievements →
+              </Link>
+            </div>
+          </FadeIn>
+
+          <FadeIn>
+            <div
+              className="rounded-2xl p-12 text-center"
+              style={{ background: '#fff', border: '1.5px dashed #D1D1D6' }}>
+              <Trophy size={32} className="mx-auto mb-4" style={{ color: '#D1D1D6' }} />
+              <p className="font-bold text-sm mb-1" style={{ color: '#71717A' }}>
+                Competition wins and honours will be listed here.
+              </p>
+              <p className="text-xs mb-6" style={{ color: '#A1A1AA' }}>
+                National, state and inter-university achievements from club events.
+              </p>
+              <Link
+                href="/achievements"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-bold transition-all hover:scale-[1.02]"
+                style={{ background: domain.color, color: '#fff' }}>
+                View Achievement Board
+                <ArrowRight size={13} />
+              </Link>
+            </div>
+          </FadeIn>
+        </div>
+      </section>
+
+      {/* ─── Office Bearers ───────────────────────────────────────────── */}
+      <section style={{ background: '#fff' }}>
+        <div className="max-w-7xl mx-auto px-5 sm:px-10 py-20">
+          <FadeIn>
+            <div className="flex items-end justify-between mb-10 flex-wrap gap-4">
+              <div>
+                <p className="text-[10px] font-black tracking-[0.22em] uppercase mb-3" style={{ color: domain.color }}>
+                  Office Bearers
+                </p>
+                <h2
+                  className="font-black leading-tight"
+                  style={{ fontSize: 'clamp(1.5rem, 3vw, 2.25rem)', color: '#0D0D0D', letterSpacing: '-0.02em' }}>
+                  The team behind the club.
+                </h2>
+              </div>
+            </div>
+          </FadeIn>
+
+          <FadeIn>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+              {OFFICE_ROLES.map(({ role, abbr }) => (
+                <div
+                  key={role}
+                  className="rounded-2xl p-6 flex flex-col items-center text-center gap-4"
+                  style={{ background: '#F7F7F8', border: '1px solid #E4E4E7' }}>
+                  <div
+                    className="w-14 h-14 rounded-full flex items-center justify-center font-black text-sm"
+                    style={{ background: domain.accentBg, color: domain.color }}>
+                    {abbr}
+                  </div>
+                  <div>
+                    <p className="font-black text-sm mb-0.5" style={{ color: '#0D0D0D' }}>
+                      Name TBA
+                    </p>
+                    <p className="text-xs font-semibold" style={{ color: '#A1A1AA' }}>
+                      {role}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <p className="text-xs text-center mt-5" style={{ color: '#A1A1AA' }}>
+              Office bearer details are updated at the start of each academic year via the{' '}
+              <Link
+                href="https://sac.kluniversity.in"
+                target="_blank"
+                rel="noopener"
+                className="font-bold hover:underline"
+                style={{ color: domain.color }}>
+                Student Dashboard
+              </Link>
+              .
+            </p>
+          </FadeIn>
+        </div>
+      </section>
+
       {/* ─── Join CTA ─────────────────────────────────────────────────── */}
       <section style={{ background: '#0A0A0F' }}>
         <div className="max-w-7xl mx-auto px-5 sm:px-10 py-20">
           <FadeIn>
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-8">
               <div>
+                <div className="flex items-center gap-3 mb-3">
+                  <Users size={16} style={{ color: domain.color }} />
+                  {memberCount != null && memberLimit != null && (
+                    <span className="text-sm" style={{ color: 'rgba(255,255,255,0.4)' }}>
+                      <span className="font-bold" style={{ color: 'rgba(255,255,255,0.85)' }}>{memberCount}</span>
+                      {' '}of{' '}{memberLimit} spots filled
+                    </span>
+                  )}
+                </div>
                 <h2
                   className="font-black text-2xl sm:text-3xl mb-2 leading-tight"
                   style={{ color: '#fff', letterSpacing: '-0.02em' }}>

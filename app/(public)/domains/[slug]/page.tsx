@@ -1,8 +1,12 @@
-﻿import { notFound } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { ArrowRight, ArrowUpRight, ArrowLeft } from 'lucide-react';
+import {
+  ArrowRight, ArrowUpRight, ArrowLeft,
+  Camera, Calendar, MapPin, Zap, Trophy,
+} from 'lucide-react';
 import { getDomainBySlug, DOMAIN_SLUGS } from '@/lib/content/domains';
 import { getClubsByDomain } from '@/lib/content/clubs';
+import { DEMO_ACTIVITIES } from '@/lib/demo-data';
 import { FadeIn } from '../../_components/FadeIn';
 
 export function generateStaticParams() {
@@ -13,10 +17,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const domain = getDomainBySlug(slug);
   if (!domain) return {};
-  return {
-    title: `${domain.name}`,
-    description: domain.description,
-  };
+  return { title: domain.name, description: domain.description };
 }
 
 export default async function DomainDetailPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -25,6 +26,11 @@ export default async function DomainDetailPage({ params }: { params: Promise<{ s
   if (!domain) notFound();
 
   const clubs = getClubsByDomain(domain.code);
+
+  const today = new Date().toISOString().split('T')[0];
+  const upcomingActivities = DEMO_ACTIVITIES.filter(
+    a => a.domain === domain.code && a.activity_date >= today,
+  );
 
   return (
     <>
@@ -63,23 +69,17 @@ export default async function DomainDetailPage({ params }: { params: Promise<{ s
             </div>
           </div>
 
-          <p
-            className="font-bold text-xl sm:text-2xl mb-6"
-            style={{ color: domain.color, letterSpacing: '-0.01em' }}>
+          <p className="font-bold text-xl sm:text-2xl mb-6" style={{ color: domain.color, letterSpacing: '-0.01em' }}>
             {domain.tagline}
           </p>
 
           <div className="flex flex-wrap gap-8 text-sm">
             <div>
-              <span className="font-black text-2xl" style={{ color: domain.color }}>
-                {domain.clubCount}
-              </span>
+              <span className="font-black text-2xl" style={{ color: domain.color }}>{domain.clubCount}</span>
               <span className="ml-2" style={{ color: '#71717A' }}>Clubs</span>
             </div>
             <div>
-              <span className="font-black text-2xl" style={{ color: domain.color }}>
-                {domain.competencies.length}
-              </span>
+              <span className="font-black text-2xl" style={{ color: domain.color }}>{domain.competencies.length}</span>
               <span className="ml-2" style={{ color: '#71717A' }}>Competencies developed</span>
             </div>
           </div>
@@ -91,8 +91,7 @@ export default async function DomainDetailPage({ params }: { params: Promise<{ s
         <div className="max-w-7xl mx-auto px-5 sm:px-10 py-24">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-16">
             <FadeIn className="lg:col-span-2">
-              <p className="text-[10px] font-black tracking-[0.22em] uppercase mb-5"
-                 style={{ color: domain.color }}>
+              <p className="text-[10px] font-black tracking-[0.22em] uppercase mb-5" style={{ color: domain.color }}>
                 About This Domain
               </p>
               <h2
@@ -106,16 +105,13 @@ export default async function DomainDetailPage({ params }: { params: Promise<{ s
             </FadeIn>
 
             <FadeIn delay={0.1}>
-              <p className="text-[10px] font-black tracking-[0.22em] uppercase mb-5"
-                 style={{ color: '#A1A1AA' }}>
+              <p className="text-[10px] font-black tracking-[0.22em] uppercase mb-5" style={{ color: '#A1A1AA' }}>
                 Competencies Developed
               </p>
               <ul className="flex flex-col gap-3">
                 {domain.competencies.map(c => (
                   <li key={c} className="flex items-start gap-3">
-                    <span
-                      className="w-1.5 h-1.5 rounded-full mt-2 shrink-0"
-                      style={{ background: domain.color }} />
+                    <span className="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={{ background: domain.color }} />
                     <span className="text-sm leading-relaxed" style={{ color: '#3F3F46' }}>{c}</span>
                   </li>
                 ))}
@@ -125,12 +121,171 @@ export default async function DomainDetailPage({ params }: { params: Promise<{ s
         </div>
       </section>
 
+      {/* ─── Activity Gallery ─────────────────────────────────────────── */}
+      <section style={{ background: '#F7F7F8' }}>
+        <div className="max-w-7xl mx-auto px-5 sm:px-10 py-20">
+          <FadeIn>
+            <div className="flex items-end justify-between mb-10 flex-wrap gap-4">
+              <div>
+                <p className="text-[10px] font-black tracking-[0.22em] uppercase mb-3" style={{ color: domain.color }}>
+                  Activity Gallery
+                </p>
+                <h2
+                  className="font-black leading-tight"
+                  style={{ fontSize: 'clamp(1.5rem, 3vw, 2.25rem)', color: '#0D0D0D', letterSpacing: '-0.02em' }}>
+                  Moments from our events.
+                </h2>
+              </div>
+              <span
+                className="text-xs font-semibold px-3 py-1.5 rounded-full"
+                style={{ background: domain.accentBg, color: domain.color }}>
+                Updated regularly
+              </span>
+            </div>
+          </FadeIn>
+
+          <FadeIn>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-6">
+              {[0, 1, 2, 3, 4, 5].map(i => (
+                <div
+                  key={i}
+                  className="relative rounded-2xl overflow-hidden flex flex-col items-center justify-center gap-2"
+                  style={{
+                    aspectRatio: '4/3',
+                    background: i % 3 === 0 ? `${domain.color}10` : i % 3 === 1 ? `${domain.color}07` : '#ECECEC',
+                    border: `1.5px dashed ${domain.color}22`,
+                  }}>
+                  <Camera size={22} style={{ color: `${domain.color}38` }} />
+                  <span className="text-[9px] font-black tracking-[0.2em] uppercase" style={{ color: `${domain.color}38` }}>
+                    Photo
+                  </span>
+                </div>
+              ))}
+            </div>
+            <p className="text-xs text-center" style={{ color: '#A1A1AA' }}>
+              Event and activity photos will appear here.{' '}
+              <Link
+                href="https://sac.kluniversity.in"
+                target="_blank"
+                rel="noopener"
+                className="font-bold hover:underline"
+                style={{ color: domain.color }}>
+                Submit via Student Dashboard →
+              </Link>
+            </p>
+          </FadeIn>
+        </div>
+      </section>
+
+      {/* ─── Upcoming Activities ──────────────────────────────────────── */}
+      <section style={{ background: '#fff' }}>
+        <div className="max-w-7xl mx-auto px-5 sm:px-10 py-20">
+          <FadeIn>
+            <div className="flex items-end justify-between mb-10 flex-wrap gap-4">
+              <div>
+                <p className="text-[10px] font-black tracking-[0.22em] uppercase mb-3" style={{ color: domain.color }}>
+                  Upcoming Activities
+                </p>
+                <h2
+                  className="font-black leading-tight"
+                  style={{ fontSize: 'clamp(1.5rem, 3vw, 2.25rem)', color: '#0D0D0D', letterSpacing: '-0.02em' }}>
+                  What's coming up.
+                </h2>
+              </div>
+              <Link
+                href="/activities"
+                className="text-xs font-bold hover:opacity-70 transition-opacity"
+                style={{ color: domain.color }}>
+                All activities →
+              </Link>
+            </div>
+          </FadeIn>
+
+          {upcomingActivities.length > 0 ? (
+            <FadeIn>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {upcomingActivities.slice(0, 3).map(activity => {
+                  const date = new Date(activity.activity_date);
+                  const month = date.toLocaleString('en-US', { month: 'short' }).toUpperCase();
+                  const day = date.getDate();
+                  return (
+                    <div
+                      key={activity.code}
+                      className="rounded-2xl overflow-hidden flex flex-col"
+                      style={{ border: '1px solid #E4E4E7' }}>
+                      <div
+                        className="px-6 pt-6 pb-5 flex-1 flex flex-col"
+                        style={{ background: `linear-gradient(160deg, ${domain.color}12 0%, ${domain.color}04 100%)` }}>
+                        <div className="flex items-start justify-between gap-3 mb-5">
+                          <div
+                            className="rounded-xl px-3 py-2 text-center min-w-[3.5rem]"
+                            style={{ background: domain.color }}>
+                            <p className="text-[9px] font-black tracking-widest text-white" style={{ opacity: 0.75 }}>{month}</p>
+                            <p className="text-2xl font-black leading-none text-white">{day}</p>
+                          </div>
+                          <span
+                            className="text-[9px] font-black tracking-widest uppercase px-2.5 py-1 rounded-full mt-1"
+                            style={{ background: domain.accentBg, color: domain.color }}>
+                            {activity.difficulty}
+                          </span>
+                        </div>
+                        <h3 className="font-black text-base leading-snug mb-2" style={{ color: '#0D0D0D' }}>
+                          {activity.title}
+                        </h3>
+                        <p className="text-sm leading-relaxed flex-1 mb-4" style={{ color: '#71717A' }}>
+                          {activity.description.length > 110
+                            ? activity.description.slice(0, 110) + '…'
+                            : activity.description}
+                        </p>
+                        <div className="flex items-center gap-1.5 text-xs" style={{ color: '#A1A1AA' }}>
+                          <MapPin size={11} />
+                          <span className="truncate">{activity.venue}</span>
+                        </div>
+                      </div>
+                      <div
+                        className="flex items-center justify-between px-6 py-3"
+                        style={{ borderTop: '1px solid #E4E4E7', background: '#FAFAFA' }}>
+                        <div className="flex items-center gap-1.5 text-xs font-bold" style={{ color: domain.color }}>
+                          <Zap size={11} />
+                          {activity.sdc_credits} SDC credits
+                        </div>
+                        <Link
+                          href="https://sac.kluniversity.in"
+                          target="_blank"
+                          rel="noopener"
+                          className="text-[11px] font-bold px-3.5 py-1.5 rounded-full transition-all hover:opacity-80"
+                          style={{ background: domain.color, color: '#fff' }}>
+                          Register →
+                        </Link>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </FadeIn>
+          ) : (
+            <FadeIn>
+              <div
+                className="rounded-2xl p-14 text-center"
+                style={{ background: '#F7F7F8', border: '1.5px dashed #D1D1D6' }}>
+                <Calendar size={32} className="mx-auto mb-4" style={{ color: '#D1D1D6' }} />
+                <p className="font-bold text-sm mb-1" style={{ color: '#71717A' }}>
+                  No upcoming activities scheduled yet.
+                </p>
+                <p className="text-xs" style={{ color: '#A1A1AA' }}>
+                  Check the Student Dashboard for the latest updates.
+                </p>
+              </div>
+            </FadeIn>
+          )}
+        </div>
+      </section>
+
       {/* ─── Clubs in this domain ─────────────────────────────────────── */}
       <section style={{ background: '#F7F7F8' }}>
         <div className="max-w-7xl mx-auto px-5 sm:px-10 py-24">
           <FadeIn className="mb-12">
-            <p className="text-[10px] font-black tracking-[0.22em] uppercase mb-4"
-               style={{ color: domain.color }}>
+            <p className="text-[10px] font-black tracking-[0.22em] uppercase mb-4" style={{ color: domain.color }}>
               {domain.clubCount} Clubs in {domain.shortName}
             </p>
             <h2
@@ -160,6 +315,53 @@ export default async function DomainDetailPage({ params }: { params: Promise<{ s
                     style={{ color: '#D1D1D6' }} />
                 </Link>
               ))}
+            </div>
+          </FadeIn>
+        </div>
+      </section>
+
+      {/* ─── Achievements ─────────────────────────────────────────────── */}
+      <section style={{ background: '#fff' }}>
+        <div className="max-w-7xl mx-auto px-5 sm:px-10 py-20">
+          <FadeIn>
+            <div className="flex items-end justify-between mb-10 flex-wrap gap-4">
+              <div>
+                <p className="text-[10px] font-black tracking-[0.22em] uppercase mb-3" style={{ color: domain.color }}>
+                  Achievements
+                </p>
+                <h2
+                  className="font-black leading-tight"
+                  style={{ fontSize: 'clamp(1.5rem, 3vw, 2.25rem)', color: '#0D0D0D', letterSpacing: '-0.02em' }}>
+                  What our clubs have won.
+                </h2>
+              </div>
+              <Link
+                href="/achievements"
+                className="text-xs font-bold hover:opacity-70 transition-opacity"
+                style={{ color: domain.color }}>
+                All achievements →
+              </Link>
+            </div>
+          </FadeIn>
+
+          <FadeIn>
+            <div
+              className="rounded-2xl p-14 text-center"
+              style={{ background: '#F7F7F8', border: '1.5px dashed #D1D1D6' }}>
+              <Trophy size={32} className="mx-auto mb-4" style={{ color: '#D1D1D6' }} />
+              <p className="font-bold text-sm mb-1" style={{ color: '#71717A' }}>
+                Achievement records will be showcased here.
+              </p>
+              <p className="text-xs mb-6" style={{ color: '#A1A1AA' }}>
+                National, state and inter-university wins by clubs in this domain.
+              </p>
+              <Link
+                href="/achievements"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-bold transition-all hover:scale-[1.02]"
+                style={{ background: domain.color, color: '#fff' }}>
+                View Achievement Board
+                <ArrowRight size={13} />
+              </Link>
             </div>
           </FadeIn>
         </div>
