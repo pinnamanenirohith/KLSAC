@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import { ArrowRight, ArrowUpRight, ChevronDown } from 'lucide-react';
-import { Fragment } from 'react';
 import { DOMAINS } from '@/lib/content/domains';
 import { DEMO_CLUBS, DOMAIN_META } from '@/lib/demo-data';
 import { NEWS_ARTICLES } from '@/lib/content/site-content';
@@ -21,15 +20,6 @@ const JOURNEY_STEPS = [
   { title: 'Lead',         description: 'Take responsibility within your club — as a coordinator, team leader, or domain representative. Leadership at SAC is earned through performance, not appointment.' },
   { title: 'Create',       description: 'Build something that matters: a product, a performance, a project, a venture. SAC gives you the platform, the mentors, and the collaborators you need.' },
   { title: 'Impact',       description: 'Carry your experience beyond campus — in your career, your community, and your commitment to the values KL SAC instilled in you.' },
-];
-
-const FRAMEWORK_STEPS = [
-  'Interest',
-  'Participation',
-  'Competency',
-  'Experience',
-  'Leadership',
-  'Career Readiness',
 ];
 
 export default async function HomePage() {
@@ -477,66 +467,6 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ══════════════════════════════════ STUDENT DEVELOPMENT FRAMEWORK ══ */}
-      <section style={{ background: '#8B0000' }}>
-        <div className="max-w-7xl mx-auto px-5 sm:px-10 py-28">
-          <FadeIn>
-            <p className="text-[10px] font-black tracking-[0.22em] uppercase mb-6"
-               style={{ color: 'rgba(255,255,255,0.45)' }}>
-              Student Development
-            </p>
-            <h2
-              className="font-black leading-tight mb-10"
-              style={{ fontSize: 'clamp(1.75rem, 3.5vw, 2.75rem)', color: '#fff', letterSpacing: '-0.02em', maxWidth: '28ch' }}>
-              A structured framework for lifelong growth.
-            </h2>
-          </FadeIn>
-
-          <FadeIn delay={0.1}>
-            <div className="flex flex-wrap items-center gap-3 mb-12">
-              {FRAMEWORK_STEPS.map((step, i) => (
-                <Fragment key={step}>
-                  <span
-                    className="font-black text-xs sm:text-sm tracking-wider uppercase"
-                    style={{ color: '#fff' }}>
-                    {step}
-                  </span>
-                  {i < FRAMEWORK_STEPS.length - 1 && (
-                    <span className="text-base font-light" style={{ color: 'rgba(255,255,255,0.2)' }}>
-                      →
-                    </span>
-                  )}
-                </Fragment>
-              ))}
-            </div>
-          </FadeIn>
-
-          <FadeIn delay={0.2}>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-end">
-              <p className="text-base sm:text-lg leading-relaxed" style={{ color: 'rgba(255,255,255,0.65)' }}>
-                SAC doesn't just run clubs — it runs a development ecosystem. Every activity, every leadership role, and every credit point is part of a deliberate journey from student to professional to leader.
-              </p>
-              <div className="flex flex-wrap gap-4">
-                <Link
-                  href="https://sac.kluniversity.in"
-                  target="_blank"
-                  rel="noopener"
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-bold transition-all hover:scale-[1.03]"
-                  style={{ background: '#8B0000', color: '#ffffff' }}>
-                  View My AI Career Roadmap
-                  <ArrowUpRight size={14} />
-                </Link>
-                <Link
-                  href="/about"
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-bold transition-all hover:bg-white/10"
-                  style={{ border: '1px solid rgba(255,255,255,0.25)', color: '#fff' }}>
-                  Learn about SAC
-                </Link>
-              </div>
-            </div>
-          </FadeIn>
-        </div>
-      </section>
 
       {/* ═══════════════════════════════════════════════ ACHIEVEMENTS ══ */}
       <section style={{ background: '#0A0A0F' }}>
