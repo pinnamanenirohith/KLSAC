@@ -1,14 +1,31 @@
 'use client';
 
-import { useRef, useState, useEffect, useCallback } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const CRIMSON = '#8B0000';
-const SANS    = "'Helvetica Neue', Helvetica, Arial, sans-serif";
-const DRAW    = [0.76, 0, 0.24, 1] as [number, number, number, number];
+const DARK    = '#09090B';
+const DISPLAY = "'Arial Black','Helvetica Neue',Arial,sans-serif";
+
+/* Words that map to student passions across SAC's five domains.
+   Alternating white / crimson keeps the rhythm visually alive.     */
+const WORDS = [
+  { text: 'MUSIC',   red: false },
+  { text: 'CODE',    red: true  },
+  { text: 'SPORT',   red: false },
+  { text: 'ART',     red: true  },
+  { text: 'DANCE',   red: false },
+  { text: 'CREATE',  red: true  },
+  { text: 'WIN',     red: false },
+  { text: 'LIVE',    red: true  },
+];
+
+const WORD_MS = 175; // ms per word — fast enough to feel kinetic
 
 export function IntroAnimation() {
-  const [visible, setVisible] = useState(true);
+  const [idx,         setIdx]         = useState(0);
+  const [showTagline, setShowTagline] = useState(false);
+  const [visible,     setVisible]     = useState(true);
   const fired = useRef(false);
 
   const dismiss = useCallback(() => {
@@ -19,11 +36,25 @@ export function IntroAnimation() {
 
   useEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      setVisible(false);
+      dismiss();
       return;
     }
-    const t = setTimeout(dismiss, 2800);
-    return () => clearTimeout(t);
+
+    const ts: ReturnType<typeof setTimeout>[] = [];
+
+    // Schedule every word
+    WORDS.forEach((_, i) => {
+      ts.push(setTimeout(() => setIdx(i), i * WORD_MS));
+    });
+
+    // After the reel, show the tagline
+    const reelEnd = WORDS.length * WORD_MS;
+    ts.push(setTimeout(() => setShowTagline(true), reelEnd));
+
+    // Auto-dismiss — tagline is felt for ~580 ms then fades
+    ts.push(setTimeout(dismiss, reelEnd + 580));
+
+    return () => ts.forEach(clearTimeout);
   }, [dismiss]);
 
   return (
@@ -31,108 +62,71 @@ export function IntroAnimation() {
       {visible && (
         <motion.div
           key="intro"
-          exit={{ opacity: 0, transition: { duration: 0.85, ease: 'easeInOut' } }}
+          exit={{ opacity: 0, transition: { duration: 0.65, ease: 'easeIn' } }}
           className="fixed inset-0 z-[9999] flex items-center justify-center cursor-pointer select-none"
-          style={{ background: '#F8F8F8' }}
+          style={{ background: DARK }}
           onClick={dismiss}
           aria-hidden="true"
         >
 
-          {/* ── Centre composition ─────────────────────── */}
-          <div style={{ textAlign: 'center', userSelect: 'none' }}>
-
-            {/* Wordmark */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 1.0, delay: 0.22, ease: 'easeOut' }}
+          {/* ── Word reel ───────────────────────────── */}
+          {!showTagline && (
+            <motion.p
+              key={`w${idx}`}
+              initial={{ scale: 1.12, opacity: 1 }}
+              animate={{ scale: 1,    opacity: 1 }}
+              transition={{ duration: 0.09, ease: 'easeOut' }}
               style={{
-                fontFamily: SANS,
-                fontWeight: 300,
-                fontSize: 'clamp(28px, 4.5vw, 46px)',
-                letterSpacing: '0.45em',
-                textTransform: 'uppercase',
-                lineHeight: 1,
+                margin: 0,
+                fontFamily: DISPLAY,
+                fontWeight: 900,
+                fontSize: 'clamp(52px, 13vw, 128px)',
+                letterSpacing: '0.05em',
+                color: WORDS[idx].red ? CRIMSON : '#FFFFFF',
+                userSelect: 'none',
               }}
             >
-              <span style={{ color: '#1C1C1C' }}>KL </span>
-              <span style={{ color: CRIMSON    }}>SAC</span>
+              {WORDS[idx].text}
+            </motion.p>
+          )}
+
+          {/* ── Tagline ─────────────────────────────── */}
+          {showTagline && (
+            <motion.div
+              key="tagline"
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0  }}
+              transition={{ duration: 0.26, ease: 'easeOut' }}
+              style={{ textAlign: 'center', lineHeight: 1 }}
+            >
+              <p style={{
+                margin: 0,
+                fontFamily: DISPLAY, fontWeight: 900,
+                fontSize: 'clamp(40px, 8vw, 88px)',
+                letterSpacing: '0.06em', color: '#FFFFFF',
+              }}>
+                YOUR
+              </p>
+              <p style={{
+                margin: 0,
+                fontFamily: DISPLAY, fontWeight: 900,
+                fontSize: 'clamp(40px, 8vw, 88px)',
+                letterSpacing: '0.06em', color: CRIMSON,
+              }}>
+                TIME.
+              </p>
             </motion.div>
+          )}
 
-            {/* Thin rule */}
-            <motion.div
-              initial={{ scaleX: 0 }}
-              animate={{ scaleX: 1 }}
-              transition={{ duration: 0.55, delay: 0.7, ease: DRAW }}
-              style={{
-                height: 1, width: 44,
-                background: CRIMSON,
-                margin: '22px auto 22px',
-                transformOrigin: 'center',
-              }}
-            />
-
-            {/* Student Activity Center */}
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.65, delay: 0.95, ease: 'easeOut' }}
-              style={{
-                margin: '0 0 9px', fontFamily: SANS,
-                fontSize: 9, fontWeight: 600,
-                letterSpacing: '0.38em', textTransform: 'uppercase',
-                color: '#2A2A2A',
-              }}
-            >
-              Student Activity Center
-            </motion.p>
-
-            {/* KL University */}
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.55, delay: 1.15, ease: 'easeOut' }}
-              style={{
-                margin: 0, fontFamily: SANS,
-                fontSize: 8, fontWeight: 400,
-                letterSpacing: '0.22em', textTransform: 'uppercase',
-                color: '#ABABAB',
-              }}
-            >
-              KL University · Vijayawada
-            </motion.p>
-          </div>
-
-          {/* ── Progress line ───────────────────────────── */}
-          <motion.div
-            initial={{ scaleX: 0 }}
-            animate={{ scaleX: 1 }}
-            transition={{ duration: 2.55, delay: 0.1, ease: 'linear' }}
-            style={{
-              position: 'absolute', bottom: 0, left: 0, right: 0,
-              height: 1.5,
-              background: `linear-gradient(90deg, ${CRIMSON} 0%, rgba(201,168,76,0.7) 100%)`,
-              transformOrigin: 'left',
-              opacity: 0.65,
-            }}
-          />
-
-          {/* ── Skip hint ────────────────────────────────── */}
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.4, delay: 1.6 }}
-            style={{
-              position: 'absolute', bottom: 16,
-              left: '50%', transform: 'translateX(-50%)',
-              margin: 0, fontFamily: SANS,
-              fontSize: 8, letterSpacing: '0.22em',
-              textTransform: 'uppercase', color: '#CACACA',
-              whiteSpace: 'nowrap',
-            }}
-          >
-            Click anywhere to skip
-          </motion.p>
+          {/* ── Skip hint (barely visible) ──────────── */}
+          <p style={{
+            position: 'absolute', bottom: 22, margin: 0,
+            fontFamily: "'Helvetica Neue',Helvetica,Arial,sans-serif",
+            fontSize: 8, letterSpacing: '0.22em', textTransform: 'uppercase',
+            color: 'rgba(255,255,255,0.16)',
+          }}>
+            Tap to skip
+          </p>
 
         </motion.div>
       )}
