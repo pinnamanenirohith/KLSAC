@@ -109,43 +109,6 @@ export function IntroAnimation() {
                 {WORDS[idx].text}
               </motion.p>
 
-              {/* KL SAC branding — fades in only during live-scene */}
-              {phase === 'live-scene' && (
-                <motion.div
-                  initial={{ opacity: 0, y: 16 }}
-                  animate={{ opacity: 1, y: 0  }}
-                  transition={{ duration: 0.42, delay: 0.1, ease: 'easeOut' }}
-                  style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
-                >
-                  {/* Separator line */}
-                  <motion.div
-                    initial={{ scaleX: 0 }}
-                    animate={{ scaleX: 1 }}
-                    transition={{ duration: 0.32, delay: 0.14, ease: DRAW }}
-                    style={{
-                      height: 1, width: 56,
-                      background: 'rgba(255,255,255,0.14)',
-                      margin: '26px 0 24px',
-                      transformOrigin: 'center',
-                    }}
-                  />
-
-                  {/* Tagline */}
-                  <motion.p
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.3, delay: 0.3 }}
-                    style={{
-                      margin: '10px 0 0', fontFamily: SANS,
-                      fontSize: 9, fontWeight: 600,
-                      letterSpacing: '0.3em', textTransform: 'uppercase',
-                      color: 'rgba(255,255,255,0.36)',
-                    }}
-                  >
-                    Student Activity Center
-                  </motion.p>
-                </motion.div>
-              )}
             </div>
           )}
 
