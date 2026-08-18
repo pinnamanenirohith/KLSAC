@@ -34,8 +34,18 @@ export const STUDENT_COUNCIL: CouncilMember[] = [
     role: 'President',
     subtitle: 'Administration, Strategy & Student Engagement',
     year: '4th Year', branch: 'Computer Science Engineering',
-    clubs: ['Yuva Tourism Club'],
-    clubLead: 'Yuva Tourism Club',
+    linkedin: 'https://in.linkedin.com/in/rohith-venkata-sai-pinnamaneni-38807a2b2',
+    journey:
+      'Joined SAC in October 2023 as a member of the SafeLife Club, driven by a passion for healthcare awareness and student wellness. Through consistent involvement he rose to Co-Lead and then Club Lead by June 2024. In July 2025 he stepped into core governance as SAC Administrative Lead — the interface between clubs and the executive council. He served as Vice President from September 2025, overseeing university-wide engagement programmes and earning recognition from the Women Development Cell. In June 2026 he was appointed President of the Student Council for 2026–27, heading a 25+ member executive team. Alongside his leadership role he engineered the SAC ERP Platform from scratch using Next.js, React, Node.js, and MongoDB — a role-based system approved and deployed on the KL University server under the mentorship of SAC Director Mr. Sai Vijay Pisini.',
+    achievements: [
+      'President, KL SAC Student Council 2026–27 — heads a 25+ member executive core team',
+      'Built the SAC ERP Platform from scratch (Next.js, React, Node.js, MongoDB) — deployed on KL University\'s main server',
+      'Recognised by the university\'s Women Development Cell for contributions as Vice President',
+      'Progressed from club member to Student Council President in under three years',
+      'SafeLife Club Lead — steered local healthcare outreach and team operations (2024–25)',
+      'Mentored by SAC Director Mr. Sai Vijay Pisini on institutional digital transformation',
+    ],
+    clubs: ['SafeLife Club', 'Yuva Tourism Club'],
   },
   {
     id: 'p2',
