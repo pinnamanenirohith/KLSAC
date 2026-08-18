@@ -38,3 +38,31 @@ export function getClubGalleryPhotos(clubSlug: string, max = 8): string[] {
   if (!gallerySlug) return [];
   return getGalleryPhotos(gallerySlug, max);
 }
+
+// Domain code -> ordered list of gallery slugs to pull photos from
+const DOMAIN_GALLERY_SLUGS: Record<string, string[]> = {
+  'LCH': ['dance', 'music', 'photography', 'fashion', 'arts', 'literature', 'short-film'],
+  'HWB': ['marathon'],
+  'TEC': [],
+  'ESO': [],
+  'IIE': [],
+};
+
+// Returns up to `max` photos for a domain, sampled evenly across its clubs' galleries.
+export function getDomainGalleryPhotos(domainCode: string, max = 6): string[] {
+  const slugs = DOMAIN_GALLERY_SLUGS[domainCode] ?? [];
+  if (slugs.length === 0) return [];
+  const photos: string[] = [];
+  let i = 0;
+  while (photos.length < max) {
+    const gallerySlug = slugs[i % slugs.length];
+    const idx = Math.floor(i / slugs.length) + 1;
+    const count = GALLERY_COUNTS[gallerySlug] ?? 0;
+    if (idx <= count) {
+      photos.push(`/gallery/${gallerySlug}/${String(idx).padStart(2, '0')}.jpg`);
+    }
+    i++;
+    if (i > max * slugs.length * 2) break;
+  }
+  return photos.slice(0, max);
+}

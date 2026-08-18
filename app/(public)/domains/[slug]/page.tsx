@@ -6,7 +6,8 @@ import {
 } from 'lucide-react';
 import { getDomainBySlug, DOMAIN_SLUGS } from '@/lib/content/domains';
 import { getClubsByDomain } from '@/lib/content/clubs';
-import { DEMO_ACTIVITIES } from '@/lib/demo-data';
+import { getUpcomingByDomain } from '@/lib/content/activities';
+import { getDomainGalleryPhotos } from '@/lib/content/gallery';
 import { FadeIn } from '../../_components/FadeIn';
 
 export function generateStaticParams() {
@@ -28,9 +29,8 @@ export default async function DomainDetailPage({ params }: { params: Promise<{ s
   const clubs = getClubsByDomain(domain.code);
 
   const today = new Date().toISOString().split('T')[0];
-  const upcomingActivities = DEMO_ACTIVITIES.filter(
-    a => a.domain === domain.code && a.activity_date >= today,
-  );
+  const upcomingActivities = getUpcomingByDomain(domain.code, today, 6);
+  const galleryPhotos = getDomainGalleryPhotos(domain.code, 6);
 
   return (
     <>
@@ -145,34 +145,46 @@ export default async function DomainDetailPage({ params }: { params: Promise<{ s
           </FadeIn>
 
           <FadeIn>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-6">
-              {[0, 1, 2, 3, 4, 5].map(i => (
-                <div
-                  key={i}
-                  className="relative rounded-2xl overflow-hidden flex flex-col items-center justify-center gap-2"
-                  style={{
-                    aspectRatio: '4/3',
-                    background: i % 3 === 0 ? `${domain.color}10` : i % 3 === 1 ? `${domain.color}07` : '#ECECEC',
-                    border: `1.5px dashed ${domain.color}22`,
-                  }}>
-                  <Camera size={22} style={{ color: `${domain.color}38` }} />
-                  <span className="text-[9px] font-black tracking-[0.2em] uppercase" style={{ color: `${domain.color}38` }}>
-                    Photo
-                  </span>
+            {galleryPhotos.length > 0 ? (
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                {galleryPhotos.map((src, i) => (
+                  <div
+                    key={i}
+                    className="rounded-2xl overflow-hidden"
+                    style={{ aspectRatio: '4/3' }}>
+                    <img
+                      src={src}
+                      alt={`${domain.name} activity photo ${i + 1}`}
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                    />
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-6">
+                  {[0, 1, 2, 3, 4, 5].map(i => (
+                    <div
+                      key={i}
+                      className="relative rounded-2xl overflow-hidden flex flex-col items-center justify-center gap-2"
+                      style={{
+                        aspectRatio: '4/3',
+                        background: i % 3 === 0 ? `${domain.color}10` : i % 3 === 1 ? `${domain.color}07` : '#ECECEC',
+                        border: `1.5px dashed ${domain.color}22`,
+                      }}>
+                      <Camera size={22} style={{ color: `${domain.color}38` }} />
+                      <span className="text-[9px] font-black tracking-[0.2em] uppercase" style={{ color: `${domain.color}38` }}>
+                        Photo
+                      </span>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-            <p className="text-xs text-center" style={{ color: '#A1A1AA' }}>
-              Event and activity photos will appear here.{' '}
-              <Link
-                href="https://sac.kluniversity.in"
-                target="_blank"
-                rel="noopener"
-                className="font-bold hover:underline"
-                style={{ color: domain.color }}>
-                Submit via Student Dashboard →
-              </Link>
-            </p>
+                <p className="text-xs text-center" style={{ color: '#A1A1AA' }}>
+                  Event and activity photos will appear here.
+                </p>
+              </>
+            )}
           </FadeIn>
         </div>
       </section>

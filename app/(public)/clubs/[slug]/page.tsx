@@ -6,7 +6,8 @@ import {
 } from 'lucide-react';
 import { getClubBySlug, CLUB_SLUGS } from '@/lib/content/clubs';
 import { getDomainByCode } from '@/lib/content/domains';
-import { DEMO_CLUBS, DEMO_ACTIVITIES } from '@/lib/demo-data';
+import { DEMO_CLUBS } from '@/lib/demo-data';
+import { getUpcomingByClub } from '@/lib/content/activities';
 import { getClubGalleryPhotos } from '@/lib/content/gallery';
 import { FadeIn } from '../../_components/FadeIn';
 
@@ -41,9 +42,7 @@ export default async function ClubDetailPage({ params }: { params: Promise<{ slu
   const memberLimit = demoClub?.memberLimit ?? null;
 
   const today = new Date().toISOString().split('T')[0];
-  const upcomingEvents = DEMO_ACTIVITIES.filter(
-    a => a.domain === club.domainCode && a.activity_date >= today,
-  );
+  const upcomingEvents = getUpcomingByClub(slug, today, 3);
   const galleryPhotos = getClubGalleryPhotos(slug, 8);
 
   return (
