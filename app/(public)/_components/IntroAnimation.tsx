@@ -32,7 +32,7 @@ const WORDS = [
 const WORD_MS  = 150;
 const LAST_IDX = WORDS.length - 1;
 
-type Phase = 'reel' | 'live-scene' | 'tagline';
+type Phase = 'reel' | 'live-scene' | 'kl-sac' | 'tagline';
 
 export function IntroAnimation() {
   const [idx,     setIdx]     = useState(0);
@@ -62,11 +62,14 @@ export function IntroAnimation() {
     /* After LIVE flashes, hold it with branding */
     ts.push(setTimeout(() => setPhase('live-scene'), reelEnd));
 
+    /* KL SAC beat */
+    ts.push(setTimeout(() => setPhase('kl-sac'),  reelEnd + 700));
+
     /* Transition to tagline */
-    ts.push(setTimeout(() => setPhase('tagline'), reelEnd + 700));
+    ts.push(setTimeout(() => setPhase('tagline'), reelEnd + 700 + 520));
 
     /* Auto-dismiss after tagline is felt */
-    ts.push(setTimeout(dismiss, reelEnd + 700 + 540));
+    ts.push(setTimeout(dismiss, reelEnd + 700 + 520 + 520));
 
     return () => ts.forEach(clearTimeout);
   }, [dismiss]);
@@ -161,6 +164,32 @@ export function IntroAnimation() {
                 </motion.div>
               )}
             </div>
+          )}
+
+          {/* ══ KL SAC ═══════════════════════════════════ */}
+          {phase === 'kl-sac' && (
+            <motion.div
+              key="kl-sac"
+              initial={{ scale: 1.1, opacity: 0 }}
+              animate={{ scale: 1,   opacity: 1 }}
+              transition={{ duration: 0.18, ease: 'easeOut' }}
+              style={{ lineHeight: 1, whiteSpace: 'nowrap' }}
+            >
+              <span style={{
+                fontFamily: DISPLAY, fontWeight: 900,
+                fontSize: 'clamp(52px, 13vw, 128px)',
+                letterSpacing: '0.05em', color: '#FFFFFF',
+              }}>
+                KL{' '}
+              </span>
+              <span style={{
+                fontFamily: DISPLAY, fontWeight: 900,
+                fontSize: 'clamp(52px, 13vw, 128px)',
+                letterSpacing: '0.05em', color: CRIMSON,
+              }}>
+                SAC
+              </span>
+            </motion.div>
           )}
 
           {/* ══ YOUR TIME. tagline ════════════════════════ */}
