@@ -2,7 +2,6 @@
 
 import { useEffect, useState, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import Image from 'next/image';
 
 const CRIMSON = '#8B0000';
 const DARK    = '#09090B';
@@ -131,21 +130,16 @@ export function IntroAnimation() {
                     }}
                   />
 
-                  {/* Official logo — inverted to white on dark bg */}
-                  <Image
-                    src="/logo.png"
-                    alt="KL SAC"
-                    height={38}
-                    width={172}
-                    style={{
-                      height: '38px',
-                      width: 'auto',
-                      objectFit: 'contain',
-                      filter: 'brightness(0) invert(1)',
-                      opacity: 0.9,
-                    }}
-                    priority
-                  />
+                  {/* KL SAC wordmark */}
+                  <p style={{
+                    margin: 0,
+                    fontFamily: DISPLAY, fontWeight: 900,
+                    fontSize: 'clamp(22px, 3.5vw, 38px)',
+                    letterSpacing: '0.12em',
+                  }}>
+                    <span style={{ color: '#FFFFFF' }}>KL </span>
+                    <span style={{ color: CRIMSON   }}>SAC</span>
+                  </p>
 
                   {/* Tagline */}
                   <motion.p
