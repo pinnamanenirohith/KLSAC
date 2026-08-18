@@ -1,0 +1,762 @@
+import Link from 'next/link';
+import { ArrowRight, ArrowUpRight, ChevronDown } from 'lucide-react';
+import { Fragment } from 'react';
+import { DOMAINS } from '@/lib/content/domains';
+import { DEMO_CLUBS, DOMAIN_META } from '@/lib/demo-data';
+import { NEWS_ARTICLES } from '@/lib/content/site-content';
+import { STUDENT_STORIES } from '@/lib/content/site-content';
+import { FadeIn } from './_components/FadeIn';
+import { getHomepageEvents, getHomepageStats } from '@/lib/data/homepage';
+
+export const metadata = {
+  title: 'KL SAC — Student Activity Center, KL University',
+  description:
+    'KL SAC is KL University\'s Student Activity Center — 25 clubs, 5 domains, one mission: to develop the complete student.',
+};
+
+const JOURNEY_STEPS = [
+  { title: 'Discover',     description: 'Explore your interests across five domains and twenty-five clubs. Find the community that matches who you are — or who you want to become.' },
+  { title: 'Participate',  description: 'Join activities, competitions, workshops, and programmes that go beyond the curriculum. Every participation earns SDC credits and real-world experience.' },
+  { title: 'Develop',      description: 'Build competencies that employers and institutions recognise — technical, creative, leadership, and interpersonal skills that define the complete professional.' },
+  { title: 'Lead',         description: 'Take responsibility within your club — as a coordinator, team leader, or domain representative. Leadership at SAC is earned through performance, not appointment.' },
+  { title: 'Create',       description: 'Build something that matters: a product, a performance, a project, a venture. SAC gives you the platform, the mentors, and the collaborators you need.' },
+  { title: 'Impact',       description: 'Carry your experience beyond campus — in your career, your community, and your commitment to the values KL SAC instilled in you.' },
+];
+
+const FRAMEWORK_STEPS = [
+  'Interest',
+  'Participation',
+  'Competency',
+  'Experience',
+  'Leadership',
+  'Career Readiness',
+];
+
+export default async function HomePage() {
+  const [events, stats] = await Promise.all([
+    getHomepageEvents(4),
+    getHomepageStats(),
+  ]);
+
+  const today   = new Date().toISOString().split('T')[0];
+  const upcomingEvents = events.filter((e: any) => e.activity_date >= today).slice(0, 4);
+
+  return (
+    <>
+      {/* ══════════════════════════════════════════════════════════ HERO ══ */}
+      <section
+        className="relative flex items-center justify-start overflow-hidden"
+        style={{ minHeight: '100svh' }}>
+
+        {/* Video background */}
+        <video
+          autoPlay muted loop playsInline
+          className="absolute inset-0 w-full h-full object-cover"
+          src="/hero.mp4"
+          aria-hidden="true"
+        />
+
+        {/* Gradient overlays */}
+        <div
+          className="absolute inset-0"
+          style={{ background: 'linear-gradient(105deg, rgba(5,5,8,0.88) 0%, rgba(5,5,8,0.65) 45%, rgba(5,5,8,0.25) 75%, rgba(5,5,8,0.1) 100%)' }}
+          aria-hidden="true"
+        />
+        <div
+          className="absolute bottom-0 left-0 right-0 h-40"
+          style={{ background: 'linear-gradient(to top, rgba(5,5,8,0.6) 0%, transparent 100%)' }}
+          aria-hidden="true"
+        />
+
+        {/* Content */}
+        <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-10 w-full pt-24 pb-20">
+          <div className="max-w-2xl">
+
+            {/* Badge */}
+            <div className="inline-flex items-center gap-2 mb-8 animate-fade-in">
+              <span
+                className="h-px w-8"
+                style={{ background: '#C9A84C' }} />
+              <span
+                className="text-[10px] font-black tracking-[0.25em] uppercase"
+                style={{ color: '#C9A84C' }}>
+                KL University · Student Activity Center
+              </span>
+            </div>
+
+            {/* Headline */}
+            <h1
+              className="font-black leading-[1.05] mb-6 animate-fade-up"
+              style={{ fontSize: 'clamp(3rem, 7vw, 5.5rem)', color: '#FFFFFF', letterSpacing: '-0.025em' }}>
+              Student Life.
+              <br />
+              <span style={{ color: 'rgba(255,255,255,0.55)', fontWeight: 300 }}>Beyond the</span>
+              <br />
+              Classroom.
+            </h1>
+
+            {/* Body */}
+            <p
+              className="text-lg sm:text-xl leading-relaxed mb-10 animate-fade-up delay-100"
+              style={{ color: 'rgba(255,255,255,0.65)', maxWidth: '48ch' }}>
+              KL SAC is where 25 clubs, 5 domains, and thousands of students come together to build something larger than a degree.
+            </p>
+
+            {/* CTAs */}
+            <div className="flex flex-wrap items-center gap-4 animate-fade-up delay-200">
+              <Link
+                href="/about"
+                className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full font-bold text-base transition-all hover:scale-[1.03] active:scale-[0.98]"
+                style={{ background: '#8B0000', color: '#fff' }}>
+                Explore SAC
+                <ArrowRight size={16} />
+              </Link>
+              <Link
+                href="/clubs"
+                className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full font-bold text-base transition-all hover:bg-white/15"
+                style={{ border: '1px solid rgba(255,255,255,0.3)', color: '#fff' }}>
+                Browse Clubs
+              </Link>
+              <Link
+                href="https://sac.kluniversity.in"
+                target="_blank"
+                rel="noopener"
+                className="inline-flex items-center gap-1.5 font-semibold text-sm transition-opacity hover:opacity-75"
+                style={{ color: 'rgba(255,255,255,0.55)' }}>
+                Student Dashboard
+                <ArrowUpRight size={14} />
+              </Link>
+            </div>
+          </div>
+
+          {/* Scroll cue */}
+          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce-gentle opacity-40">
+            <ChevronDown size={22} style={{ color: '#fff' }} />
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════════ AT A GLANCE ══ */}
+      <section style={{ background: '#0A0A0F' }}>
+        <div className="max-w-7xl mx-auto px-5 sm:px-10 py-20">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-0 lg:divide-x"
+               style={{ borderColor: 'rgba(255,255,255,0.07)' }}>
+            {[
+              { value: stats.clubs.toString(),                     label: 'Active Clubs',          gold: true  },
+              { value: stats.domains.toString(),                   label: 'Learning Domains',       gold: true  },
+              { value: stats.students ? String(stats.students) + '+' : null, label: 'Student Members',      gold: false },
+              { value: stats.activities ? String(stats.activities) + '+' : null, label: 'Annual Activities',     gold: false },
+            ].map((s) => (
+              <div key={s.label} className="px-0 lg:px-10">
+                <div
+                  className="font-black leading-none mb-2"
+                  style={{
+                    fontSize: 'clamp(2.5rem, 5vw, 4rem)',
+                    color:    s.value ? (s.gold ? '#C9A84C' : '#fff') : '#2A2A30',
+                    letterSpacing: '-0.03em',
+                  }}>
+                  {s.value ?? '—'}
+                </div>
+                <div className="text-sm font-medium" style={{ color: 'rgba(255,255,255,0.38)' }}>
+                  {s.label}
+                </div>
+                {!s.value && (
+                  <div className="text-[10px] mt-1 font-medium" style={{ color: '#3A3A44' }}>
+                    Official data pending
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════ WHAT HAPPENS AT SAC */}
+      <section style={{ background: '#fff' }}>
+        <div className="max-w-7xl mx-auto px-5 sm:px-10 py-28">
+          <FadeIn className="mb-16">
+            <p className="text-[10px] font-black tracking-[0.22em] uppercase mb-4" style={{ color: '#8B0000' }}>
+              The SAC Journey
+            </p>
+            <h2
+              className="font-black leading-tight"
+              style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', color: '#0D0D0D', letterSpacing: '-0.02em', maxWidth: '28ch' }}>
+              What happens when you join KL SAC?
+            </h2>
+          </FadeIn>
+
+          <div className="max-w-3xl">
+            {JOURNEY_STEPS.map((step, i) => (
+              <FadeIn key={step.title} delay={i * 0.07}>
+                <div
+                  className="flex gap-8 sm:gap-12 py-8"
+                  style={{ borderBottom: i < JOURNEY_STEPS.length - 1 ? '1px solid #EBEBEB' : 'none' }}>
+                  <span
+                    className="font-black shrink-0 leading-none pt-1"
+                    style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', color: '#E8E8EC', width: '3rem', fontVariantNumeric: 'tabular-nums' }}>
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
+                  <div>
+                    <p className="font-black text-lg uppercase tracking-[0.1em] mb-2" style={{ color: '#0D0D0D' }}>
+                      {step.title}
+                    </p>
+                    <p className="text-base leading-relaxed" style={{ color: '#71717A' }}>
+                      {step.description}
+                    </p>
+                  </div>
+                </div>
+              </FadeIn>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════════════ FIVE DOMAINS ══ */}
+      <section style={{ background: '#F7F7F8' }}>
+        <div className="max-w-7xl mx-auto px-5 sm:px-10 py-28">
+          <FadeIn className="mb-12">
+            <p className="text-[10px] font-black tracking-[0.22em] uppercase mb-4" style={{ color: '#8B0000' }}>
+              Five Domains · Twenty-Five Clubs
+            </p>
+            <h2
+              className="font-black leading-tight"
+              style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', color: '#0D0D0D', letterSpacing: '-0.02em' }}>
+              Every passion. One ecosystem.
+            </h2>
+          </FadeIn>
+
+          <FadeIn>
+            <div style={{ borderTop: '1px solid #E4E4E7' }}>
+              {DOMAINS.map((d, i) => (
+                <Link
+                  key={d.code}
+                  href={`/domains/${d.slug}`}
+                  className="group flex items-center gap-4 sm:gap-8 py-5 sm:py-6 transition-all"
+                  style={{
+                    borderBottom:  '1px solid #E4E4E7',
+                    paddingLeft:   '0',
+                    paddingRight:  '0',
+                  }}>
+                  {/* Code badge */}
+                  <div
+                    className="w-14 h-10 rounded-lg flex items-center justify-center font-black text-xs shrink-0 transition-colors"
+                    style={{ background: d.accentBg, color: d.color }}>
+                    {d.code}
+                  </div>
+
+                  {/* Name */}
+                  <div className="flex-1 min-w-0">
+                    <p className="font-bold text-base sm:text-lg leading-tight text-gray-900 group-hover:text-gray-600 transition-colors">
+                      {d.name}
+                    </p>
+                    <p className="text-sm mt-0.5 hidden sm:block" style={{ color: '#A1A1AA' }}>
+                      {d.tagline}
+                    </p>
+                  </div>
+
+                  {/* Club count */}
+                  <div className="text-right shrink-0">
+                    <span className="text-sm font-semibold" style={{ color: '#A1A1AA' }}>
+                      {d.clubCount} clubs
+                    </span>
+                  </div>
+
+                  {/* Arrow */}
+                  <ArrowRight
+                    size={18}
+                    className="shrink-0 transition-transform group-hover:translate-x-1"
+                    style={{ color: '#D1D1D6' }} />
+                </Link>
+              ))}
+            </div>
+
+            <div className="mt-8 flex items-center gap-6">
+              <Link
+                href="/domains"
+                className="inline-flex items-center gap-2 font-bold text-sm transition-colors hover:opacity-75"
+                style={{ color: '#8B0000' }}>
+                View all domains
+                <ArrowRight size={14} />
+              </Link>
+              <Link
+                href="/clubs"
+                className="inline-flex items-center gap-2 font-semibold text-sm transition-colors hover:opacity-75"
+                style={{ color: '#71717A' }}>
+                Browse all 25 clubs
+              </Link>
+            </div>
+          </FadeIn>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════ STUDENT STORIES ══ */}
+      <section style={{ background: '#fff' }}>
+        <div className="max-w-7xl mx-auto px-5 sm:px-10 py-28">
+          <FadeIn className="flex items-end justify-between mb-12 gap-6">
+            <div>
+              <p className="text-[10px] font-black tracking-[0.22em] uppercase mb-4" style={{ color: '#8B0000' }}>
+                Student Stories
+              </p>
+              <h2
+                className="font-black leading-tight"
+                style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', color: '#0D0D0D', letterSpacing: '-0.02em' }}>
+                Lived experiences.<br />Real transformation.
+              </h2>
+            </div>
+            <Link
+              href="/stories"
+              className="hidden sm:inline-flex items-center gap-2 font-bold text-sm shrink-0 mb-1 transition-opacity hover:opacity-70"
+              style={{ color: '#8B0000' }}>
+              All stories
+              <ArrowRight size={14} />
+            </Link>
+          </FadeIn>
+
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-5">
+            {/* Featured story */}
+            <FadeIn className="lg:col-span-3">
+              <Link href={`/stories/${STUDENT_STORIES[0].slug}`} className="group block h-full">
+                <div
+                  className="rounded-2xl overflow-hidden h-72 lg:h-80 flex items-end mb-5 relative"
+                  style={{ background: 'linear-gradient(135deg, #1a0005 0%, #5b0000 100%)' }}>
+                  {/* Photo placeholder */}
+                  <div className="absolute inset-0 flex items-center justify-center opacity-10">
+                    <span className="text-xs font-bold tracking-widest uppercase" style={{ color: '#fff' }}>
+                      Photography Required
+                    </span>
+                  </div>
+                  {/* Story meta overlay */}
+                  <div className="relative p-6 w-full"
+                       style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 100%)' }}>
+                    <span
+                      className="text-[10px] font-black tracking-widest uppercase mb-2 inline-block"
+                      style={{ color: DOMAINS.find(d => d.code === STUDENT_STORIES[0].domainCode)?.color ?? '#C9A84C' }}>
+                      {STUDENT_STORIES[0].clubName}
+                    </span>
+                    <h3 className="font-black text-xl leading-snug" style={{ color: '#fff' }}>
+                      {STUDENT_STORIES[0].title}
+                    </h3>
+                  </div>
+                </div>
+                <p className="text-base leading-relaxed" style={{ color: '#71717A' }}>
+                  {STUDENT_STORIES[0].excerpt}
+                </p>
+                <p className="text-sm font-bold mt-3 group-hover:gap-3 flex items-center gap-2 transition-all"
+                   style={{ color: '#8B0000' }}>
+                  Read story <ArrowRight size={14} />
+                </p>
+              </Link>
+            </FadeIn>
+
+            {/* Two smaller stories */}
+            <div className="lg:col-span-2 flex flex-col gap-5">
+              {STUDENT_STORIES.slice(1, 3).map((story, i) => (
+                <FadeIn key={story.slug} delay={0.1 + i * 0.1} className="flex-1">
+                  <Link href={`/stories/${story.slug}`} className="group block h-full">
+                    <div
+                      className="rounded-xl overflow-hidden h-40 flex items-end mb-4 relative"
+                      style={{ background: i === 0 ? 'linear-gradient(135deg, #1a001a 0%, #7E22CE 100%)' : 'linear-gradient(135deg, #001a0a 0%, #15803D 100%)' }}>
+                      <div className="absolute inset-0 flex items-center justify-center opacity-10">
+                        <span className="text-xs font-bold tracking-widest uppercase" style={{ color: '#fff' }}>
+                          Photography Required
+                        </span>
+                      </div>
+                      <div className="relative p-4 w-full"
+                           style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 100%)' }}>
+                        <span className="text-[9px] font-black tracking-widest uppercase"
+                              style={{ color: 'rgba(255,255,255,0.65)' }}>
+                          {story.clubName}
+                        </span>
+                      </div>
+                    </div>
+                    <h3 className="font-bold text-base leading-snug mb-1" style={{ color: '#0D0D0D' }}>
+                      {story.title}
+                    </h3>
+                    <p className="text-sm line-clamp-2" style={{ color: '#71717A' }}>
+                      {story.excerpt}
+                    </p>
+                  </Link>
+                </FadeIn>
+              ))}
+            </div>
+          </div>
+
+          <div className="mt-8 sm:hidden">
+            <Link
+              href="/stories"
+              className="inline-flex items-center gap-2 font-bold text-sm"
+              style={{ color: '#8B0000' }}>
+              All student stories <ArrowRight size={14} />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ════════════════════════════════════════════ UPCOMING EVENTS ══ */}
+      <section style={{ background: '#F7F7F8' }}>
+        <div className="max-w-7xl mx-auto px-5 sm:px-10 py-28">
+          <FadeIn className="flex items-end justify-between mb-12 gap-6">
+            <div>
+              <p className="text-[10px] font-black tracking-[0.22em] uppercase mb-4" style={{ color: '#8B0000' }}>
+                Calendar
+              </p>
+              <h2
+                className="font-black leading-tight"
+                style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', color: '#0D0D0D', letterSpacing: '-0.02em' }}>
+                Upcoming Events
+              </h2>
+            </div>
+            <Link
+              href="/events"
+              className="hidden sm:inline-flex items-center gap-2 font-bold text-sm shrink-0 mb-1 transition-opacity hover:opacity-70"
+              style={{ color: '#8B0000' }}>
+              Full calendar
+              <ArrowRight size={14} />
+            </Link>
+          </FadeIn>
+
+          <FadeIn>
+            <div style={{ borderTop: '1px solid #E4E4E7' }}>
+              {upcomingEvents.length === 0 ? (
+                <div className="py-16 text-center" style={{ color: '#A1A1AA' }}>
+                  <p className="font-semibold">No upcoming events at this time.</p>
+                  <p className="text-sm mt-1">Check back soon or visit the events page.</p>
+                </div>
+              ) : upcomingEvents.map((ev: any) => {
+                const date   = new Date(ev.activity_date);
+                const dmeta  = DOMAIN_META[ev.domain];
+                const color  = dmeta?.color ?? '#8B0000';
+                return (
+                  <div
+                    key={ev.code}
+                    className="group flex items-start gap-6 py-5"
+                    style={{ borderBottom: '1px solid #E4E4E7' }}>
+                    {/* Date */}
+                    <div className="w-12 shrink-0 text-center pt-0.5">
+                      <div className="font-black text-2xl leading-none" style={{ color: '#0D0D0D' }}>
+                        {date.getDate()}
+                      </div>
+                      <div className="text-[10px] font-bold uppercase mt-0.5" style={{ color: '#A1A1AA' }}>
+                        {date.toLocaleString('en-IN', { month: 'short' })} {date.getFullYear().toString().slice(2)}
+                      </div>
+                    </div>
+                    {/* Content */}
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-bold text-base sm:text-lg leading-snug mb-1" style={{ color: '#0D0D0D' }}>
+                        {ev.title}
+                      </h3>
+                      <div className="flex flex-wrap items-center gap-2 text-xs" style={{ color: '#A1A1AA' }}>
+                        <span className="font-black text-[10px] uppercase" style={{ color }}>{ev.domain}</span>
+                        {ev.venue && <><span>·</span><span>{ev.venue}</span></>}
+                      </div>
+                    </div>
+                    {/* CTA */}
+                    <a
+                      href="https://sac.kluniversity.in"
+                      target="_blank"
+                      rel="noopener"
+                      className="text-xs font-bold shrink-0 mt-1 transition-all opacity-0 group-hover:opacity-100 inline-flex items-center gap-1"
+                      style={{ color: '#8B0000' }}>
+                      Register
+                      <ArrowUpRight size={12} />
+                    </a>
+                  </div>
+                );
+              })}
+            </div>
+
+            <div className="mt-8">
+              <Link
+                href="/events"
+                className="inline-flex items-center gap-2 font-bold text-sm"
+                style={{ color: '#8B0000' }}>
+                View all events <ArrowRight size={14} />
+              </Link>
+            </div>
+          </FadeIn>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════ STUDENT DEVELOPMENT FRAMEWORK ══ */}
+      <section style={{ background: '#8B0000' }}>
+        <div className="max-w-7xl mx-auto px-5 sm:px-10 py-28">
+          <FadeIn>
+            <p className="text-[10px] font-black tracking-[0.22em] uppercase mb-6"
+               style={{ color: 'rgba(255,255,255,0.45)' }}>
+              Student Development
+            </p>
+            <h2
+              className="font-black leading-tight mb-10"
+              style={{ fontSize: 'clamp(1.75rem, 3.5vw, 2.75rem)', color: '#fff', letterSpacing: '-0.02em', maxWidth: '28ch' }}>
+              A structured framework for lifelong growth.
+            </h2>
+          </FadeIn>
+
+          <FadeIn delay={0.1}>
+            <div className="flex flex-wrap items-center gap-3 mb-12">
+              {FRAMEWORK_STEPS.map((step, i) => (
+                <Fragment key={step}>
+                  <span
+                    className="font-black text-xs sm:text-sm tracking-wider uppercase"
+                    style={{ color: i === FRAMEWORK_STEPS.length - 1 ? '#C9A84C' : 'rgba(255,255,255,0.6)' }}>
+                    {step}
+                  </span>
+                  {i < FRAMEWORK_STEPS.length - 1 && (
+                    <span className="text-base font-light" style={{ color: 'rgba(255,255,255,0.2)' }}>
+                      →
+                    </span>
+                  )}
+                </Fragment>
+              ))}
+            </div>
+          </FadeIn>
+
+          <FadeIn delay={0.2}>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-end">
+              <p className="text-base sm:text-lg leading-relaxed" style={{ color: 'rgba(255,255,255,0.65)' }}>
+                SAC doesn't just run clubs — it runs a development ecosystem. Every activity, every leadership role, and every credit point is part of a deliberate journey from student to professional to leader.
+              </p>
+              <div className="flex flex-wrap gap-4">
+                <Link
+                  href="https://sac.kluniversity.in"
+                  target="_blank"
+                  rel="noopener"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-bold transition-all hover:scale-[1.03]"
+                  style={{ background: '#C9A84C', color: '#0D0D0D' }}>
+                  View My AI Career Roadmap
+                  <ArrowUpRight size={14} />
+                </Link>
+                <Link
+                  href="/about"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-bold transition-all hover:bg-white/10"
+                  style={{ border: '1px solid rgba(255,255,255,0.25)', color: '#fff' }}>
+                  Learn about SAC
+                </Link>
+              </div>
+            </div>
+          </FadeIn>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════ ACHIEVEMENTS ══ */}
+      <section style={{ background: '#0A0A0F' }}>
+        <div className="max-w-7xl mx-auto px-5 sm:px-10 py-24">
+          <FadeIn className="flex items-end justify-between mb-12 gap-6">
+            <div>
+              <p className="text-[10px] font-black tracking-[0.22em] uppercase mb-4" style={{ color: '#C9A84C' }}>
+                Recognition
+              </p>
+              <h2
+                className="font-black leading-tight"
+                style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', color: '#fff', letterSpacing: '-0.02em' }}>
+                Achievements
+              </h2>
+            </div>
+            <Link
+              href="/achievements"
+              className="hidden sm:inline-flex items-center gap-2 font-bold text-sm shrink-0 mb-1 transition-opacity hover:opacity-70"
+              style={{ color: '#C9A84C' }}>
+              View all
+              <ArrowRight size={14} />
+            </Link>
+          </FadeIn>
+
+          <FadeIn>
+            <div
+              className="rounded-2xl p-6 sm:p-8"
+              style={{ background: '#111118', border: '1px solid rgba(255,255,255,0.06)' }}>
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-2 h-2 rounded-full" style={{ background: '#C9A84C' }} />
+                <p className="text-sm font-semibold" style={{ color: 'rgba(255,255,255,0.35)' }}>
+                  Official achievement records will appear here.
+                </p>
+              </div>
+              <div className="space-y-4">
+                {['National', 'National', 'State', 'University'].map((level, i) => (
+                  <div
+                    key={i}
+                    className="flex items-center gap-4 py-4"
+                    style={{ borderBottom: i < 3 ? '1px solid rgba(255,255,255,0.06)' : 'none' }}>
+                    <span
+                      className="text-[10px] font-black tracking-widest uppercase px-2.5 py-1 rounded shrink-0"
+                      style={{
+                        background: level === 'National' ? 'rgba(201,168,76,0.15)' : level === 'State' ? 'rgba(59,130,246,0.12)' : 'rgba(255,255,255,0.06)',
+                        color:      level === 'National' ? '#C9A84C'               : level === 'State' ? '#3B82F6'               : 'rgba(255,255,255,0.4)',
+                      }}>
+                      {level}
+                    </span>
+                    <div className="flex-1 h-3 rounded" style={{ background: '#1C1C24' }} />
+                    <div className="w-24 h-3 rounded" style={{ background: '#1C1C24' }} />
+                    <div className="w-12 h-3 rounded" style={{ background: '#1C1C24' }} />
+                  </div>
+                ))}
+              </div>
+              <p className="text-xs mt-6 text-center" style={{ color: 'rgba(255,255,255,0.18)' }}>
+                [OFFICIAL ACHIEVEMENT DATA REQUIRED — Please provide verified records from SAC]
+              </p>
+            </div>
+          </FadeIn>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════════ INDUSTRY TEASER ══ */}
+      <section style={{ background: '#fff' }}>
+        <div className="max-w-7xl mx-auto px-5 sm:px-10 py-24">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+            <FadeIn>
+              <p className="text-[10px] font-black tracking-[0.22em] uppercase mb-4" style={{ color: '#8B0000' }}>
+                Industry & Collaboration
+              </p>
+              <h2
+                className="font-black leading-tight mb-6"
+                style={{ fontSize: 'clamp(2rem, 3.5vw, 2.75rem)', color: '#0D0D0D', letterSpacing: '-0.02em' }}>
+                Where industry meets student talent.
+              </h2>
+              <p className="text-base sm:text-lg leading-relaxed mb-8" style={{ color: '#71717A' }}>
+                KL SAC creates structured pathways for industry leaders, academic institutions, government bodies, and organisations to engage with KL University's student talent.
+              </p>
+              <Link
+                href="/collaborate"
+                className="inline-flex items-center gap-2 font-bold text-sm transition-opacity hover:opacity-75"
+                style={{ color: '#8B0000' }}>
+                Partner with SAC
+                <ArrowRight size={14} />
+              </Link>
+            </FadeIn>
+
+            <FadeIn delay={0.1}>
+              <div className="grid grid-cols-2 gap-4">
+                {[
+                  { title: 'Industry Mentorship', desc: 'Connect experts with students building real skills.' },
+                  { title: 'Campus Hiring',        desc: 'Engage students who already demonstrate excellence.' },
+                  { title: 'Research Collaboration', desc: 'Partner with student clubs on applied research.' },
+                  { title: 'Sponsorship & CSR',   desc: 'Fund programmes that create long-term social impact.' },
+                ].map(item => (
+                  <div
+                    key={item.title}
+                    className="p-5 rounded-xl"
+                    style={{ background: '#F7F7F8', border: '1px solid #E4E4E7' }}>
+                    <p className="font-bold text-sm mb-1.5" style={{ color: '#0D0D0D' }}>{item.title}</p>
+                    <p className="text-xs leading-relaxed" style={{ color: '#71717A' }}>{item.desc}</p>
+                  </div>
+                ))}
+              </div>
+            </FadeIn>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════ LATEST NEWS ══ */}
+      <section style={{ background: '#F7F7F8' }}>
+        <div className="max-w-7xl mx-auto px-5 sm:px-10 py-24">
+          <FadeIn className="flex items-end justify-between mb-12 gap-6">
+            <div>
+              <p className="text-[10px] font-black tracking-[0.22em] uppercase mb-4" style={{ color: '#8B0000' }}>
+                News & Updates
+              </p>
+              <h2
+                className="font-black leading-tight"
+                style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', color: '#0D0D0D', letterSpacing: '-0.02em' }}>
+                Latest from SAC
+              </h2>
+            </div>
+            <Link
+              href="/news"
+              className="hidden sm:inline-flex items-center gap-2 font-bold text-sm shrink-0 mb-1 transition-opacity hover:opacity-70"
+              style={{ color: '#8B0000' }}>
+              All news
+              <ArrowRight size={14} />
+            </Link>
+          </FadeIn>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+            {NEWS_ARTICLES.slice(0, 3).map((article, i) => (
+              <FadeIn key={article.slug} delay={i * 0.1}>
+                <Link href={`/news/${article.slug}`} className="group block h-full">
+                  <article
+                    className="h-full rounded-2xl overflow-hidden flex flex-col transition-all hover:shadow-lg"
+                    style={{ background: '#fff', border: '1px solid #E4E4E7' }}>
+                    {/* Image placeholder */}
+                    <div
+                      className="h-44 flex items-center justify-center"
+                      style={{
+                        background: i === 0
+                          ? 'linear-gradient(135deg, #5B0000 0%, #8B0000 100%)'
+                          : i === 1
+                          ? 'linear-gradient(135deg, #1D4ED8 0%, #3B82F6 100%)'
+                          : 'linear-gradient(135deg, #15803D 0%, #22C55E 100%)',
+                      }}>
+                      <span className="text-[10px] font-bold tracking-widest uppercase opacity-20" style={{ color: '#fff' }}>
+                        Image Required
+                      </span>
+                    </div>
+                    <div className="p-5 flex flex-col gap-3 flex-1">
+                      <div className="flex items-center gap-2">
+                        <span
+                          className="text-[10px] font-black tracking-[0.15em] uppercase px-2 py-0.5 rounded"
+                          style={{ background: '#FFF0F0', color: '#8B0000' }}>
+                          {article.category}
+                        </span>
+                        <span className="text-xs" style={{ color: '#A1A1AA' }}>
+                          {new Date(article.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+                        </span>
+                      </div>
+                      <h3 className="font-bold text-base leading-snug flex-1" style={{ color: '#0D0D0D' }}>
+                        {article.title}
+                      </h3>
+                      <p className="text-sm line-clamp-2" style={{ color: '#71717A' }}>
+                        {article.excerpt}
+                      </p>
+                      <p className="text-xs font-bold flex items-center gap-1.5 transition-all group-hover:gap-2.5"
+                         style={{ color: '#8B0000' }}>
+                        Read more <ArrowRight size={11} />
+                      </p>
+                    </div>
+                  </article>
+                </Link>
+              </FadeIn>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════════════ CTA ══ */}
+      <section style={{ background: '#0A0A0F' }}>
+        <div className="max-w-7xl mx-auto px-5 sm:px-10 py-32 text-center">
+          <FadeIn>
+            <p className="text-[10px] font-black tracking-[0.22em] uppercase mb-6"
+               style={{ color: 'rgba(255,255,255,0.3)' }}>
+              KL SAC
+            </p>
+            <h2
+              className="font-black leading-tight mb-6 mx-auto"
+              style={{ fontSize: 'clamp(2.25rem, 5vw, 4rem)', color: '#fff', letterSpacing: '-0.025em', maxWidth: '22ch' }}>
+              Ready to make your university years count?
+            </h2>
+            <p className="text-lg mb-12 mx-auto" style={{ color: 'rgba(255,255,255,0.45)', maxWidth: '48ch' }}>
+              Join one of 25 clubs, participate in activities, earn SDC credits, and build experiences that will define your career.
+            </p>
+            <div className="flex flex-wrap items-center justify-center gap-4">
+              <Link
+                href="/clubs"
+                className="inline-flex items-center gap-2 px-8 py-4 rounded-full font-bold text-base transition-all hover:scale-[1.03] active:scale-[0.98]"
+                style={{ background: '#8B0000', color: '#fff' }}>
+                Explore All Clubs
+                <ArrowRight size={16} />
+              </Link>
+              <Link
+                href="https://sac.kluniversity.in"
+                target="_blank"
+                rel="noopener"
+                className="inline-flex items-center gap-2 px-8 py-4 rounded-full font-bold text-base transition-all hover:bg-white/10"
+                style={{ border: '1px solid rgba(255,255,255,0.2)', color: '#fff' }}>
+                Student Dashboard
+                <ArrowUpRight size={16} />
+              </Link>
+            </div>
+          </FadeIn>
+        </div>
+      </section>
+    </>
+  );
+}
