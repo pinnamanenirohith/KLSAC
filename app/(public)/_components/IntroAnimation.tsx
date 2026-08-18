@@ -2,13 +2,16 @@
 
 import { useEffect, useState, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import Image from 'next/image';
 
 const CRIMSON = '#8B0000';
 const DARK    = '#09090B';
 const DISPLAY = "'Arial Black','Helvetica Neue',Arial,sans-serif";
+const SANS    = "'Helvetica Neue',Helvetica,Arial,sans-serif";
+const DRAW    = [0.76, 0, 0.24, 1] as [number, number, number, number];
 
-/* Words that map to student passions across SAC's five domains.
-   Alternating white / crimson keeps the rhythm visually alive.     */
+/* ── Word reel — alternates white / crimson ──────────────
+   "LIVE" is last and gets its own held scene with branding  */
 const WORDS = [
   { text: 'MUSIC',   red: false },
   { text: 'CODE',    red: true  },
@@ -17,15 +20,24 @@ const WORDS = [
   { text: 'DANCE',   red: false },
   { text: 'CREATE',  red: true  },
   { text: 'WIN',     red: false },
-  { text: 'LIVE',    red: true  },
+  { text: 'LEAD',    red: true  },
+  { text: 'BUILD',   red: false },
+  { text: 'DREAM',   red: true  },
+  { text: 'THRIVE',  red: false },
+  { text: 'INSPIRE', red: true  },
+  { text: 'BELONG',  red: false },
+  { text: 'LIVE',    red: true  }, // ← held with KL SAC branding
 ];
 
-const WORD_MS = 175; // ms per word — fast enough to feel kinetic
+const WORD_MS  = 150;
+const LAST_IDX = WORDS.length - 1;
+
+type Phase = 'reel' | 'live-scene' | 'tagline';
 
 export function IntroAnimation() {
-  const [idx,         setIdx]         = useState(0);
-  const [showTagline, setShowTagline] = useState(false);
-  const [visible,     setVisible]     = useState(true);
+  const [idx,     setIdx]     = useState(0);
+  const [phase,   setPhase]   = useState<Phase>('reel');
+  const [visible, setVisible] = useState(true);
   const fired = useRef(false);
 
   const dismiss = useCallback(() => {
@@ -42,17 +54,19 @@ export function IntroAnimation() {
 
     const ts: ReturnType<typeof setTimeout>[] = [];
 
-    // Schedule every word
-    WORDS.forEach((_, i) => {
-      ts.push(setTimeout(() => setIdx(i), i * WORD_MS));
-    });
+    /* Schedule every word in the reel */
+    WORDS.forEach((_, i) => ts.push(setTimeout(() => setIdx(i), i * WORD_MS)));
 
-    // After the reel, show the tagline
-    const reelEnd = WORDS.length * WORD_MS;
-    ts.push(setTimeout(() => setShowTagline(true), reelEnd));
+    const reelEnd = WORDS.length * WORD_MS; // after LIVE's own flash
 
-    // Auto-dismiss — tagline is felt for ~580 ms then fades
-    ts.push(setTimeout(dismiss, reelEnd + 580));
+    /* After LIVE flashes, hold it with branding */
+    ts.push(setTimeout(() => setPhase('live-scene'), reelEnd));
+
+    /* Transition to tagline */
+    ts.push(setTimeout(() => setPhase('tagline'), reelEnd + 700));
+
+    /* Auto-dismiss after tagline is felt */
+    ts.push(setTimeout(dismiss, reelEnd + 700 + 540));
 
     return () => ts.forEach(clearTimeout);
   }, [dismiss]);
@@ -69,29 +83,88 @@ export function IntroAnimation() {
           aria-hidden="true"
         >
 
-          {/* ── Word reel ───────────────────────────── */}
-          {!showTagline && (
-            <motion.p
-              key={`w${idx}`}
-              initial={{ scale: 1.12, opacity: 1 }}
-              animate={{ scale: 1,    opacity: 1 }}
-              transition={{ duration: 0.09, ease: 'easeOut' }}
-              style={{
-                margin: 0,
-                fontFamily: DISPLAY,
-                fontWeight: 900,
-                fontSize: 'clamp(52px, 13vw, 128px)',
-                letterSpacing: '0.05em',
-                color: WORDS[idx].red ? CRIMSON : '#FFFFFF',
-                userSelect: 'none',
-              }}
-            >
-              {WORDS[idx].text}
-            </motion.p>
+          {/* ══ Word reel + LIVE scene ════════════════════ */}
+          {(phase === 'reel' || phase === 'live-scene') && (
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+
+              {/* The current word.
+                  LIVE uses a stable key so it doesn't re-punch when the
+                  phase switches from reel → live-scene.                   */}
+              <motion.p
+                key={idx === LAST_IDX ? 'live-word' : `w${idx}`}
+                initial={{ scale: 1.1, opacity: 1 }}
+                animate={{ scale: 1,   opacity: 1 }}
+                transition={{ duration: 0.09, ease: 'easeOut' }}
+                style={{
+                  margin: 0,
+                  fontFamily: DISPLAY, fontWeight: 900,
+                  fontSize: 'clamp(52px, 13vw, 128px)',
+                  letterSpacing: '0.05em',
+                  color: WORDS[idx].red ? CRIMSON : '#FFFFFF',
+                  userSelect: 'none',
+                }}
+              >
+                {WORDS[idx].text}
+              </motion.p>
+
+              {/* KL SAC branding — fades in only during live-scene */}
+              {phase === 'live-scene' && (
+                <motion.div
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0  }}
+                  transition={{ duration: 0.42, delay: 0.1, ease: 'easeOut' }}
+                  style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
+                >
+                  {/* Separator line */}
+                  <motion.div
+                    initial={{ scaleX: 0 }}
+                    animate={{ scaleX: 1 }}
+                    transition={{ duration: 0.32, delay: 0.14, ease: DRAW }}
+                    style={{
+                      height: 1, width: 56,
+                      background: 'rgba(255,255,255,0.14)',
+                      margin: '26px 0 24px',
+                      transformOrigin: 'center',
+                    }}
+                  />
+
+                  {/* Official logo — inverted to white on dark bg */}
+                  <Image
+                    src="/logo.png"
+                    alt="KL SAC"
+                    height={38}
+                    width={172}
+                    style={{
+                      height: '38px',
+                      width: 'auto',
+                      objectFit: 'contain',
+                      filter: 'brightness(0) invert(1)',
+                      opacity: 0.9,
+                    }}
+                    priority
+                  />
+
+                  {/* Tagline */}
+                  <motion.p
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.3, delay: 0.3 }}
+                    style={{
+                      margin: '10px 0 0', fontFamily: SANS,
+                      fontSize: 9, fontWeight: 600,
+                      letterSpacing: '0.3em', textTransform: 'uppercase',
+                      color: 'rgba(255,255,255,0.36)',
+                    }}
+                  >
+                    Student Activity Center
+                  </motion.p>
+                </motion.div>
+              )}
+            </div>
           )}
 
-          {/* ── Tagline ─────────────────────────────── */}
-          {showTagline && (
+          {/* ══ YOUR TIME. tagline ════════════════════════ */}
+          {phase === 'tagline' && (
             <motion.div
               key="tagline"
               initial={{ opacity: 0, y: 14 }}
@@ -100,16 +173,14 @@ export function IntroAnimation() {
               style={{ textAlign: 'center', lineHeight: 1 }}
             >
               <p style={{
-                margin: 0,
-                fontFamily: DISPLAY, fontWeight: 900,
+                margin: 0, fontFamily: DISPLAY, fontWeight: 900,
                 fontSize: 'clamp(40px, 8vw, 88px)',
                 letterSpacing: '0.06em', color: '#FFFFFF',
               }}>
                 YOUR
               </p>
               <p style={{
-                margin: 0,
-                fontFamily: DISPLAY, fontWeight: 900,
+                margin: 0, fontFamily: DISPLAY, fontWeight: 900,
                 fontSize: 'clamp(40px, 8vw, 88px)',
                 letterSpacing: '0.06em', color: CRIMSON,
               }}>
@@ -118,11 +189,11 @@ export function IntroAnimation() {
             </motion.div>
           )}
 
-          {/* ── Skip hint (barely visible) ──────────── */}
+          {/* Tap to skip — barely visible */}
           <p style={{
             position: 'absolute', bottom: 22, margin: 0,
-            fontFamily: "'Helvetica Neue',Helvetica,Arial,sans-serif",
-            fontSize: 8, letterSpacing: '0.22em', textTransform: 'uppercase',
+            fontFamily: SANS, fontSize: 8,
+            letterSpacing: '0.22em', textTransform: 'uppercase',
             color: 'rgba(255,255,255,0.16)',
           }}>
             Tap to skip
