@@ -1,201 +1,190 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useRef, useState, useEffect, useCallback } from 'react';
+import { motion } from 'framer-motion';
 
-const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+// Easing — each curve chosen for its specific motion role
+const LINE_EASE = [0.76, 0, 0.24, 1] as [number, number, number, number]; // precise draw
+const TEXT_EASE = [0.16, 1, 0.3,  1] as [number, number, number, number]; // spring settle
+const EXIT_EASE = [0.55, 0, 1,  0.45] as [number, number, number, number]; // accelerating release
 
-type Phase = 'hidden' | 'scrambling' | 'locked';
-
-function ScrambleLetter({
-  char,
-  appearAt,
-  lockAt,
-}: {
-  char: string;
-  appearAt: number;
-  lockAt: number;
-}) {
-  const [display, setDisplay] = useState(char);
-  const [phase, setPhase] = useState<Phase>('hidden');
-
-  useEffect(() => {
-    if (char === ' ') { setPhase('locked'); return; }
-
-    let interval: ReturnType<typeof setInterval>;
-    let lockTimer: ReturnType<typeof setTimeout>;
-
-    const appearTimer = setTimeout(() => {
-      setPhase('scrambling');
-      setDisplay(CHARS[Math.floor(Math.random() * CHARS.length)]);
-      interval = setInterval(() => {
-        setDisplay(CHARS[Math.floor(Math.random() * CHARS.length)]);
-      }, 45);
-      lockTimer = setTimeout(() => {
-        clearInterval(interval);
-        setDisplay(char);
-        setPhase('locked');
-      }, lockAt - appearAt);
-    }, appearAt);
-
-    return () => {
-      clearTimeout(appearTimer);
-      clearInterval(interval);
-      clearTimeout(lockTimer);
-    };
-  }, [char, appearAt, lockAt]);
-
-  if (char === ' ') {
-    return <span style={{ display: 'inline-block', width: '0.42em' }} />;
-  }
-
-  return (
-    <span
-      style={{
-        display: 'inline-block',
-        color:
-          phase === 'hidden'
-            ? 'transparent'
-            : phase === 'scrambling'
-            ? 'rgba(201,168,76,0.9)'
-            : '#ffffff',
-        transition: phase === 'locked' ? 'color 0.12s ease' : 'none',
-      }}
-    >
-      {display}
-    </span>
-  );
-}
-
-const TITLE = 'KL SAC';
-const SUBTITLE = 'STUDENT ACTIVITY CENTER';
+const CRIMSON     = '#8B0000';
+const DISPLAY     = "'Arial Black', 'Helvetica Neue', Arial, sans-serif";
+const LABEL_STYLE = {
+  fontSize:      9,
+  fontWeight:    700,
+  letterSpacing: '0.22em',
+  textTransform: 'uppercase' as const,
+  color:         '#A8A8A8',
+  margin:        0,
+  whiteSpace:    'nowrap' as const,
+};
 
 export function IntroAnimation() {
+  const [exiting, setExiting] = useState(false);
   const [visible, setVisible] = useState(true);
+  const fired = useRef(false);
 
-  useEffect(() => {
-    const t = setTimeout(() => setVisible(false), 3200);
-    return () => clearTimeout(t);
+  const dismiss = useCallback((instant = false) => {
+    if (fired.current) return;
+    fired.current = true;
+    if (instant) {
+      setVisible(false);
+    } else {
+      setExiting(true);
+      setTimeout(() => setVisible(false), 920);
+    }
   }, []);
 
+  useEffect(() => {
+    // Respect the user's motion preference
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      dismiss(true);
+      return;
+    }
+    const t = setTimeout(dismiss, 2050);
+    return () => clearTimeout(t);
+  }, [dismiss]);
+
+  if (!visible) return null;
+
   return (
-    <AnimatePresence>
-      {visible && (
-        <motion.div
-          key="sac-intro"
-          className="fixed inset-0 z-[9999] flex flex-col items-center justify-center cursor-pointer select-none"
-          style={{ background: '#07070E' }}
-          exit={{ opacity: 0, transition: { duration: 0.7, ease: 'easeInOut' } }}
-          onClick={() => setVisible(false)}
+    <div
+      className="fixed inset-0 z-[9999] select-none"
+      onClick={() => dismiss()}
+      aria-hidden="true"
+    >
+      {/* ─────────────────────────────────────── TOP PANEL — "KL" ─── */}
+      <motion.div
+        animate={{ y: exiting ? '-100%' : '0%' }}
+        transition={{ duration: 0.82, ease: EXIT_EASE }}
+        style={{
+          position:       'absolute',
+          top: 0, left: 0, right: 0,
+          height:         '50vh',
+          background:     '#fff',
+          overflow:       'hidden',
+          display:        'flex',
+          alignItems:     'flex-end',
+          justifyContent: 'center',
+          willChange:     'transform',
+        }}
+      >
+        <motion.span
+          initial={{ y: '-108%' }}
+          animate={{ y: '0%' }}
+          transition={{ duration: 0.92, ease: TEXT_EASE, delay: 0.18 }}
+          style={{
+            display:       'block',
+            fontFamily:    DISPLAY,
+            fontWeight:    900,
+            fontSize:      'clamp(96px, 20vw, 240px)',
+            letterSpacing: '-0.02em',
+            lineHeight:    0.85,
+            color:         '#0A0A0A',
+            whiteSpace:    'nowrap',
+          }}
         >
-          {/* Title */}
-          <div
-            style={{
-              fontFamily: "'Arial Black', 'Helvetica Neue', Arial, sans-serif",
-              fontWeight: 900,
-              fontSize: 'clamp(68px, 13vw, 132px)',
-              letterSpacing: '0.08em',
-              lineHeight: 1,
-            }}
-          >
-            {TITLE.split('').map((char, i) => {
-              const nsi = TITLE.slice(0, i).replace(/ /g, '').length;
-              return (
-                <ScrambleLetter
-                  key={i}
-                  char={char}
-                  appearAt={char === ' ' ? 0 : nsi * 110}
-                  lockAt={char === ' ' ? 0 : nsi * 110 + 440}
-                />
-              );
-            })}
-          </div>
+          KL
+        </motion.span>
 
-          {/* Divider */}
-          <motion.div
-            initial={{ scaleX: 0, opacity: 0 }}
-            animate={{ scaleX: 1, opacity: 1 }}
-            transition={{
-              duration: 0.7,
-              delay: 1.0,
-              ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
-            }}
-            style={{
-              height: '1px',
-              width: '180px',
-              background:
-                'linear-gradient(90deg, transparent 0%, rgba(139,0,0,0.9) 30%, rgba(201,168,76,0.7) 70%, transparent 100%)',
-              margin: '28px 0 22px',
-              transformOrigin: 'center',
-            }}
-          />
-
-          {/* Subtitle */}
-          <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
-            {SUBTITLE.split('').map((char, i) =>
-              char === ' ' ? (
-                <span key={i} style={{ display: 'inline-block', width: '0.5em' }} />
-              ) : (
-                <motion.span
-                  key={i}
-                  initial={{ opacity: 0, y: 5 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3, delay: 1.25 + i * 0.025, ease: 'easeOut' }}
-                  style={{
-                    display: 'inline-block',
-                    fontSize: 'clamp(8px, 1.3vw, 13px)',
-                    letterSpacing: '0.28em',
-                    fontWeight: 700,
-                    color: 'rgba(255,255,255,0.4)',
-                  }}
-                >
-                  {char}
-                </motion.span>
-              )
-            )}
-          </div>
-
-          {/* Progress bar */}
-          <div
-            style={{
-              position: 'absolute',
-              bottom: 0,
-              left: 0,
-              right: 0,
-              height: '2px',
-              background: 'rgba(255,255,255,0.04)',
-            }}
-          >
-            <motion.div
-              initial={{ scaleX: 0 }}
-              animate={{ scaleX: 1 }}
-              transition={{ duration: 2.7, ease: 'linear' }}
-              style={{
-                height: '100%',
-                background: 'linear-gradient(90deg, #8B0000, #C9A84C)',
-                transformOrigin: 'left',
-              }}
-            />
-          </div>
-
-          {/* Skip hint */}
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 0.22 }}
-            transition={{ duration: 0.5, delay: 2.0 }}
-            style={{
-              position: 'absolute',
-              bottom: '16px',
-              color: '#fff',
-              fontSize: '9px',
-              letterSpacing: '0.22em',
-              textTransform: 'uppercase',
-            }}
-          >
-            Click anywhere to skip
-          </motion.p>
+        {/* Institution label — top-right, slides in from right */}
+        <motion.div
+          initial={{ opacity: 0, x: 10 }}
+          animate={{ opacity: exiting ? 0 : 1, x: exiting ? 10 : 0 }}
+          transition={{ duration: 0.42, delay: exiting ? 0 : 1.02 }}
+          style={{ position: 'absolute', top: 26, right: 30, textAlign: 'right' }}
+        >
+          <p style={LABEL_STYLE}>KL University</p>
+          <p style={{ ...LABEL_STYLE, fontWeight: 400, letterSpacing: '0.12em', marginTop: 4, color: '#C8C8C8' }}>
+            Vijayawada · AP
+          </p>
         </motion.div>
-      )}
-    </AnimatePresence>
+      </motion.div>
+
+      {/* ─────────────────────────── CENTER INCISION LINE ─────────── */}
+      <motion.div
+        initial={{ scaleX: 0 }}
+        animate={{ scaleX: exiting ? 0 : 1, opacity: exiting ? 0 : 1 }}
+        transition={{
+          scaleX:  { duration: 0.58, delay: exiting ? 0 : 0.08, ease: LINE_EASE },
+          opacity: { duration: 0.22 },
+        }}
+        style={{
+          position:        'absolute',
+          top:             '50vh',
+          left: 0, right:  0,
+          height:          1.5,
+          marginTop:       -0.75,
+          background:      CRIMSON,
+          transformOrigin: 'center',
+          zIndex:          10,
+        }}
+      />
+
+      {/* ─────────────────────────────────────── BOTTOM PANEL — "SAC" */}
+      <motion.div
+        animate={{ y: exiting ? '100%' : '0%' }}
+        transition={{ duration: 0.82, ease: EXIT_EASE, delay: exiting ? 0.05 : 0 }}
+        style={{
+          position:       'absolute',
+          top: '50vh', left: 0, right: 0, bottom: 0,
+          background:     '#fff',
+          overflow:       'hidden',
+          display:        'flex',
+          alignItems:     'flex-start',
+          justifyContent: 'center',
+          willChange:     'transform',
+        }}
+      >
+        <motion.span
+          initial={{ y: '108%' }}
+          animate={{ y: '0%' }}
+          transition={{ duration: 0.92, ease: TEXT_EASE, delay: 0.23 }}
+          style={{
+            display:       'block',
+            fontFamily:    DISPLAY,
+            fontWeight:    900,
+            fontSize:      'clamp(96px, 20vw, 240px)',
+            letterSpacing: '-0.02em',
+            lineHeight:    0.85,
+            color:         CRIMSON,
+            whiteSpace:    'nowrap',
+          }}
+        >
+          SAC
+        </motion.span>
+
+        {/* Center name label — bottom-left, slides in from left */}
+        <motion.div
+          initial={{ opacity: 0, x: -10 }}
+          animate={{ opacity: exiting ? 0 : 1, x: exiting ? -10 : 0 }}
+          transition={{ duration: 0.42, delay: exiting ? 0 : 1.07 }}
+          style={{ position: 'absolute', bottom: 26, left: 30 }}
+        >
+          <p style={LABEL_STYLE}>Student Activity Center</p>
+        </motion.div>
+
+        {/* Skip hint — bottom-right */}
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: exiting ? 0 : 1 }}
+          transition={{ duration: 0.38, delay: exiting ? 0 : 1.5 }}
+          style={{
+            position:      'absolute',
+            bottom:        26,
+            right:         30,
+            margin:        0,
+            fontSize:      9,
+            letterSpacing: '0.2em',
+            textTransform: 'uppercase',
+            color:         '#C8C8C8',
+            whiteSpace:    'nowrap',
+          }}
+        >
+          Click to skip
+        </motion.p>
+      </motion.div>
+    </div>
   );
 }
