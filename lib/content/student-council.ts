@@ -3,7 +3,6 @@ export type CouncilRole =
   | 'Vice President'
   | 'Secretary'
   | 'Joint Secretary'
-  | 'Council Member'
   | 'Club Lead'
   | 'Faculty Mentor'
   | 'Faculty In-Charge';
@@ -12,20 +11,338 @@ export interface CouncilMember {
   id: string;
   name: string;
   role: CouncilRole;
-  photo?: string;        // e.g. '/council/john-doe.jpg'
-  year?: string;         // e.g. '3rd Year'
-  branch?: string;       // e.g. 'Computer Science Engineering'
-  linkedin?: string;     // full URL
-  journey?: string;      // their SAC journey paragraph
+  subtitle?: string;     // e.g. "Administration, Strategy & Student Engagement"
+  photo?: string;        // e.g. '/council/rohith.jpg'
+  year?: string;         // e.g. '4th Year'
+  branch?: string;
+  linkedin?: string;
+  journey?: string;
   achievements?: string[];
-  clubs?: string[];      // clubs they are part of
-  clubLead?: string;     // for Club Leads: the club name they lead
+  clubs?: string[];
+  clubLead?: string;     // for Club Leads: club name they lead
   isFaculty?: boolean;
-  designation?: string;  // for faculty: "Associate Professor, CSE"
+  designation?: string;
 }
 
-// ── Add real council data here ───────────────────────────────
-// Each member object populates their photo card and profile modal.
-// Photo paths are relative to /public (e.g. '/council/name.jpg').
-// Leave the array empty and placeholder slots appear automatically.
-export const STUDENT_COUNCIL: CouncilMember[] = [];
+// ── KL SAC Student Council  |  2026–27 ──────────────────────
+export const STUDENT_COUNCIL: CouncilMember[] = [
+
+  // ── PRESIDENTS ──────────────────────────────────────────────
+  {
+    id: 'p1',
+    name: 'Rohith Venkata Sai Pinnamaneni',
+    role: 'President',
+    subtitle: 'Administration, Strategy & Student Engagement',
+    year: '4th Year', branch: 'Computer Science Engineering',
+    clubs: ['Yuva Tourism Club'],
+    clubLead: 'Yuva Tourism Club',
+  },
+  {
+    id: 'p2',
+    name: 'N C Krishna Saran',
+    role: 'President',
+    subtitle: 'Technology, Innovation & Digital Transformation',
+    year: '4th Year', branch: 'Computer Science & Information Technology',
+  },
+  {
+    id: 'p3',
+    name: 'Sayani Datta',
+    role: 'President',
+    subtitle: 'Internships & Career Development',
+    year: '4th Year', branch: 'Computer Science Engineering',
+  },
+
+  // ── VICE PRESIDENTS ─────────────────────────────────────────
+  {
+    id: 'vp1',
+    name: 'Nayanvita Yelurupaty',
+    role: 'Vice President',
+    subtitle: 'Student Welfare & Engagement',
+    year: '3rd Year', branch: 'Artificial Intelligence & Data Science',
+  },
+  {
+    id: 'vp2',
+    name: 'Jyothi Krishna Kanth Suroju',
+    role: 'Vice President',
+    subtitle: 'Student Excellence & Administration',
+    year: '4th Year', branch: 'Electronics & Communication Engineering',
+  },
+  {
+    id: 'vp3',
+    name: 'Vishnu Varddhan Reddy Mallidi',
+    role: 'Vice President',
+    subtitle: 'Digital Communications & Branding',
+    year: '4th Year', branch: 'Artificial Intelligence & Data Science',
+  },
+  {
+    id: 'vp4',
+    name: 'Revanth Sai Vedantam',
+    role: 'Vice President',
+    subtitle: 'Student Activities & Engagement',
+    year: '4th Year', branch: 'Computer Science Engineering',
+  },
+  {
+    id: 'vp5',
+    name: 'Nischal Singana',
+    role: 'Vice President',
+    subtitle: 'Technology & Digital Operations',
+    year: '3rd Year', branch: 'Computer Science Engineering',
+  },
+  {
+    id: 'vp6',
+    name: 'Syed Liba Fathima',
+    role: 'Vice President',
+    subtitle: 'Incubation & Entrepreneurship',
+    year: '3rd Year', branch: 'Computer Science Engineering',
+  },
+  {
+    id: 'vp7',
+    name: 'Noor Shahzeer Mogal',
+    role: 'Vice President',
+    subtitle: 'Innovation & Research',
+    year: '4th Year', branch: 'Computer Science Engineering',
+  },
+
+  // ── SECRETARIES / COUNCIL DIVISION LEADS ────────────────────
+  {
+    id: 'sec-hostel-1',
+    name: 'Teja Varma Gottumukkala',
+    role: 'Secretary',
+    subtitle: 'Hostel Events & Activities Division',
+    year: '3rd Year', branch: 'Computer Science Engineering',
+  },
+  {
+    id: 'sec-hostel-2',
+    name: 'Jeevitha Thalluri',
+    role: 'Joint Secretary',
+    subtitle: 'Hostel Events & Activities Division',
+    year: '3rd Year', branch: 'Artificial Intelligence & Data Science',
+  },
+  {
+    id: 'sec-hwb-2',
+    name: 'Sai Spoorthi Tadisetty',
+    role: 'Joint Secretary',
+    subtitle: 'Health & Wellbeing Council',
+    year: '2nd Year', branch: 'Computer Science Engineering',
+  },
+  {
+    id: 'sec-eso-1',
+    name: 'Nikhil Sreepathi',
+    role: 'Secretary',
+    subtitle: 'Extension & Social Outreach Council',
+    year: '2nd Year', branch: 'Artificial Intelligence & Data Science',
+  },
+  {
+    id: 'sec-eso-2',
+    name: 'Tanu Sri Avula',
+    role: 'Joint Secretary',
+    subtitle: 'Extension & Social Outreach Council',
+    year: '2nd Year', branch: 'Computer Science Engineering',
+  },
+  {
+    id: 'sec-dose',
+    name: 'Anupam Kumar',
+    role: 'Secretary',
+    subtitle: 'Division of Student Excellence (DOSE)',
+    year: '3rd Year', branch: 'Computer Science Engineering',
+  },
+  {
+    id: 'sec-docs',
+    name: 'Shreyan Kothapalli',
+    role: 'Secretary',
+    subtitle: 'Documentation & Publications Division',
+    year: '3rd Year', branch: 'Computer Science Engineering',
+  },
+  {
+    id: 'sec-media-1',
+    name: 'Kodanda Ramesh Murapaka',
+    role: 'Secretary',
+    subtitle: 'Digital Media & Branding Division',
+    year: '3rd Year', branch: 'Artificial Intelligence & Data Science',
+  },
+  {
+    id: 'sec-media-2',
+    name: 'Guru Charan Lingam',
+    role: 'Joint Secretary',
+    subtitle: 'Digital Media & Branding Division',
+    year: '3rd Year', branch: 'Internet of Things',
+  },
+  {
+    id: 'sec-lch-1',
+    name: 'Sravya Varikuntla',
+    role: 'Secretary',
+    subtitle: 'Liberal Arts, Cultural & Hobby Council',
+    year: '4th Year', branch: 'Artificial Intelligence & Data Science',
+  },
+  {
+    id: 'sec-lch-2',
+    name: 'Dundi Naga Sree Kakarala',
+    role: 'Joint Secretary',
+    subtitle: 'Liberal Arts, Cultural & Hobby Council',
+    year: '3rd Year', branch: 'Computer Science Engineering',
+  },
+  {
+    id: 'sec-tec',
+    name: 'Madhava Havishma Shreyamsi Bitragunta',
+    role: 'Secretary',
+    subtitle: 'Technology Council',
+    year: '3rd Year', branch: 'Computer Science Engineering',
+  },
+  {
+    id: 'sec-web-1',
+    name: 'Bala Murali Sriram Chinta',
+    role: 'Secretary',
+    subtitle: 'Website Division',
+    year: '2nd Year', branch: 'Computer Science Engineering',
+  },
+  {
+    id: 'sec-web-2',
+    name: 'Prudhvi Raj Sai SR Chebrolu',
+    role: 'Joint Secretary',
+    subtitle: 'Website Division',
+    year: '2nd Year', branch: 'Artificial Intelligence & Data Science',
+  },
+  {
+    id: 'sec-iie-1',
+    name: 'Akhilesh Sai Ippili',
+    role: 'Secretary',
+    subtitle: 'Innovation, Incubation & Entrepreneurship Council',
+    year: '3rd Year', branch: 'Computer Science Engineering',
+  },
+  {
+    id: 'sec-iie-2',
+    name: 'Emmanuel Moses Mathi',
+    role: 'Joint Secretary',
+    subtitle: 'Innovation, Incubation & Entrepreneurship Council',
+    year: '2nd Year', branch: 'Computer Science Engineering',
+  },
+  {
+    id: 'sec-iie-3',
+    name: 'Manasa Indlamuri',
+    role: 'Joint Secretary',
+    subtitle: 'Innovation, Incubation & Entrepreneurship Council',
+    year: '2nd Year', branch: 'Electronics & Communication Engineering',
+  },
+
+  // ── CLUB LEADS ───────────────────────────────────────────────
+  {
+    id: 'cl-marathon',
+    name: 'Sai Phanindra Muthyala',
+    role: 'Club Lead', clubLead: 'Marathon Club',
+    year: '3rd Year', branch: 'Computer Science Engineering',
+  },
+  {
+    id: 'cl-safelife',
+    name: 'Pranathi Yakkanti',
+    role: 'Club Lead', clubLead: 'SafeLife Club',
+    year: '3rd Year', branch: 'Electronics & Communication Engineering',
+  },
+  {
+    id: 'cl-yoga',
+    name: 'Hyndhavi Sai Ambati',
+    role: 'Club Lead', clubLead: 'Yoga Club',
+    year: '3rd Year', branch: 'Computer Science Engineering',
+  },
+  {
+    id: 'cl-policy',
+    name: 'Sumit Dawn',
+    role: 'Club Lead', clubLead: 'KL Youth Policy Lab',
+    year: '3rd Year', branch: 'Artificial Intelligence & Data Science',
+  },
+  {
+    id: 'cl-spiritual',
+    name: 'Venkata Surya Varun Akuri',
+    role: 'Club Lead', clubLead: 'Spiritual Sciences Club',
+    year: '3rd Year', branch: 'Computer Science Engineering',
+  },
+  {
+    id: 'cl-photography',
+    name: 'Rohith Esukapati',
+    role: 'Club Lead', clubLead: 'Photography Club',
+    year: '2nd Year', branch: 'Artificial Intelligence & Data Science',
+  },
+  {
+    id: 'cl-handicrafts',
+    name: 'Parthvi Lakshmi Reddy Mandalapu',
+    role: 'Club Lead', clubLead: 'Handicrafts Club',
+    year: '3rd Year', branch: 'Electronics & Communication Engineering',
+  },
+  {
+    id: 'cl-music',
+    name: 'Hemanth Satya Bapanna Andey',
+    role: 'Club Lead', clubLead: 'Swara Music Club',
+    year: '4th Year', branch: 'Computer Science Engineering',
+  },
+  {
+    id: 'cl-fashion',
+    name: 'Shaik Mohammad Maaz',
+    role: 'Club Lead', clubLead: 'Vastraa Fashion Club',
+    year: '3rd Year', branch: 'Computer Science Engineering',
+  },
+  {
+    id: 'cl-literature',
+    name: 'Venkata Sai Karthikeya Khandavilli',
+    role: 'Club Lead', clubLead: 'Vachas Club',
+    year: '3rd Year', branch: 'Biotechnology',
+  },
+  {
+    id: 'cl-adventure',
+    name: 'Srisanth Sasi Bhushan Boddu',
+    role: 'Club Lead', clubLead: 'Adventure Club',
+    year: '3rd Year', branch: 'Computer Science Engineering',
+  },
+  {
+    id: 'cl-dance',
+    name: 'Devi Yasasree Papisetti',
+    role: 'Club Lead', clubLead: 'Dance Club',
+    year: '4th Year', branch: 'Artificial Intelligence & Data Science',
+  },
+  {
+    id: 'cl-shortfilm',
+    name: 'Gowri Karthik Saripalli',
+    role: 'Club Lead', clubLead: 'Short Film Makers Club',
+    year: '3rd Year', branch: 'Electronics & Communication Engineering',
+  },
+  {
+    id: 'cl-arts',
+    name: 'Dundi Naga Sree Kakarala',
+    role: 'Club Lead', clubLead: 'Arts / Painting Club',
+    year: '3rd Year', branch: 'Computer Science Engineering',
+  },
+  {
+    id: 'cl-esports',
+    name: 'Sri Santhosh Reddy P',
+    role: 'Club Lead', clubLead: 'KL eSports Club',
+    year: '4th Year', branch: 'Computer Science Engineering',
+  },
+  {
+    id: 'cl-zeroone',
+    name: 'Hemanth Kankipati',
+    role: 'Club Lead', clubLead: 'ZeroOne Code Club',
+    year: '3rd Year', branch: 'Computer Science Engineering',
+  },
+  {
+    id: 'cl-cybersec',
+    name: 'Gnana Venkata Dinesh Reddy Challa',
+    role: 'Club Lead', clubLead: 'Cyber Security Club',
+    year: '4th Year', branch: 'Computer Science Engineering',
+  },
+  {
+    id: 'cl-webapps',
+    name: 'Madhu Kaleru',
+    role: 'Club Lead', clubLead: 'WebApps Club',
+    year: '3rd Year', branch: 'Computer Science Engineering',
+  },
+  {
+    id: 'cl-ev',
+    name: 'Shaik Mohammad Gayaz Basha',
+    role: 'Club Lead', clubLead: 'Electric Vehicle Club',
+    year: '3rd Year', branch: 'Electronics & Communication Engineering',
+  },
+  {
+    id: 'cl-automation',
+    name: 'Shaik Mohammad Gayaz Basha',
+    role: 'Club Lead', clubLead: 'Automation Club',
+    year: '3rd Year', branch: 'Electronics & Communication Engineering',
+  },
+];

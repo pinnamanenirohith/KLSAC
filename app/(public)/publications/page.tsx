@@ -1,6 +1,7 @@
 ﻿import { PUBLICATIONS, type Publication } from '@/lib/content/site-content';
 import { FadeIn } from '../_components/FadeIn';
 import { ArrowUpRight, FileText } from 'lucide-react';
+import Link from 'next/link';
 
 export const metadata = {
   title: 'Publications',
@@ -31,8 +32,8 @@ export default function PublicationsPage() {
           <p className="text-lg mb-4" style={{ color: '#71717A', maxWidth: '52ch' }}>
             Annual reports, magazines, and documentation from KL SAC.
           </p>
-          <p className="text-xs" style={{ color: '#D4D4D8' }}>
-            [PLACEHOLDER — Official publications to be provided by SAC administration]
+          <p className="text-xs font-semibold" style={{ color: '#A1A1AA' }}>
+            Official KL SAC publications — downloadable PDFs
           </p>
         </div>
       </section>
@@ -75,13 +76,16 @@ export default function PublicationsPage() {
                       </p>
                     </div>
 
-                    {pub.downloadAvailable && (
+                    {pub.downloadAvailable && pub.url && (
                       <div className="shrink-0 hidden sm:flex items-center">
-                        <span
-                          className="inline-flex items-center gap-1 text-xs font-bold"
-                          style={{ color: '#8B0000' }}>
-                          Download <ArrowUpRight size={11} />
-                        </span>
+                        <Link
+                          href={pub.url}
+                          target="_blank"
+                          rel="noopener"
+                          className="inline-flex items-center gap-1 text-xs font-bold px-4 py-2 rounded-full transition-all hover:opacity-80"
+                          style={{ background: '#8B0000', color: '#fff' }}>
+                          Download PDF <ArrowUpRight size={11} />
+                        </Link>
                       </div>
                     )}
                   </div>
@@ -90,18 +94,6 @@ export default function PublicationsPage() {
             </div>
           </FadeIn>
 
-          <FadeIn>
-            <div
-              className="mt-16 p-8 rounded-2xl text-center"
-              style={{ background: '#FAFAFA', border: '1px dashed #D4D4D8' }}>
-              <p className="font-bold text-base mb-2" style={{ color: '#0D0D0D' }}>
-                Official publications coming soon
-              </p>
-              <p className="text-sm" style={{ color: '#A1A1AA' }}>
-                SAC administration will provide verified annual reports and publications for display here.
-              </p>
-            </div>
-          </FadeIn>
         </div>
       </section>
     </>

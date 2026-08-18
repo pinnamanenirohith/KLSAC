@@ -28,9 +28,9 @@ export async function getHomepageEvents(limit = 4) {
 export async function getHomepageStats() {
   const json = await safeFetch('/api/public/stats');
   return {
-    clubs:      json?.data?.clubs      ?? 25,
+    clubs:      json?.data?.clubs      ?? 36,
     domains:    json?.data?.domains    ?? 5,
-    students:   json?.data?.students   ?? null,
+    students:   json?.data?.students   ?? 3661,
     activities: json?.data?.activities ?? null,
   };
 }

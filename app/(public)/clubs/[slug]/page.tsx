@@ -7,6 +7,7 @@ import {
 import { getClubBySlug, CLUB_SLUGS } from '@/lib/content/clubs';
 import { getDomainByCode } from '@/lib/content/domains';
 import { DEMO_CLUBS, DEMO_ACTIVITIES } from '@/lib/demo-data';
+import { getClubGalleryPhotos } from '@/lib/content/gallery';
 import { FadeIn } from '../../_components/FadeIn';
 
 export function generateStaticParams() {
@@ -43,6 +44,7 @@ export default async function ClubDetailPage({ params }: { params: Promise<{ slu
   const upcomingEvents = DEMO_ACTIVITIES.filter(
     a => a.domain === club.domainCode && a.activity_date >= today,
   );
+  const galleryPhotos = getClubGalleryPhotos(slug, 8);
 
   return (
     <>
@@ -180,36 +182,59 @@ export default async function ClubDetailPage({ params }: { params: Promise<{ slu
           </FadeIn>
 
           <FadeIn>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 mb-4">
-              {[0, 1, 2, 3, 4, 5, 6, 7].map(i => (
-                <div
-                  key={i}
-                  className="relative rounded-xl overflow-hidden flex flex-col items-center justify-center gap-2"
-                  style={{
-                    aspectRatio: i < 2 ? '16/9' : '4/3',
-                    gridColumn: i < 2 ? 'span 2' : 'span 1',
-                    background: i % 2 === 0 ? `${domain.color}10` : `${domain.color}07`,
-                    border: `1.5px dashed ${domain.color}22`,
-                  }}>
-                  <Camera size={i < 2 ? 28 : 20} style={{ color: `${domain.color}38` }} />
-                  <span className="text-[9px] font-black tracking-[0.2em] uppercase" style={{ color: `${domain.color}38` }}>
-                    {i < 2 ? 'Featured' : 'Photo'}
-                  </span>
+            {galleryPhotos.length > 0 ? (
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+                {galleryPhotos.map((src, i) => (
+                  <div
+                    key={i}
+                    className="relative rounded-xl overflow-hidden"
+                    style={{
+                      aspectRatio: i < 2 ? '16/9' : '4/3',
+                      gridColumn: i < 2 ? 'span 2' : 'span 1',
+                    }}>
+                    <img
+                      src={src}
+                      alt={`${club.name} activity photo ${i + 1}`}
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                    />
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <>
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 mb-4">
+                  {[0, 1, 2, 3, 4, 5, 6, 7].map(i => (
+                    <div
+                      key={i}
+                      className="relative rounded-xl overflow-hidden flex flex-col items-center justify-center gap-2"
+                      style={{
+                        aspectRatio: i < 2 ? '16/9' : '4/3',
+                        gridColumn: i < 2 ? 'span 2' : 'span 1',
+                        background: i % 2 === 0 ? `${domain.color}10` : `${domain.color}07`,
+                        border: `1.5px dashed ${domain.color}22`,
+                      }}>
+                      <Camera size={i < 2 ? 28 : 20} style={{ color: `${domain.color}38` }} />
+                      <span className="text-[9px] font-black tracking-[0.2em] uppercase" style={{ color: `${domain.color}38` }}>
+                        {i < 2 ? 'Featured' : 'Photo'}
+                      </span>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-            <p className="text-xs text-center" style={{ color: '#A1A1AA' }}>
-              Event photos submitted by club members via the{' '}
-              <Link
-                href="https://sac.kluniversity.in"
-                target="_blank"
-                rel="noopener"
-                className="font-bold hover:underline"
-                style={{ color: domain.color }}>
-                Student Dashboard
-              </Link>
-              {' '}will appear here.
-            </p>
+                <p className="text-xs text-center" style={{ color: '#A1A1AA' }}>
+                  Event photos submitted by club members via the{' '}
+                  <Link
+                    href="https://sac.kluniversity.in"
+                    target="_blank"
+                    rel="noopener"
+                    className="font-bold hover:underline"
+                    style={{ color: domain.color }}>
+                    Student Dashboard
+                  </Link>
+                  {' '}will appear here.
+                </p>
+              </>
+            )}
           </FadeIn>
         </div>
       </section>

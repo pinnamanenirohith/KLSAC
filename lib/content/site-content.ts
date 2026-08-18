@@ -250,38 +250,31 @@ export interface Publication {
   description: string;
   pages: number | null;
   downloadAvailable: boolean;
+  url?: string;
 }
 
 export const PUBLICATIONS: Publication[] = [
   {
-    id: 'pub-001',
-    title: 'SAC Annual Report 2025-26',
-    type: 'Annual Report',
-    year: '2026',
-    description:
-      '[PLACEHOLDER — Official annual report content required. Please provide the verified SAC Annual Report PDF and summary content.]',
-    pages: null,
-    downloadAvailable: false,
-  },
-  {
-    id: 'pub-002',
-    title: 'SAC Annual Report 2024-25',
-    type: 'Annual Report',
-    year: '2025',
-    description:
-      '[PLACEHOLDER — Official annual report content required. Please provide the verified SAC Annual Report PDF and summary content.]',
-    pages: null,
-    downloadAvailable: false,
-  },
-  {
-    id: 'pub-003',
-    title: 'SAC Magazine — [PLACEHOLDER TITLE]',
+    id: 'pub-aug-story',
+    title: 'The August Story — Volume 1',
     type: 'Magazine',
     year: '2026',
     description:
-      '[PLACEHOLDER — Official SAC magazine content required. Please provide the verified SAC Magazine PDF and editorial content.]',
+      'A curated collection of stories, achievements, and highlights from KL SAC activities during August 2026. Covering cultural events, student milestones, and community initiatives across all five domains.',
     pages: null,
-    downloadAvailable: false,
+    downloadAvailable: true,
+    url: '/publications/august-story-vol1.pdf',
+  },
+  {
+    id: 'pub-independence-day',
+    title: 'Independence Day 2026 — Event Report',
+    type: 'Newsletter',
+    year: '2026',
+    description:
+      'Official documentation of the Independence Day 2026 celebrations at KL University, organised by KL SAC. Includes event proceedings, participation records, and highlights from the flag-hoisting ceremony and cultural programmes.',
+    pages: null,
+    downloadAvailable: true,
+    url: '/publications/independence-day-2026.pdf',
   },
 ];
 

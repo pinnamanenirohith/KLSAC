@@ -9,7 +9,6 @@ import type { CouncilMember, CouncilRole } from '@/lib/content/student-council';
 import type { Club } from '@/lib/content/clubs';
 
 const CRIMSON = '#8B0000';
-const QUAD_ROLES: CouncilRole[] = ['President', 'Vice President', 'Secretary', 'Joint Secretary'];
 
 // ─── Member Card ──────────────────────────────────────────────────────────────
 function MemberCard({
@@ -101,6 +100,11 @@ function MemberCard({
         <p className="text-xs mt-0.5 truncate" style={{ color: isPlaceholder ? '#D1D1D6' : CRIMSON }}>
           {member?.role ?? roleFallback ?? '—'}
         </p>
+        {member?.subtitle && (
+          <p className="text-[10px] mt-0.5 leading-snug" style={{ color: '#71717A', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+            {member.subtitle}
+          </p>
+        )}
         {member?.year && (
           <p className="text-[10px] mt-0.5 truncate" style={{ color: '#A1A1AA' }}>
             {member.year}{member.branch ? ` · ${member.branch.split(' ')[0]}` : ''}
@@ -179,10 +183,13 @@ function ProfileModal({ member, onClose }: { member: CouncilMember; onClose: () 
                   {member.role}
                 </span>
                 <h2
-                  className="font-black text-2xl sm:text-3xl leading-tight mb-2"
+                  className="font-black text-2xl sm:text-3xl leading-tight mb-1"
                   style={{ color: '#0D0D0D', letterSpacing: '-0.025em' }}>
                   {member.name}
                 </h2>
+                {member.subtitle && (
+                  <p className="text-sm mb-2" style={{ color: '#71717A' }}>{member.subtitle}</p>
+                )}
 
                 <div className="flex flex-wrap gap-x-3 gap-y-1 text-sm mb-4">
                   {member.year && (
@@ -325,52 +332,61 @@ export default function CouncilGrid({
 
   const byRole = (role: CouncilRole) => members.filter(m => m.role === role);
 
-  // Council members — show at least 8 placeholder slots
-  const councilMembers = byRole('Council Member');
-  const councilSlots = councilMembers.length || 8;
+  const presidents = byRole('President');
+  const vps        = byRole('Vice President');
+  const secs       = byRole('Secretary');
+  const jsecs      = byRole('Joint Secretary');
 
-  // Faculty
   const mentors   = byRole('Faculty Mentor');
   const incharges = byRole('Faculty In-Charge');
 
   return (
     <>
-      {/* ── The Big Four ────────────────────────────────────────────── */}
+      {/* ── Presidents ──────────────────────────────────────────────── */}
       <section style={{ background: '#fff' }}>
         <div className="max-w-7xl mx-auto px-5 sm:px-10 py-20">
-          <SectionLabel label="Student Council Leadership" sub="The core executive team." />
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
-            {QUAD_ROLES.map(role => {
-              const m = members.find(x => x.role === role);
-              return (
-                <MemberCard
-                  key={role}
-                  member={m}
-                  roleFallback={role}
-                  size="lg"
-                  onClick={open}
-                />
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Council Members ─────────────────────────────────────────── */}
-      <section style={{ background: '#F7F7F8' }}>
-        <div className="max-w-7xl mx-auto px-5 sm:px-10 py-20">
-          <SectionLabel label="Council Members" sub="Elected representatives." />
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-            {councilMembers.length > 0
-              ? councilMembers.map(m => (
-                  <MemberCard key={m.id} member={m} size="md" onClick={open} />
+          <SectionLabel label="Student Council Leadership" sub="Presidents of KL SAC." />
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 sm:gap-6">
+            {presidents.length > 0
+              ? presidents.map(m => (
+                  <MemberCard key={m.id} member={m} size="lg" onClick={open} />
                 ))
-              : Array.from({ length: councilSlots }).map((_, i) => (
-                  <MemberCard key={i} roleFallback="Council Member" size="md" />
+              : Array.from({ length: 3 }).map((_, i) => (
+                  <MemberCard key={i} roleFallback="President" size="lg" />
                 ))}
           </div>
         </div>
       </section>
+
+      {/* ── Vice Presidents ─────────────────────────────────────────── */}
+      <section style={{ background: '#F7F7F8' }}>
+        <div className="max-w-7xl mx-auto px-5 sm:px-10 py-20">
+          <SectionLabel label="Vice Presidents" sub="Domain & division leadership." />
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5">
+            {vps.length > 0
+              ? vps.map(m => (
+                  <MemberCard key={m.id} member={m} size="md" onClick={open} />
+                ))
+              : Array.from({ length: 7 }).map((_, i) => (
+                  <MemberCard key={i} roleFallback="Vice President" size="md" />
+                ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Secretaries ─────────────────────────────────────────────── */}
+      {(secs.length > 0 || jsecs.length > 0) && (
+        <section style={{ background: '#fff' }}>
+          <div className="max-w-7xl mx-auto px-5 sm:px-10 py-20">
+            <SectionLabel label="Secretaries" sub="Division heads & coordinators." />
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+              {[...secs, ...jsecs].map(m => (
+                <MemberCard key={m.id} member={m} size="sm" onClick={open} />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* ── Club Leads ──────────────────────────────────────────────── */}
       <section style={{ background: '#fff' }}>
