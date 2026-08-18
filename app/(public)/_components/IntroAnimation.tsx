@@ -130,17 +130,6 @@ export function IntroAnimation() {
                     }}
                   />
 
-                  {/* KL SAC wordmark */}
-                  <p style={{
-                    margin: 0,
-                    fontFamily: DISPLAY, fontWeight: 900,
-                    fontSize: 'clamp(22px, 3.5vw, 38px)',
-                    letterSpacing: '0.12em',
-                  }}>
-                    <span style={{ color: '#FFFFFF' }}>KL </span>
-                    <span style={{ color: CRIMSON   }}>SAC</span>
-                  </p>
-
                   {/* Tagline */}
                   <motion.p
                     initial={{ opacity: 0 }}
