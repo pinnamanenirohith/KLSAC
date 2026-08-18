@@ -1,5 +1,6 @@
 'use client';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useState, useEffect, useRef } from 'react';
 import { usePathname } from 'next/navigation';
 import { Menu, X, ChevronDown, ArrowUpRight } from 'lucide-react';
@@ -71,23 +72,22 @@ export default function Navbar() {
           {/* ── Logo ── */}
           <Link
             href="/"
-            className="flex items-center gap-2.5 shrink-0 transition-opacity hover:opacity-80"
+            className="shrink-0 transition-opacity hover:opacity-80"
             aria-label="KL SAC Home">
-            <div
-              className="w-8 h-8 rounded-lg flex items-center justify-center font-black text-sm"
-              style={{ background: glass ? 'rgba(255,255,255,0.18)' : '#8B0000', color: glass ? '#fff' : '#fff', letterSpacing: '-0.02em' }}>
-              KL
-            </div>
-            <span
-              className="font-black tracking-tight text-lg leading-none"
-              style={{ color: glass ? '#fff' : '#0D0D0D' }}>
-              SAC
-            </span>
-            <span
-              className="hidden sm:block text-[10px] font-semibold tracking-widest uppercase leading-none mt-0.5"
-              style={{ color: glass ? 'rgba(255,255,255,0.55)' : '#A1A1AA' }}>
-              KL University
-            </span>
+            <Image
+              src="/logo.png"
+              alt="KL SAC — Student Activity Center, KL University"
+              height={38}
+              width={170}
+              style={{
+                height: '38px',
+                width: 'auto',
+                objectFit: 'contain',
+                filter: glass ? 'brightness(0) invert(1)' : 'none',
+                transition: 'filter 0.3s',
+              }}
+              priority
+            />
           </Link>
 
           {/* ── Desktop Nav ── */}
@@ -224,7 +224,13 @@ export default function Navbar() {
         }}>
         {/* Drawer header */}
         <div className="flex items-center justify-between px-5 py-4" style={{ borderBottom: '1px solid #E4E4E7', height: '72px' }}>
-          <span className="font-black text-base" style={{ color: '#0D0D0D' }}>KL SAC</span>
+          <Image
+            src="/logo.png"
+            alt="KL SAC"
+            height={32}
+            width={140}
+            style={{ height: '32px', width: 'auto', objectFit: 'contain' }}
+          />
           <button onClick={() => setMenuOpen(false)} className="p-2 rounded-lg hover:bg-gray-100">
             <X size={20} style={{ color: '#71717A' }} />
           </button>

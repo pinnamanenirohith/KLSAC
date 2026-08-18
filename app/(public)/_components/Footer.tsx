@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { ArrowUpRight } from 'lucide-react';
 import { DOMAINS } from '@/lib/content/domains';
 
@@ -28,16 +29,20 @@ export default function Footer() {
 
         {/* Brand */}
         <div>
-          <div className="flex items-center gap-2.5 mb-5">
-            <div className="w-9 h-9 rounded-lg flex items-center justify-center font-black text-sm"
-                 style={{ background: '#8B0000', color: '#fff' }}>
-              KL
-            </div>
-            <div>
-              <p className="font-black text-base leading-none">SAC</p>
-              <p className="text-[10px] font-semibold tracking-widest uppercase mt-0.5"
-                 style={{ color: 'rgba(255,255,255,0.35)' }}>KL University</p>
-            </div>
+          <div className="mb-6">
+            <Image
+              src="/logo.png"
+              alt="KL SAC — Student Activity Center, KL University"
+              height={44}
+              width={200}
+              style={{
+                height: '44px',
+                width: 'auto',
+                objectFit: 'contain',
+                filter: 'brightness(0) invert(1)',
+                opacity: 0.88,
+              }}
+            />
           </div>
 
           <p className="text-sm leading-relaxed mb-6" style={{ color: 'rgba(255,255,255,0.38)' }}>
