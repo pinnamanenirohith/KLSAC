@@ -6,7 +6,7 @@ const BASE =
 
 async function safeFetch(path: string) {
   try {
-    const res = await fetch(`${BASE}${path}`, { next: { revalidate: 300 } });
+    const res = await fetch(`${BASE}${path}`, { cache: 'no-store' });
     if (!res.ok) return null;
     return await res.json();
   } catch {

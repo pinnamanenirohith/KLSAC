@@ -19,5 +19,6 @@ export async function PUT(req: NextRequest) {
       .eq('key', u.key);
   }
   revalidatePath('/');
+  revalidatePath('/', 'layout');
   return NextResponse.json({ success: true });
 }

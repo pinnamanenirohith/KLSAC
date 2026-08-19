@@ -7,6 +7,8 @@ import { STUDENT_STORIES } from '@/lib/content/site-content';
 import { FadeIn } from './_components/FadeIn';
 import { getHomepageEvents, getHomepageStats } from '@/lib/data/homepage';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata = {
   title: 'KL SAC — Student Activity Center, KL University',
   description:
