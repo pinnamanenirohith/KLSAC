@@ -1,34 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server';
-import pool from '@/lib/db';
-import { ensureSACTables } from '@/lib/db-setup';
+import { supabase } from '@/lib/supabase';
 import bcrypt from 'bcryptjs';
 
-// One-time setup endpoint — creates the first admin account.
-// Disable or remove this route after initial setup.
 export async function POST(req: NextRequest) {
   const setupKey = req.headers.get('x-setup-key');
-  if (setupKey !== process.env.ADMIN_SETUP_PASSWORD) {
+  if (setupKey !== process.env.ADMIN_SETUP_KEY)
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
-  }
 
-  await ensureSACTables();
   const { username, password, name } = await req.json();
-
-  if (!username || !password) {
+  if (!username || !password)
     return NextResponse.json({ error: 'username and password required' }, { status: 400 });
-  }
 
   const hash = await bcrypt.hash(password, 12);
-  try {
-    await pool.execute(
-      'INSERT INTO sac_admins (username, password_hash, name) VALUES (?, ?, ?)',
-      [username, hash, name ?? username]
-    );
-    return NextResponse.json({ success: true, message: 'Admin created. Remove this route now.' });
-  } catch (e: any) {
-    if (e.code === 'ER_DUP_ENTRY') {
-      return NextResponse.json({ error: 'Username already exists' }, { status: 400 });
-    }
-    return NextResponse.json({ error: e.message }, { status: 500 });
-  }
+  const { error } = await supabase
+    .from('sac_admins')
+    .insert({ username, password_hash: hash, name: name ?? username });
+
+  if (error)
+    return NextResponse.json({ error: error.message }, { status: 400 });
+
+  return NextResponse.json({ success: true, message: 'Admin created.' });
 }

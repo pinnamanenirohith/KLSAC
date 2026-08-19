@@ -1,22 +1,18 @@
 import { NextResponse } from 'next/server';
-import pool from '@/lib/db';
-import { ensureSACTables } from '@/lib/db-setup';
+import { supabase } from '@/lib/supabase';
+import { DEMO_ANNOUNCEMENTS } from '@/lib/demo-data';
 
 export async function GET() {
-  await ensureSACTables();
   try {
-    const [rows] = await pool.execute(`
-      SELECT id, title, content, type, created_at, expires_at
-      FROM sac_announcements
-      WHERE is_active = TRUE
-        AND (expires_at IS NULL OR expires_at > NOW())
-      ORDER BY
-        CASE type WHEN 'urgent' THEN 0 WHEN 'event' THEN 1 ELSE 2 END,
-        created_at DESC
-      LIMIT 20
-    `);
-    return NextResponse.json({ success: true, data: rows });
+    const { data, error } = await supabase
+      .from('sac_announcements')
+      .select('*')
+      .eq('is_active', true)
+      .or('expires_at.is.null,expires_at.gt.now()')
+      .order('created_at', { ascending: false });
+    if (error || !data?.length) throw new Error('fallback');
+    return NextResponse.json({ success: true, data });
   } catch {
-    return NextResponse.json({ success: false, data: [] });
+    return NextResponse.json({ success: true, data: DEMO_ANNOUNCEMENTS });
   }
 }

@@ -1,0 +1,119 @@
+-- ================================================================
+-- KL SAC Website — Supabase Database Schema
+-- Run this once in Supabase Dashboard → SQL Editor → New Query
+-- ================================================================
+
+-- Admin users
+create table if not exists sac_admins (
+  id            bigserial primary key,
+  username      text unique not null,
+  password_hash text not null,
+  name          text,
+  created_at    timestamptz default now()
+);
+
+-- Homepage stats
+create table if not exists sac_stats (
+  key        text primary key,
+  value      integer not null default 0,
+  label      text not null,
+  suffix     text default '+',
+  updated_at timestamptz default now()
+);
+
+-- News articles
+create table if not exists news_articles (
+  slug       text primary key,
+  title      text not null,
+  excerpt    text default '',
+  body       text default '',
+  category   text default 'General',
+  date       date not null default current_date,
+  featured   boolean default false,
+  photo_url  text,
+  created_at timestamptz default now(),
+  updated_at timestamptz default now()
+);
+
+-- Activities
+create table if not exists activities (
+  code          text primary key,
+  club_slug     text not null,
+  domain        text not null,
+  title         text not null,
+  description   text default '',
+  competencies  text default '',
+  activity_date date not null,
+  venue         text default '',
+  time_slot     text,
+  difficulty    text default 'Beginner',
+  sdc_credits   integer default 3,
+  created_at    timestamptz default now()
+);
+
+-- Publications
+create table if not exists publications (
+  id                  text primary key,
+  title               text not null,
+  type                text not null default 'Magazine',
+  year                text not null,
+  description         text default '',
+  pdf_url             text,
+  download_available  boolean default true,
+  sort_order          integer default 0,
+  created_at          timestamptz default now()
+);
+
+-- Announcements
+create table if not exists sac_announcements (
+  id          bigserial primary key,
+  title       text not null,
+  content     text not null,
+  type        text default 'general',
+  created_by  text,
+  created_at  timestamptz default now(),
+  expires_at  timestamptz,
+  is_active   boolean default true
+);
+
+-- Disable RLS (auth is handled by Next.js JWT middleware)
+alter table sac_admins      disable row level security;
+alter table sac_stats       disable row level security;
+alter table news_articles   disable row level security;
+alter table activities      disable row level security;
+alter table publications    disable row level security;
+alter table sac_announcements disable row level security;
+
+-- ── Seed initial stats ───────────────────────────────────────────
+insert into sac_stats (key, value, label, suffix) values
+  ('students',     8500, 'Students Enrolled', '+'),
+  ('clubs',          25, 'Active Clubs',       '' ),
+  ('activities',    400, 'Annual Activities',  '+'),
+  ('achievements',  150, 'Achievements',       '+')
+on conflict (key) do nothing;
+
+-- ── Seed existing publications ───────────────────────────────────
+insert into publications (id, title, type, year, description, pdf_url, download_available, sort_order) values
+  ('pub-aug-story',
+   'The August Story — Volume 1',
+   'Magazine', '2026',
+   'A curated collection of stories, achievements, and highlights from KL SAC activities during August 2026.',
+   '/publications/independence-day-2026.pdf', true, 1),
+  ('pub-independence-day',
+   'Independence Day 2026 — Event Report',
+   'Newsletter', '2026',
+   'Official documentation of the Independence Day 2026 celebrations at KL University, organised by KL SAC.',
+   '/publications/august-story-vol1.pdf', true, 2)
+on conflict (id) do nothing;
+
+-- ── Storage bucket for media uploads ────────────────────────────
+insert into storage.buckets (id, name, public)
+  values ('sac-media', 'sac-media', true)
+  on conflict do nothing;
+
+create policy if not exists "Public read sac-media"
+  on storage.objects for select using (bucket_id = 'sac-media');
+create policy if not exists "Anon upload sac-media"
+  on storage.objects for insert with check (bucket_id = 'sac-media');
+create policy if not exists "Anon delete sac-media"
+  on storage.objects for delete using (bucket_id = 'sac-media');

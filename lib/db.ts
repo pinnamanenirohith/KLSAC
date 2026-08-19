@@ -1,14 +1,2 @@
-import mysql from 'mysql2/promise';
-
-const pool = mysql.createPool({
-  host:     process.env.DB_HOST     || 'localhost',
-  port:     Number(process.env.DB_PORT) || 3306,
-  user:     process.env.DB_USER     || 'root',
-  password: process.env.DB_PASSWORD || '',
-  database: process.env.DB_NAME     || 'sac_portal',
-  waitForConnections: true,
-  connectionLimit: 10,
-  queueLimit: 0,
-});
-
-export default pool;
+// Compatibility shim — all DB access now goes through lib/supabase.ts
+export { supabase as default } from './supabase';

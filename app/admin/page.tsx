@@ -1,82 +1,78 @@
 import { requireAdmin } from '@/lib/auth';
 import { redirect } from 'next/navigation';
-import pool from '@/lib/db';
-import { ensureSACTables } from '@/lib/db-setup';
+import { supabase } from '@/lib/supabase';
 import Link from 'next/link';
-import { Clock, CheckCircle, XCircle, Megaphone } from 'lucide-react';
+import { BarChart2, Newspaper, Zap, BookOpen, Megaphone, ArrowRight } from 'lucide-react';
 
-export const metadata = { title: 'Admin Dashboard — KL SAC' };
+export const metadata = { title: 'Dashboard — KL SAC Admin' };
 
-async function getDashboardStats() {
-  await ensureSACTables();
-  const [[pending], [approved], [denied], [announcements]] = await Promise.all([
-    pool.execute(`
-      SELECT COUNT(*) as count FROM (
-        SELECT code as id FROM activity_catalogue
-        WHERE NOT EXISTS (SELECT 1 FROM website_approvals WHERE content_type='activity' AND content_id=code)
-        UNION ALL
-        SELECT CAST(id AS CHAR) FROM clubs
-        WHERE NOT EXISTS (SELECT 1 FROM website_approvals WHERE content_type='club' AND content_id=CAST(id AS CHAR))
-      ) as unreviewed
-    `),
-    pool.execute(`SELECT COUNT(*) as count FROM website_approvals WHERE status='approved'`),
-    pool.execute(`SELECT COUNT(*) as count FROM website_approvals WHERE status='denied'`),
-    pool.execute(`SELECT COUNT(*) as count FROM sac_announcements WHERE is_active=TRUE`),
-  ]);
-  return {
-    pending:       (pending as any[])[0].count,
-    approved:      (approved as any[])[0].count,
-    denied:        (denied as any[])[0].count,
-    announcements: (announcements as any[])[0].count,
-  };
+async function getStats() {
+  const [{ data: stats }, { count: news }, { count: activities }, { count: pubs }, { count: announcements }] =
+    await Promise.all([
+      supabase.from('sac_stats').select('*'),
+      supabase.from('news_articles').select('*', { count: 'exact', head: true }),
+      supabase.from('activities').select('*', { count: 'exact', head: true }),
+      supabase.from('publications').select('*', { count: 'exact', head: true }),
+      supabase.from('sac_announcements').select('*', { count: 'exact', head: true }).eq('is_active', true),
+    ]);
+  const statMap: Record<string, number> = {};
+  (stats ?? []).forEach((s: any) => { statMap[s.key] = s.value; });
+  return { statMap, news: news ?? 0, activities: activities ?? 0, pubs: pubs ?? 0, announcements: announcements ?? 0 };
 }
 
 export default async function AdminDashboard() {
   const { error } = await requireAdmin();
   if (error) redirect('/admin/login');
 
-  const stats = await getDashboardStats();
+  const { statMap, news, activities, pubs, announcements } = await getStats();
 
-  const cards = [
-    { label: 'Awaiting Review', value: stats.pending,       icon: Clock,        color: 'text-yellow-600', bg: 'bg-yellow-50', href: '/admin/pending' },
-    { label: 'Approved',        value: stats.approved,      icon: CheckCircle,  color: 'text-green-600',  bg: 'bg-green-50' },
-    { label: 'Denied',          value: stats.denied,        icon: XCircle,      color: 'text-red-600',    bg: 'bg-red-50' },
-    { label: 'Announcements',   value: stats.announcements, icon: Megaphone,    color: 'text-blue-600',   bg: 'bg-blue-50', href: '/admin/announcements' },
+  const sections = [
+    { href: '/admin/stats',        label: 'Homepage Stats',  icon: BarChart2,  value: `${statMap.students ?? 0} students · ${statMap.activities ?? 0} activities`,   desc: 'Edit the numbers shown on the homepage' },
+    { href: '/admin/news',         label: 'News Articles',   icon: Newspaper,  value: `${news} articles`,         desc: 'Add, edit, or remove news and updates' },
+    { href: '/admin/activities',   label: 'Activities',      icon: Zap,        value: `${activities} in database`, desc: 'Create and manage club activities' },
+    { href: '/admin/publications', label: 'Publications',    icon: BookOpen,   value: `${pubs} publications`,      desc: 'Upload magazines, reports, and PDFs' },
+    { href: '/admin/announcements',label: 'Announcements',   icon: Megaphone,  value: `${announcements} active`,   desc: 'Post notices to the announcement ticker' },
   ];
 
   return (
     <div>
-      <h1 className="text-3xl font-extrabold mb-2">Dashboard</h1>
-      <p className="mb-8 text-sm" style={{ color: 'var(--muted-foreground)' }}>
-        Manage what appears on the public KL SAC website.
+      <h1 className="text-2xl font-black mb-1" style={{ color: '#0D0D0D', letterSpacing: '-0.02em' }}>
+        Dashboard
+      </h1>
+      <p className="text-sm mb-8" style={{ color: '#71717A' }}>
+        Manage everything that appears on the public KL SAC website.
       </p>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-12">
-        {cards.map(({ label, value, icon: Icon, color, bg, href }) => (
-          <div key={label} className="rounded-2xl border p-6 flex flex-col gap-3"
-               style={{ background: 'var(--card)', borderColor: 'var(--border)' }}>
-            <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${bg}`}>
-              <Icon size={20} className={color} />
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {sections.map(({ href, label, icon: Icon, value, desc }) => (
+          <Link key={href} href={href}
+                className="group rounded-2xl border p-6 flex flex-col gap-3 transition-all hover:shadow-lg hover:-translate-y-0.5"
+                style={{ background: '#fff', borderColor: '#E4E4E7' }}>
+            <div className="flex items-center justify-between">
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center"
+                   style={{ background: '#fff0f0' }}>
+                <Icon size={18} style={{ color: '#8B0000' }} />
+              </div>
+              <ArrowRight size={16} className="opacity-0 group-hover:opacity-100 transition-opacity"
+                          style={{ color: '#8B0000' }} />
             </div>
-            <div className="text-3xl font-extrabold">{value}</div>
-            <div className="text-sm" style={{ color: 'var(--muted-foreground)' }}>{label}</div>
-            {href && (
-              <Link href={href} className="text-xs font-semibold hover:underline mt-auto"
-                    style={{ color: 'var(--primary)' }}>
-                View →
-              </Link>
-            )}
-          </div>
+            <div>
+              <h2 className="font-black text-base mb-0.5" style={{ color: '#0D0D0D' }}>{label}</h2>
+              <p className="text-xs font-semibold mb-1" style={{ color: '#8B0000' }}>{value}</p>
+              <p className="text-xs" style={{ color: '#71717A' }}>{desc}</p>
+            </div>
+          </Link>
         ))}
       </div>
 
-      <div className="rounded-2xl border p-6" style={{ background: 'var(--card)', borderColor: 'var(--border)' }}>
-        <h2 className="font-bold text-lg mb-3">How it works</h2>
-        <ol className="list-decimal list-inside space-y-2 text-sm" style={{ color: 'var(--muted-foreground)' }}>
-          <li>New activities and clubs added in the Student Portal appear in <strong>Pending</strong>.</li>
-          <li>You review each item and click <strong>Approve</strong> or <strong>Deny</strong>.</li>
-          <li>Approved items immediately appear on the public website.</li>
-          <li>Use <strong>Announcements</strong> to post manual notices to the ticker and announcements page.</li>
+      <div className="mt-8 rounded-2xl border p-6" style={{ background: '#fff', borderColor: '#E4E4E7' }}>
+        <h2 className="font-black text-base mb-3" style={{ color: '#0D0D0D' }}>Quick guide</h2>
+        <ol className="list-decimal list-inside space-y-2 text-sm" style={{ color: '#71717A' }}>
+          <li>Use <strong>Stats</strong> to update student counts, club numbers, and activity totals on the homepage.</li>
+          <li>Use <strong>News</strong> to publish new articles with photos — they appear on the public news page instantly.</li>
+          <li>Use <strong>Activities</strong> to add new club activities — they show on the Activities page and club pages.</li>
+          <li>Use <strong>Publications</strong> to upload and manage PDFs (magazines, annual reports).</li>
+          <li>Use <strong>Announcements</strong> to push notices to the scrolling announcement bar on the website.</li>
         </ol>
       </div>
     </div>

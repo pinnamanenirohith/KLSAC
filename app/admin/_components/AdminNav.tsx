@@ -1,12 +1,18 @@
 'use client';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { LayoutDashboard, Clock, Megaphone, LogOut } from 'lucide-react';
+import {
+  LayoutDashboard, BarChart2, Newspaper, Zap,
+  BookOpen, Megaphone, LogOut, ExternalLink,
+} from 'lucide-react';
 
 const links = [
   { href: '/admin',               label: 'Dashboard',     icon: LayoutDashboard },
-  { href: '/admin/pending',       label: 'Pending',       icon: Clock },
-  { href: '/admin/announcements', label: 'Announcements', icon: Megaphone },
+  { href: '/admin/stats',         label: 'Stats',         icon: BarChart2       },
+  { href: '/admin/news',          label: 'News',          icon: Newspaper       },
+  { href: '/admin/activities',    label: 'Activities',    icon: Zap             },
+  { href: '/admin/publications',  label: 'Publications',  icon: BookOpen        },
+  { href: '/admin/announcements', label: 'Announcements', icon: Megaphone       },
 ];
 
 export default function AdminNav() {
@@ -18,30 +24,42 @@ export default function AdminNav() {
     router.push('/admin/login');
   }
 
+  const active = (href: string) =>
+    href === '/admin' ? pathname === '/admin' : pathname.startsWith(href);
+
   return (
-    <header className="border-b" style={{ background: 'var(--card)', borderColor: 'var(--border)' }}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 flex h-14 items-center justify-between">
-        <div className="flex items-center gap-6">
-          <Link href="/admin" className="font-bold text-lg" style={{ color: 'var(--primary)' }}>
+    <header className="border-b sticky top-0 z-50"
+            style={{ background: '#fff', borderColor: '#E4E4E7' }}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 flex h-14 items-center justify-between gap-4">
+        <div className="flex items-center gap-6 min-w-0">
+          <Link href="/admin" className="font-black text-base shrink-0" style={{ color: '#8B0000' }}>
             ⚡ KL SAC Admin
           </Link>
-          <nav className="hidden sm:flex items-center gap-1">
+          <nav className="hidden md:flex items-center gap-0.5 overflow-x-auto">
             {links.map(({ href, label, icon: Icon }) => (
               <Link key={href} href={href}
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors"
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors whitespace-nowrap"
                     style={{
-                      background: pathname === href ? 'var(--muted)' : 'transparent',
-                      color: pathname === href ? 'var(--primary)' : 'var(--muted-foreground)',
+                      background: active(href) ? '#fff0f0' : 'transparent',
+                      color:      active(href) ? '#8B0000' : '#71717A',
                     }}>
-                <Icon size={14} /> {label}
+                <Icon size={13} /> {label}
               </Link>
             ))}
           </nav>
         </div>
-        <button onClick={logout}
-                className="flex items-center gap-1.5 text-sm px-3 py-1.5 rounded-lg transition-colors hover:bg-red-50 text-red-600">
-          <LogOut size={14} /> Logout
-        </button>
+        <div className="flex items-center gap-2 shrink-0">
+          <Link href="/" target="_blank"
+                className="hidden sm:flex items-center gap-1 text-xs px-3 py-1.5 rounded-lg font-semibold transition-colors"
+                style={{ color: '#71717A' }}>
+            <ExternalLink size={12} /> Site
+          </Link>
+          <button onClick={logout}
+                  className="flex items-center gap-1.5 text-sm px-3 py-1.5 rounded-lg font-semibold transition-colors"
+                  style={{ color: '#8B0000' }}>
+            <LogOut size={13} /> Logout
+          </button>
+        </div>
       </div>
     </header>
   );
