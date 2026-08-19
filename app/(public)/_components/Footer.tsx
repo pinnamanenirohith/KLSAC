@@ -166,6 +166,11 @@ export default function Footer() {
               {l}
             </span>
           ))}
+          <Link href="/admin/login"
+                className="text-xs transition-colors hover:text-white"
+                style={{ color: 'rgba(255,255,255,0.18)' }}>
+            Admin
+          </Link>
         </div>
       </div>
     </footer>
