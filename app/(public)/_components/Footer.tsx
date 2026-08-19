@@ -56,15 +56,34 @@ export default function Footer() {
             Empowering <span style={{ color: '#8B0000' }}>Tomorrow's Leaders</span>
           </p>
 
-          {/* Social placeholder */}
+          {/* Social links */}
           <div className="flex items-center gap-3">
-            {['Instagram', 'LinkedIn', 'YouTube'].map(s => (
-              <a key={s} href="#" aria-label={s}
-                 className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-colors hover:bg-white/10"
-                 style={{ background: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.5)' }}>
-                {s[0]}
-              </a>
-            ))}
+            <a href="https://www.instagram.com/kl_sac/" target="_blank" rel="noopener" aria-label="Instagram"
+               className="w-9 h-9 rounded-full flex items-center justify-center transition-all hover:scale-110"
+               style={{ background: 'rgba(255,255,255,0.08)' }}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.6)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+                <circle cx="12" cy="12" r="4"/>
+                <circle cx="17.5" cy="6.5" r="0.5" fill="rgba(255,255,255,0.6)" stroke="none"/>
+              </svg>
+            </a>
+            <a href="https://www.linkedin.com/company/sac-klef/posts/?feedView=all" target="_blank" rel="noopener" aria-label="LinkedIn"
+               className="w-9 h-9 rounded-full flex items-center justify-center transition-all hover:scale-110"
+               style={{ background: 'rgba(255,255,255,0.08)' }}>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="rgba(255,255,255,0.6)">
+                <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
+                <rect x="2" y="9" width="4" height="12"/>
+                <circle cx="4" cy="4" r="2"/>
+              </svg>
+            </a>
+            <a href="https://www.youtube.com/@SAC__KLEF" target="_blank" rel="noopener" aria-label="YouTube"
+               className="w-9 h-9 rounded-full flex items-center justify-center transition-all hover:scale-110"
+               style={{ background: 'rgba(255,255,255,0.08)' }}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="rgba(255,255,255,0.6)">
+                <path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58A2.78 2.78 0 0 0 3.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.4a2.78 2.78 0 0 0 1.95-1.95A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/>
+                <polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="#0A0A0F"/>
+              </svg>
+            </a>
           </div>
         </div>
 
