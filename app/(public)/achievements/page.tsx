@@ -34,9 +34,6 @@ export default function AchievementsPage() {
           <p className="text-lg leading-relaxed mb-4" style={{ color: 'rgba(255,255,255,0.42)', maxWidth: '56ch' }}>
             Competitions won, recognitions earned, and milestones crossed — by KL SAC students.
           </p>
-          <p className="text-xs" style={{ color: 'rgba(255,255,255,0.18)' }}>
-            [PLACEHOLDER — Official achievements to be populated from institutional records]
-          </p>
         </div>
       </section>
 
@@ -91,18 +88,6 @@ export default function AchievementsPage() {
             </div>
           </FadeIn>
 
-          <FadeIn>
-            <div
-              className="mt-16 p-8 rounded-2xl text-center"
-              style={{ background: '#FAFAFA', border: '1px dashed #D4D4D8' }}>
-              <p className="font-bold text-base mb-2" style={{ color: '#0D0D0D' }}>
-                More achievements coming soon
-              </p>
-              <p className="text-sm" style={{ color: '#A1A1AA' }}>
-                This page will be populated with verified achievement records from institutional sources.
-              </p>
-            </div>
-          </FadeIn>
         </div>
       </section>
     </>
