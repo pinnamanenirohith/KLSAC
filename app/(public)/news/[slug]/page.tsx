@@ -61,28 +61,19 @@ export default async function NewsArticlePage({ params }: { params: Promise<{ sl
             )}
           </div>
 
-          <p className="mt-4 text-xs" style={{ color: '#D4D4D8' }}>
-            [PLACEHOLDER — Official content required]
-          </p>
         </div>
       </section>
 
-      {/* ─── Cover image placeholder ──────────────────────────────────── */}
-      <section style={{ background: '#F7F7F8' }}>
-        <div className="max-w-4xl mx-auto px-5 sm:px-10 py-0">
-          <div
-            className="w-full rounded-2xl"
-            style={{
-              height: '280px',
-              background: 'rgba(139,0,0,0.05)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}>
-            <span className="font-black text-5xl" style={{ color: '#E4E4E7' }}>SAC</span>
+      {/* ─── Cover image ──────────────────────────────────────────────── */}
+      {article.photo && (
+        <section style={{ background: '#F7F7F8' }}>
+          <div className="max-w-4xl mx-auto px-5 sm:px-10">
+            <div className="w-full rounded-2xl overflow-hidden" style={{ aspectRatio: '16/7' }}>
+              <img src={article.photo} alt={article.title} className="w-full h-full object-cover" />
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* ─── Article body ─────────────────────────────────────────────── */}
       <section style={{ background: '#fff' }}>
@@ -94,9 +85,13 @@ export default async function NewsArticlePage({ params }: { params: Promise<{ sl
               {article.excerpt}
             </p>
 
-            <p className="text-base sm:text-lg leading-relaxed" style={{ color: '#3F3F46' }}>
-              {article.body}
-            </p>
+            <div className="flex flex-col gap-5">
+              {article.body.split('\n\n').map((para, i) => (
+                <p key={i} className="text-base sm:text-lg leading-relaxed" style={{ color: '#3F3F46' }}>
+                  {para}
+                </p>
+              ))}
+            </div>
           </FadeIn>
         </div>
       </section>

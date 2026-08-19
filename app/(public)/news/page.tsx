@@ -28,9 +28,6 @@ export default function NewsPage() {
           <p className="text-lg" style={{ color: '#71717A', maxWidth: '54ch' }}>
             Announcements, activity wrap-ups, and institutional updates from KL SAC.
           </p>
-          <p className="mt-3 text-xs" style={{ color: '#C7C7CC' }}>
-            [PLACEHOLDER — Official news content required]
-          </p>
         </div>
       </section>
 
@@ -44,13 +41,17 @@ export default function NewsPage() {
                 className="group grid grid-cols-1 lg:grid-cols-5 gap-0 rounded-2xl overflow-hidden transition-shadow hover:shadow-lg"
                 style={{ border: '1px solid #E4E4E7' }}>
 
-                {/* Image placeholder */}
+                {/* Cover image */}
                 <div
-                  className="lg:col-span-2 min-h-56"
+                  className="lg:col-span-2 min-h-56 overflow-hidden"
                   style={{ background: 'rgba(139,0,0,0.05)' }}>
-                  <div className="w-full h-full flex items-center justify-center">
-                    <span className="font-black text-4xl" style={{ color: '#E4E4E7' }}>KL</span>
-                  </div>
+                  {featured.photo ? (
+                    <img src={featured.photo} alt={featured.title} className="w-full h-full object-cover" />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center">
+                      <span className="font-black text-4xl" style={{ color: '#E4E4E7' }}>KL</span>
+                    </div>
+                  )}
                 </div>
 
                 <div className="lg:col-span-3 p-8 sm:p-12 flex flex-col justify-center">
@@ -115,6 +116,13 @@ export default function NewsPage() {
                       {article.excerpt}
                     </p>
                   </div>
+
+                  {/* Thumbnail */}
+                  {article.photo && (
+                    <div className="hidden sm:block w-28 h-20 shrink-0 rounded-xl overflow-hidden">
+                      <img src={article.photo} alt={article.title} className="w-full h-full object-cover" loading="lazy" />
+                    </div>
+                  )}
 
                   <div className="hidden sm:flex items-center shrink-0">
                     <ArrowRight

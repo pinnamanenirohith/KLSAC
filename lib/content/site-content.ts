@@ -12,56 +12,48 @@ export interface NewsArticle {
   author: string;
   featured: boolean;
   tags: string[];
+  photo?: string;
 }
 
 export const NEWS_ARTICLES: NewsArticle[] = [
   {
-    slug: 'sac-launches-2026-27-academic-year',
-    title: 'KL SAC Launches Academic Year 2026-27 with Campus-Wide Activities Drive',
+    slug: 'yuva-tourism-kondaveedu-trek-2026',
+    title: 'Yuva Tourism Adventure Club Organises Outreach Trek to Kondaveedu Fort',
     excerpt:
-      'The Student Activity Center has opened registrations across all 25 clubs and 5 domains for the new academic year, with expanded programmes, new leadership opportunities, and a heightened focus on student development.',
-    body: '[PLACEHOLDER — Official news article body required. Please provide verified content from SAC Communications.]',
-    category: 'Announcement',
-    date: '2026-08-01',
+      'The Yuva Tourism Adventure Club led students on a trekking expedition to the historic Kondaveedu Fort — an experiential journey built around adventure, teamwork, and discovery.',
+    body: 'The Yuva Tourism Adventure Club, under KL SAC, successfully organised an outreach trekking expedition to the historic Kondaveedu Fort — one of the most significant medieval fortresses in Andhra Pradesh.\n\nThe initiative was designed to push students beyond the boundaries of the classroom and into an environment that demanded endurance, collaboration, and curiosity. Participants navigated the terrain of the fort together, discovering its layered history while experiencing the physical and mental challenge of the trek.\n\nThe expedition was more than an adventure — it was a structured exercise in teamwork. Students supported one another through difficult stretches, made collective decisions on the trail, and built bonds that extended well beyond the activity itself.\n\nFor many participants, it was their first experience of trekking and historical exploration combined. The initiative created a memorable and meaningful experience — one that reinforced the value of stepping out of comfort zones and engaging with the world directly.\n\nThe Yuva Tourism Adventure Club continues to plan similar experiences that blend adventure, cultural learning, and personal development for students across KL University.',
+    category: 'Event',
+    date: '2026-08-10',
     author: 'KL SAC Communications',
     featured: true,
-    tags: ['Academic Year', 'Club Registration', 'SAC'],
+    tags: ['Yuva Tourism', 'Trekking', 'Kondaveedu Fort', 'Adventure', 'HWB'],
+    photo: '/news/yuva-tourism-kondaveedu-trek.jpg',
   },
   {
-    slug: 'zeroone-hackathon-2026',
-    title: 'ZeroOne Code Club Represents KL at National Hackathon — Reaches Finals',
+    slug: 'arts-club-first-activity-2026',
+    title: 'Arts Club Conducts Its First Activity, Marking the Beginning of a Creative Journey',
     excerpt:
-      'A team from ZeroOne Code Club competed in the national finals of a prominent intercollegiate hackathon, presenting an innovative solution to a real-world public health challenge.',
-    body: '[PLACEHOLDER — Official news article body required. Please provide verified content from SAC Communications.]',
-    category: 'Achievement',
-    date: '2026-07-28',
-    author: 'KL SAC Communications',
-    featured: false,
-    tags: ['ZeroOne', 'Hackathon', 'TEC', 'Achievement'],
-  },
-  {
-    slug: 'svr-outreach-2026',
-    title: 'SVR Club Completes Annual Village Outreach Programme — 500+ Families Reached',
-    excerpt:
-      'The SVR Club concluded its three-day annual village outreach programme serving communities in the Vijayawada district, providing health awareness, education support, and livelihood resources.',
-    body: '[PLACEHOLDER — Official news article body required. Please provide verified content from SAC Communications.]',
-    category: 'Community',
-    date: '2026-07-15',
-    author: 'KL SAC Communications',
-    featured: false,
-    tags: ['SVR Club', 'Outreach', 'ESO', 'Community Service'],
-  },
-  {
-    slug: 'classical-dance-festival-2026',
-    title: 'Dance Club to Host Classical Dance Festival — Auditions Open',
-    excerpt:
-      'KL SAC Dance Club has announced the return of its flagship Classical Dance Festival, inviting students across all dance forms to audition for the annual performance showcase.',
-    body: '[PLACEHOLDER — Official news article body required. Please provide verified content from SAC Communications.]',
+      'The Arts Club under KL SAC held its first activity, giving students a platform to express creativity, showcase artistic abilities, and connect with fellow artists on campus.',
+    body: 'The Arts Club, operating under the Liberal Arts, Cultural & Hobby (LCH) domain of KL SAC, successfully conducted its first activity — a milestone that marks the beginning of a dedicated creative community within KL University.\n\nThe activity brought together students from across disciplines who share a passion for art in its many forms. Participants were given the space and the encouragement to express themselves freely — through drawing, painting, and other visual art forms — creating an atmosphere of creativity and mutual appreciation.\n\nFor many students, the activity served as an introduction to the broader SAC creative ecosystem. It offered an early glimpse of what consistent participation in the Arts Club can lead to: skill development, peer learning, public showcases, and a community of like-minded individuals.\n\nThe Arts Club intends to build on this foundation with regular sessions, theme-based workshops, collaborative projects, and participation in inter-college competitions. The club is open to students at all levels — from beginners exploring art for the first time to those with established skills looking to deepen their practice.\n\nThis first activity signals the start of a creative journey that the Arts Club and KL SAC are committed to sustaining throughout the academic year.',
     category: 'Event',
-    date: '2026-08-08',
+    date: '2026-08-05',
     author: 'KL SAC Communications',
     featured: false,
-    tags: ['Dance Club', 'Festival', 'LCH', 'Auditions'],
+    tags: ['Arts Club', 'LCH', 'Creativity', 'First Activity'],
+    photo: '/news/arts-club-first-activity.jpg',
+  },
+  {
+    slug: 'webapps-club-first-activity-2026',
+    title: 'Web Apps Club Conducts Its First Activity, Launching a Journey in Technology and Innovation',
+    excerpt:
+      'The Web Apps Club held its inaugural activity under KL SAC, offering students a hands-on introduction to web technologies, collaborative learning, and the practical side of software development.',
+    body: 'The Web Apps Club, part of the Technology (TEC) domain under KL SAC, successfully conducted its first activity — launching what promises to be an impactful journey in web development and technology innovation for students at KL University.\n\nThe activity brought together students with an interest in web technologies, from those just beginning to explore development to those already building projects on their own. The session created space for idea exchange, technical discussion, and the kind of collaborative learning that accelerates real skill growth.\n\nParticipants engaged with core concepts of web development, explored the range of technologies available in the modern stack, and began to connect with peers who share the same technical drive. The environment was hands-on and collaborative — built around doing, not just listening.\n\nThe Web Apps Club plans to continue with regular sessions focused on practical development — building and deploying real projects, participating in hackathons, engaging with industry tools, and contributing to open-source initiatives. The club is structured to support students at every stage of their technical journey.\n\nThis inaugural activity marks the beginning of a community at KL University where students can grow as developers, collaborate on meaningful work, and continuously push the boundaries of what they can build.',
+    category: 'Event',
+    date: '2026-08-03',
+    author: 'KL SAC Communications',
+    featured: false,
+    tags: ['Web Apps Club', 'TEC', 'Technology', 'Web Development', 'First Activity'],
+    photo: '/news/webapps-club-first-activity.jpg',
   },
 ];
 

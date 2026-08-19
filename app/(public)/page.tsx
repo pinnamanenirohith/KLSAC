@@ -611,19 +611,19 @@ export default async function HomePage() {
                   <article
                     className="h-full rounded-2xl overflow-hidden flex flex-col transition-all hover:shadow-lg"
                     style={{ background: '#fff', border: '1px solid #E4E4E7' }}>
-                    {/* Image placeholder */}
+                    {/* Cover image */}
                     <div
-                      className="h-44 flex items-center justify-center"
+                      className="h-44 overflow-hidden"
                       style={{
-                        background: i === 0
-                          ? 'linear-gradient(135deg, #5B0000 0%, #8B0000 100%)'
-                          : i === 1
-                          ? 'linear-gradient(135deg, #8B0000 0%, #B91C1C 100%)'
-                          : 'linear-gradient(135deg, #8B0000 0%, #B91C1C 100%)',
+                        background: 'linear-gradient(135deg, #5B0000 0%, #8B0000 100%)',
                       }}>
-                      <span className="text-[10px] font-bold tracking-widest uppercase opacity-20" style={{ color: '#fff' }}>
-                        Image Required
-                      </span>
+                      {article.photo ? (
+                        <img src={article.photo} alt={article.title} className="w-full h-full object-cover" loading="lazy" />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center">
+                          <span className="text-[10px] font-bold tracking-widest uppercase opacity-20" style={{ color: '#fff' }}>KL SAC</span>
+                        </div>
+                      )}
                     </div>
                     <div className="p-5 flex flex-col gap-3 flex-1">
                       <div className="flex items-center gap-2">
