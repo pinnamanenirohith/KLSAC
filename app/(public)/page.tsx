@@ -61,7 +61,7 @@ export default async function HomePage() {
         />
 
         {/* Content */}
-        <div className="relative z-10 max-w-[1440px] mx-auto px-5 sm:px-10 w-full pt-24 pb-20">
+        <div className="relative z-10 w-full px-6 sm:px-12 xl:px-20 w-full pt-24 pb-20">
           <div className="max-w-2xl">
 
             {/* Badge */}
@@ -130,7 +130,7 @@ export default async function HomePage() {
 
       {/* ═══════════════════════════════════════════════════ AT A GLANCE ══ */}
       <section style={{ background: '#0A0A0F' }}>
-        <div className="max-w-[1440px] mx-auto px-5 sm:px-10 py-20">
+        <div className="w-full px-6 sm:px-12 xl:px-20 py-20">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-0 lg:divide-x"
                style={{ borderColor: 'rgba(255,255,255,0.07)' }}>
             {[
@@ -165,7 +165,7 @@ export default async function HomePage() {
 
       {/* ═══════════════════════════════════════════════ WHAT HAPPENS AT SAC */}
       <section style={{ background: '#fff' }}>
-        <div className="max-w-[1440px] mx-auto px-5 sm:px-10 py-28">
+        <div className="w-full px-6 sm:px-12 xl:px-20 py-28">
           <FadeIn className="mb-16">
             <p className="text-[10px] font-black tracking-[0.22em] uppercase mb-4" style={{ color: '#8B0000' }}>
               The SAC Journey
@@ -205,7 +205,7 @@ export default async function HomePage() {
 
       {/* ══════════════════════════════════════════════════ FIVE DOMAINS ══ */}
       <section style={{ background: '#F7F7F8' }}>
-        <div className="max-w-[1440px] mx-auto px-5 sm:px-10 py-28">
+        <div className="w-full px-6 sm:px-12 xl:px-20 py-28">
           <FadeIn className="mb-12">
             <p className="text-[10px] font-black tracking-[0.22em] uppercase mb-4" style={{ color: '#8B0000' }}>
               Five Domains · Twenty-Five Clubs
@@ -283,7 +283,7 @@ export default async function HomePage() {
 
       {/* ═══════════════════════════════════════════════ STUDENT STORIES ══ */}
       <section style={{ background: '#fff' }}>
-        <div className="max-w-[1440px] mx-auto px-5 sm:px-10 py-28">
+        <div className="w-full px-6 sm:px-12 xl:px-20 py-28">
           <FadeIn className="flex items-end justify-between mb-12 gap-6">
             <div>
               <p className="text-[10px] font-black tracking-[0.22em] uppercase mb-4" style={{ color: '#8B0000' }}>
@@ -391,7 +391,7 @@ export default async function HomePage() {
 
       {/* ════════════════════════════════════════════ UPCOMING ACTIVITIES ══ */}
       <section style={{ background: '#F7F7F8' }}>
-        <div className="max-w-[1440px] mx-auto px-5 sm:px-10 py-28">
+        <div className="w-full px-6 sm:px-12 xl:px-20 py-28">
           <FadeIn className="flex items-end justify-between mb-12 gap-6">
             <div>
               <p className="text-[10px] font-black tracking-[0.22em] uppercase mb-4" style={{ color: '#8B0000' }}>
@@ -477,7 +477,7 @@ export default async function HomePage() {
 
       {/* ═══════════════════════════════════════════════ ACHIEVEMENTS ══ */}
       <section style={{ background: '#0A0A0F' }}>
-        <div className="max-w-[1440px] mx-auto px-5 sm:px-10 py-24">
+        <div className="w-full px-6 sm:px-12 xl:px-20 py-24">
           <FadeIn className="flex items-end justify-between mb-12 gap-6">
             <div>
               <p className="text-[10px] font-black tracking-[0.22em] uppercase mb-4" style={{ color: '#8B0000' }}>
@@ -538,7 +538,7 @@ export default async function HomePage() {
 
       {/* ══════════════════════════════════════════════ INDUSTRY TEASER ══ */}
       <section style={{ background: '#fff' }}>
-        <div className="max-w-[1440px] mx-auto px-5 sm:px-10 py-24">
+        <div className="w-full px-6 sm:px-12 xl:px-20 py-24">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
             <FadeIn>
               <p className="text-[10px] font-black tracking-[0.22em] uppercase mb-4" style={{ color: '#8B0000' }}>
@@ -585,7 +585,7 @@ export default async function HomePage() {
 
       {/* ═══════════════════════════════════════════════ LATEST NEWS ══ */}
       <section style={{ background: '#F7F7F8' }}>
-        <div className="max-w-[1440px] mx-auto px-5 sm:px-10 py-24">
+        <div className="w-full px-6 sm:px-12 xl:px-20 py-24">
           <FadeIn className="flex items-end justify-between mb-12 gap-6">
             <div>
               <p className="text-[10px] font-black tracking-[0.22em] uppercase mb-4" style={{ color: '#8B0000' }}>
@@ -659,7 +659,7 @@ export default async function HomePage() {
 
       {/* ═══════════════════════════════════════════════════════ CTA ══ */}
       <section style={{ background: '#0A0A0F' }}>
-        <div className="max-w-[1440px] mx-auto px-5 sm:px-10 py-32 text-center">
+        <div className="w-full px-6 sm:px-12 xl:px-20 py-32 text-center">
           <FadeIn>
             <p className="text-[10px] font-black tracking-[0.22em] uppercase mb-6"
                style={{ color: 'rgba(255,255,255,0.3)' }}>

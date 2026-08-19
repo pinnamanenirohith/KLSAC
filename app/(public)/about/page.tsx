@@ -31,7 +31,7 @@ export default function AboutPage() {
     <>
       {/* ─── Hero ─────────────────────────────────────────────────────── */}
       <section style={{ background: '#0A0A0F', paddingTop: '92px', paddingBottom: '80px' }}>
-        <div className="max-w-[1440px] mx-auto px-5 sm:px-10">
+        <div className="w-full px-6 sm:px-12 xl:px-20">
           <p className="text-[10px] font-black tracking-[0.25em] uppercase mb-5"
              style={{ color: '#8B0000' }}>
             About KL SAC
@@ -49,7 +49,7 @@ export default function AboutPage() {
 
       {/* ─── What is SAC ──────────────────────────────────────────────── */}
       <section style={{ background: '#fff' }}>
-        <div className="max-w-[1440px] mx-auto px-5 sm:px-10 py-28">
+        <div className="w-full px-6 sm:px-12 xl:px-20 py-28">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-start">
 
             <FadeIn>
@@ -103,7 +103,7 @@ export default function AboutPage() {
 
       {/* ─── Philosophy ───────────────────────────────────────────────── */}
       <section style={{ background: '#F7F7F8' }}>
-        <div className="max-w-[1440px] mx-auto px-5 sm:px-10 py-28">
+        <div className="w-full px-6 sm:px-12 xl:px-20 py-28">
           <FadeIn className="mb-16">
             <p className="text-[10px] font-black tracking-[0.22em] uppercase mb-4" style={{ color: '#8B0000' }}>
               Our Philosophy
@@ -145,7 +145,7 @@ export default function AboutPage() {
 
       {/* ─── Five Domains ─────────────────────────────────────────────── */}
       <section style={{ background: '#fff' }}>
-        <div className="max-w-[1440px] mx-auto px-5 sm:px-10 py-28">
+        <div className="w-full px-6 sm:px-12 xl:px-20 py-28">
           <FadeIn className="mb-12">
             <p className="text-[10px] font-black tracking-[0.22em] uppercase mb-4" style={{ color: '#8B0000' }}>
               Our Structure
@@ -191,7 +191,7 @@ export default function AboutPage() {
 
       {/* ─── SAC vs ERP distinction ───────────────────────────────────── */}
       <section style={{ background: '#F7F7F8' }}>
-        <div className="max-w-[1440px] mx-auto px-5 sm:px-10 py-24">
+        <div className="w-full px-6 sm:px-12 xl:px-20 py-24">
           <FadeIn className="mb-12">
             <p className="text-[10px] font-black tracking-[0.22em] uppercase mb-4" style={{ color: '#8B0000' }}>
               Two Systems, One Journey
@@ -268,7 +268,7 @@ export default function AboutPage() {
 
       {/* ─── Contact CTA ──────────────────────────────────────────────── */}
       <section style={{ background: '#8B0000' }}>
-        <div className="max-w-[1440px] mx-auto px-5 sm:px-10 py-20 flex flex-col sm:flex-row items-center justify-between gap-8">
+        <div className="w-full px-6 sm:px-12 xl:px-20 py-20 flex flex-col sm:flex-row items-center justify-between gap-8">
           <div>
             <h3 className="font-black text-2xl sm:text-3xl mb-2" style={{ color: '#fff', letterSpacing: '-0.02em' }}>
               Have questions about SAC?

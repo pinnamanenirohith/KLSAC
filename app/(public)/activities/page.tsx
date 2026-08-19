@@ -40,7 +40,7 @@ export default function ActivitiesPage() {
   const visible = domain === 'all' ? activities : activities.filter(a => a.domain === domain);
 
   return (
-    <div className="max-w-[1440px] mx-auto px-4 sm:px-8" style={{ paddingTop: '112px', paddingBottom: '80px' }}>
+    <div className="w-full px-6 sm:px-12 xl:px-20" style={{ paddingTop: '112px', paddingBottom: '80px' }}>
       <div className="mb-12 text-center">
         <span
           className="text-xs font-black tracking-[0.2em] uppercase px-4 py-1.5 rounded-full inline-block mb-4"

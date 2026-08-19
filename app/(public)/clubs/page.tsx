@@ -33,7 +33,7 @@ export default function ClubsPage() {
     <>
       {/* â”€â”€â”€ Hero â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <section style={{ background: '#fff', paddingTop: '92px', paddingBottom: '0' }}>
-        <div className="max-w-[1440px] mx-auto px-5 sm:px-10 pt-10 pb-0">
+        <div className="w-full px-6 sm:px-12 xl:px-20 pt-10 pb-0">
           <p className="text-[10px] font-black tracking-[0.25em] uppercase mb-4" style={{ color: '#8B0000' }}>
             25 Clubs Â· 5 Domains
           </p>
@@ -71,7 +71,7 @@ export default function ClubsPage() {
 
       {/* â”€â”€â”€ Club List â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <section style={{ background: '#fff' }}>
-        <div className="max-w-[1440px] mx-auto px-5 sm:px-10 pt-10 pb-24">
+        <div className="w-full px-6 sm:px-12 xl:px-20 pt-10 pb-24">
           {visibleDomains.map(domain => {
             const domainClubs = CLUBS.filter(c => c.domainCode === domain.code);
             return (

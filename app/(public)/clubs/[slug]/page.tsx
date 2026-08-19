@@ -55,7 +55,7 @@ export default async function ClubDetailPage({ params }: { params: Promise<{ slu
           background: `linear-gradient(135deg, ${domain.color}18 0%, ${domain.color}06 100%)`,
           borderBottom: `1px solid ${domain.color}18`,
         }}>
-        <div className="max-w-[1440px] mx-auto px-5 sm:px-10">
+        <div className="w-full px-6 sm:px-12 xl:px-20">
           <Link
             href={`/domains/${domain.slug}`}
             className="inline-flex items-center gap-2 text-xs font-bold mb-8 transition-opacity hover:opacity-70"
@@ -104,7 +104,7 @@ export default async function ClubDetailPage({ params }: { params: Promise<{ slu
 
       {/* ─── About ────────────────────────────────────────────────────── */}
       <section style={{ background: '#fff' }}>
-        <div className="max-w-[1440px] mx-auto px-5 sm:px-10 py-24">
+        <div className="w-full px-6 sm:px-12 xl:px-20 py-24">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-16">
             <div className="lg:col-span-2">
               <FadeIn>
@@ -159,7 +159,7 @@ export default async function ClubDetailPage({ params }: { params: Promise<{ slu
 
       {/* ─── Activity Gallery ─────────────────────────────────────────── */}
       <section style={{ background: '#F7F7F8' }}>
-        <div className="max-w-[1440px] mx-auto px-5 sm:px-10 py-20">
+        <div className="w-full px-6 sm:px-12 xl:px-20 py-20">
           <FadeIn>
             <div className="flex items-end justify-between mb-10 flex-wrap gap-4">
               <div>
@@ -240,7 +240,7 @@ export default async function ClubDetailPage({ params }: { params: Promise<{ slu
 
       {/* ─── Competencies ─────────────────────────────────────────────── */}
       <section style={{ background: '#fff' }}>
-        <div className="max-w-[1440px] mx-auto px-5 sm:px-10 py-20">
+        <div className="w-full px-6 sm:px-12 xl:px-20 py-20">
           <FadeIn>
             <p className="text-[10px] font-black tracking-[0.22em] uppercase mb-8" style={{ color: domain.color }}>
               Competencies You'll Develop
@@ -259,7 +259,7 @@ export default async function ClubDetailPage({ params }: { params: Promise<{ slu
 
       {/* ─── Upcoming Events ──────────────────────────────────────────── */}
       <section style={{ background: '#F7F7F8' }}>
-        <div className="max-w-[1440px] mx-auto px-5 sm:px-10 py-20">
+        <div className="w-full px-6 sm:px-12 xl:px-20 py-20">
           <FadeIn>
             <div className="flex items-end justify-between mb-10 flex-wrap gap-4">
               <div>
@@ -364,7 +364,7 @@ export default async function ClubDetailPage({ params }: { params: Promise<{ slu
 
       {/* ─── What We Do ───────────────────────────────────────────────── */}
       <section style={{ background: '#fff' }}>
-        <div className="max-w-[1440px] mx-auto px-5 sm:px-10 py-20">
+        <div className="w-full px-6 sm:px-12 xl:px-20 py-20">
           <FadeIn>
             <p className="text-[10px] font-black tracking-[0.22em] uppercase mb-8" style={{ color: domain.color }}>
               What We Do
@@ -392,7 +392,7 @@ export default async function ClubDetailPage({ params }: { params: Promise<{ slu
 
       {/* ─── Achievements ─────────────────────────────────────────────── */}
       <section style={{ background: '#F7F7F8' }}>
-        <div className="max-w-[1440px] mx-auto px-5 sm:px-10 py-20">
+        <div className="w-full px-6 sm:px-12 xl:px-20 py-20">
           <FadeIn>
             <div className="flex items-end justify-between mb-10 flex-wrap gap-4">
               <div>
@@ -439,7 +439,7 @@ export default async function ClubDetailPage({ params }: { params: Promise<{ slu
 
       {/* ─── Office Bearers ───────────────────────────────────────────── */}
       <section style={{ background: '#fff' }}>
-        <div className="max-w-[1440px] mx-auto px-5 sm:px-10 py-20">
+        <div className="w-full px-6 sm:px-12 xl:px-20 py-20">
           <FadeIn>
             <div className="flex items-end justify-between mb-10 flex-wrap gap-4">
               <div>
@@ -496,7 +496,7 @@ export default async function ClubDetailPage({ params }: { params: Promise<{ slu
 
       {/* ─── Join CTA ─────────────────────────────────────────────────── */}
       <section style={{ background: '#0A0A0F' }}>
-        <div className="max-w-[1440px] mx-auto px-5 sm:px-10 py-20">
+        <div className="w-full px-6 sm:px-12 xl:px-20 py-20">
           <FadeIn>
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-8">
               <div>

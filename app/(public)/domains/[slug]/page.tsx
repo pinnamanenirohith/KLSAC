@@ -42,7 +42,7 @@ export default async function DomainDetailPage({ params }: { params: Promise<{ s
           background: `linear-gradient(135deg, ${domain.color}22 0%, ${domain.color}08 100%)`,
           borderBottom: `2px solid ${domain.color}20`,
         }}>
-        <div className="max-w-[1440px] mx-auto px-5 sm:px-10">
+        <div className="w-full px-6 sm:px-12 xl:px-20">
           <Link
             href="/domains"
             className="inline-flex items-center gap-2 text-xs font-bold mb-8 transition-opacity hover:opacity-70"
@@ -88,7 +88,7 @@ export default async function DomainDetailPage({ params }: { params: Promise<{ s
 
       {/* ─── About ────────────────────────────────────────────────────── */}
       <section style={{ background: '#fff' }}>
-        <div className="max-w-[1440px] mx-auto px-5 sm:px-10 py-24">
+        <div className="w-full px-6 sm:px-12 xl:px-20 py-24">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-16">
             <FadeIn className="lg:col-span-2">
               <p className="text-[10px] font-black tracking-[0.22em] uppercase mb-5" style={{ color: domain.color }}>
@@ -123,7 +123,7 @@ export default async function DomainDetailPage({ params }: { params: Promise<{ s
 
       {/* ─── Activity Gallery ─────────────────────────────────────────── */}
       <section style={{ background: '#F7F7F8' }}>
-        <div className="max-w-[1440px] mx-auto px-5 sm:px-10 py-20">
+        <div className="w-full px-6 sm:px-12 xl:px-20 py-20">
           <FadeIn>
             <div className="flex items-end justify-between mb-10 flex-wrap gap-4">
               <div>
@@ -191,7 +191,7 @@ export default async function DomainDetailPage({ params }: { params: Promise<{ s
 
       {/* ─── Upcoming Activities ──────────────────────────────────────── */}
       <section style={{ background: '#fff' }}>
-        <div className="max-w-[1440px] mx-auto px-5 sm:px-10 py-20">
+        <div className="w-full px-6 sm:px-12 xl:px-20 py-20">
           <FadeIn>
             <div className="flex items-end justify-between mb-10 flex-wrap gap-4">
               <div>
@@ -295,7 +295,7 @@ export default async function DomainDetailPage({ params }: { params: Promise<{ s
 
       {/* ─── Clubs in this domain ─────────────────────────────────────── */}
       <section style={{ background: '#F7F7F8' }}>
-        <div className="max-w-[1440px] mx-auto px-5 sm:px-10 py-24">
+        <div className="w-full px-6 sm:px-12 xl:px-20 py-24">
           <FadeIn className="mb-12">
             <p className="text-[10px] font-black tracking-[0.22em] uppercase mb-4" style={{ color: domain.color }}>
               {domain.clubCount} Clubs in {domain.shortName}
@@ -334,7 +334,7 @@ export default async function DomainDetailPage({ params }: { params: Promise<{ s
 
       {/* ─── Achievements ─────────────────────────────────────────────── */}
       <section style={{ background: '#fff' }}>
-        <div className="max-w-[1440px] mx-auto px-5 sm:px-10 py-20">
+        <div className="w-full px-6 sm:px-12 xl:px-20 py-20">
           <FadeIn>
             <div className="flex items-end justify-between mb-10 flex-wrap gap-4">
               <div>
@@ -381,7 +381,7 @@ export default async function DomainDetailPage({ params }: { params: Promise<{ s
 
       {/* ─── CTA ──────────────────────────────────────────────────────── */}
       <section style={{ background: domain.color }}>
-        <div className="max-w-[1440px] mx-auto px-5 sm:px-10 py-20 flex flex-col sm:flex-row items-center justify-between gap-8">
+        <div className="w-full px-6 sm:px-12 xl:px-20 py-20 flex flex-col sm:flex-row items-center justify-between gap-8">
           <div>
             <h2
               className="font-black text-2xl sm:text-3xl mb-2 leading-tight"

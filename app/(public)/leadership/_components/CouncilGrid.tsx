@@ -344,7 +344,7 @@ export default function CouncilGrid({
     <>
       {/* â”€â”€ Presidents â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <section style={{ background: '#fff' }}>
-        <div className="max-w-[1440px] mx-auto px-5 sm:px-10 py-20">
+        <div className="w-full px-6 sm:px-12 xl:px-20 py-20">
           <SectionLabel label="Student Council Leadership" sub="Presidents of KL SAC." />
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 sm:gap-6">
             {presidents.length > 0
@@ -360,7 +360,7 @@ export default function CouncilGrid({
 
       {/* â”€â”€ Vice Presidents â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <section style={{ background: '#F7F7F8' }}>
-        <div className="max-w-[1440px] mx-auto px-5 sm:px-10 py-20">
+        <div className="w-full px-6 sm:px-12 xl:px-20 py-20">
           <SectionLabel label="Vice Presidents" sub="Domain & division leadership." />
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5">
             {vps.length > 0
@@ -377,7 +377,7 @@ export default function CouncilGrid({
       {/* â”€â”€ Secretaries â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       {(secs.length > 0 || jsecs.length > 0) && (
         <section style={{ background: '#fff' }}>
-          <div className="max-w-[1440px] mx-auto px-5 sm:px-10 py-20">
+          <div className="w-full px-6 sm:px-12 xl:px-20 py-20">
             <SectionLabel label="Secretaries" sub="Division heads & coordinators." />
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
               {[...secs, ...jsecs].map(m => (
@@ -390,7 +390,7 @@ export default function CouncilGrid({
 
       {/* â”€â”€ Club Leads â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <section style={{ background: '#fff' }}>
-        <div className="max-w-[1440px] mx-auto px-5 sm:px-10 py-20">
+        <div className="w-full px-6 sm:px-12 xl:px-20 py-20">
           <SectionLabel label="Club Leads" sub="Coordinators of all 25 clubs." />
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
             {clubs.map(club => {
@@ -414,7 +414,7 @@ export default function CouncilGrid({
 
       {/* â”€â”€ Faculty â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <section style={{ background: '#F7F7F8' }}>
-        <div className="max-w-[1440px] mx-auto px-5 sm:px-10 py-20">
+        <div className="w-full px-6 sm:px-12 xl:px-20 py-20">
           <SectionLabel label="Faculty" sub="Mentors & In-Charges." />
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-14">
 

@@ -67,7 +67,7 @@ export default function Navbar() {
           backdropFilter: glass ? 'none'        : 'blur(20px)',
           boxShadow:      glass ? 'none'        : '0 1px 0 rgba(0,0,0,0.07)',
         }}>
-        <div className="max-w-[1440px] mx-auto px-5 sm:px-8 flex h-full items-center justify-between gap-8">
+        <div className="w-full px-6 sm:px-12 xl:px-20 flex h-full items-center justify-between gap-8">
 
           {/* ── Logo ── */}
           <Link
