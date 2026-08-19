@@ -73,14 +73,14 @@ export default function ActivitiesPage() {
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {visible.map((act) => {
+          {visible.map((act, idx) => {
             const meta      = DOMAIN_META[act.domain];
             const color     = meta?.color ?? '#8b0000';
             const diffColor = DIFFICULTY_COLOR[act.difficulty ?? 'Beginner'] ?? '#6b7280';
             const isPast    = act.activity_date < new Date().toISOString().split('T')[0];
             return (
               <div
-                key={act.code}
+                key={`${act.code}__${act.clubSlug}__${idx}`}
                 className="rounded-2xl border flex flex-col overflow-hidden transition-all hover:shadow-xl hover:-translate-y-1"
                 style={{ background: '#fff', borderColor: '#e4e4e7', opacity: isPast ? 0.72 : 1 }}>
                 {/* Domain colour top bar */}
