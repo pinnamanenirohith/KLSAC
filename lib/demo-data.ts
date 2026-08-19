@@ -1,4 +1,5 @@
 // Shared demo / fallback data — used by all public pages when DB is not connected
+import { ACTIVITIES } from './content/activities';
 
 export const DEMO_CLUBS = [
   // TEC
@@ -33,21 +34,7 @@ export const DEMO_CLUBS = [
   { id: 25, name: 'TBI',                           domain: 'IIE', description: 'Technology Business Incubator — mentoring student entrepreneurs.',              memberCount: 185, memberLimit: 250 },
 ];
 
-export const DEMO_ACTIVITIES = [
-  { code: 'ACT001', title: 'National Hackathon 2026',       domain: 'TEC', description: '36-hour national-level hackathon — build innovative solutions to real-world problems with teams from across India.',             difficulty: 'Intermediate', sdc_credits: 15, enrolledCount: 480, activity_date: '2026-09-15', venue: 'KL Tech Arena, Block A' },
-  { code: 'ACT002', title: 'Classical Dance Festival',      domain: 'LCH', description: 'Annual cultural extravaganza showcasing Bharatanatyam, Kuchipudi and folk dance performances by student clubs.',                  difficulty: 'Beginner',      sdc_credits: 10, enrolledCount: 320, activity_date: '2026-09-28', venue: 'KL Auditorium' },
-  { code: 'ACT003', title: 'Cybersecurity Workshop',        domain: 'TEC', description: 'Hands-on ethical hacking and penetration testing workshop led by industry experts from top security firms.',                      difficulty: 'Advanced',      sdc_credits: 12, enrolledCount: 215, activity_date: '2026-10-05', venue: 'Lab Block 3, Room 302' },
-  { code: 'ACT004', title: 'Campus Marathon 2026',          domain: 'HWB', description: '5K and 10K campus marathon promoting fitness and a healthy lifestyle. Open to all KL University students and faculty.',            difficulty: 'Beginner',      sdc_credits:  8, enrolledCount: 560, activity_date: '2026-10-12', venue: 'KL University Main Ground' },
-  { code: 'ACT005', title: 'Startup Pitch Competition',     domain: 'IIE', description: 'Present your startup idea to a panel of investors and industry leaders for seed funding and mentorship.',                         difficulty: 'Advanced',      sdc_credits: 20, enrolledCount: 150, activity_date: '2026-10-20', venue: 'Innovation Hub, Block B' },
-  { code: 'ACT006', title: 'Photography Exhibition',        domain: 'LCH', description: 'Annual photography showcase displaying student work on themes of culture, nature, campus life and social impact.',                 difficulty: 'Beginner',      sdc_credits:  6, enrolledCount: 290, activity_date: '2026-10-25', venue: 'KL Art Gallery' },
-  { code: 'ACT007', title: 'Yoga & Wellness Week',          domain: 'HWB', description: 'A week-long programme of morning yoga, meditation, nutrition talks and mental health awareness sessions.',                         difficulty: 'Beginner',      sdc_credits:  5, enrolledCount: 410, activity_date: '2026-11-01', venue: 'KL Open Grounds' },
-  { code: 'ACT008', title: 'EV Design Challenge',           domain: 'TEC', description: 'Design and prototype an efficient electric vehicle component. Teams compete for the best energy-saving innovation.',               difficulty: 'Advanced',      sdc_credits: 18, enrolledCount: 95,  activity_date: '2026-11-08', venue: 'Engineering Workshop, Block C' },
-  { code: 'ACT009', title: 'Street Play Festival',          domain: 'LCH', description: 'Theatre Arts clubs take to the campus streets with powerful social message performances open to all viewers.',                    difficulty: 'Intermediate', sdc_credits:  8, enrolledCount: 175, activity_date: '2026-11-14', venue: 'Campus Central Plaza' },
-  { code: 'ACT010', title: 'Social Outreach Camp',          domain: 'ESO', description: 'Community outreach programme — students visit villages to provide education, health check-ups and livelihood support.',            difficulty: 'Beginner',      sdc_credits: 10, enrolledCount: 230, activity_date: '2026-11-20', venue: 'Vijayawada District Villages' },
-  // Past events
-  { code: 'ACT011', title: 'Freshers Coding Sprint',        domain: 'TEC', description: 'Entry-level coding competition designed for first-year students to showcase their programming skills.',                           difficulty: 'Beginner',      sdc_credits:  8, enrolledCount: 312, activity_date: '2026-07-20', venue: 'Computer Lab, Block A' },
-  { code: 'ACT012', title: 'Vastraa Fashion Show 2026',     domain: 'LCH', description: 'Annual fashion extravaganza celebrating traditional Indian textiles, fusion wear and sustainable fashion by student designers.',   difficulty: 'Intermediate', sdc_credits:  9, enrolledCount: 265, activity_date: '2026-07-30', venue: 'KL Auditorium' },
-];
+export const DEMO_ACTIVITIES = ACTIVITIES;
 
 export const DEMO_ANNOUNCEMENTS = [
   {
