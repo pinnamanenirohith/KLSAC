@@ -38,7 +38,7 @@ export default async function HomePage() {
       {/* ══════════════════════════════════════════════════════════ HERO ══ */}
       <section
         className="relative flex items-center justify-start overflow-hidden"
-        style={{ minHeight: '100svh' }}>
+        style={{ minHeight: '100svh', background: '#0A0A0F' }}>
 
         {/* Video background */}
         <video
