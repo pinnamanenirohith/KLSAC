@@ -1,6 +1,8 @@
-import { PUBLICATIONS, type Publication } from '@/lib/content/site-content';
+import { supabase } from '@/lib/supabase-admin';
 import { FadeIn } from '../_components/FadeIn';
 import { Download, FileText } from 'lucide-react';
+
+export const revalidate = 60;
 
 export const metadata = {
   title: 'Publications',
@@ -14,10 +16,16 @@ const TYPE_COLORS: Record<string, string> = {
   'Newsletter':    '#991B1B',
 };
 
-export default function PublicationsPage() {
+export default async function PublicationsPage() {
+  const { data } = await supabase
+    .from('publications')
+    .select('*')
+    .order('sort_order', { ascending: true });
+
+  const publications = data ?? [];
+
   return (
     <>
-      {/* ─── Hero ─────────────────────────────────────────────────────── */}
       <section style={{ background: '#fff', paddingTop: '92px', paddingBottom: '48px' }}>
         <div className="max-w-7xl mx-auto px-5 sm:px-10 pt-8">
           <p className="text-[10px] font-black tracking-[0.25em] uppercase mb-4" style={{ color: '#8B0000' }}>
@@ -34,18 +42,15 @@ export default function PublicationsPage() {
         </div>
       </section>
 
-      {/* ─── Publications ────────────────────────────────────────────── */}
       <section style={{ background: '#F7F7F8' }}>
         <div className="max-w-5xl mx-auto px-5 sm:px-10 py-16 flex flex-col gap-16">
-          {PUBLICATIONS.map((pub: Publication) => {
+          {publications.map(pub => {
             const typeColor = TYPE_COLORS[pub.type] ?? '#8B0000';
             return (
               <FadeIn key={pub.id}>
                 <div
                   className="rounded-2xl overflow-hidden"
                   style={{ background: '#fff', border: '1px solid #E4E4E7', boxShadow: '0 4px 24px rgba(0,0,0,0.06)' }}>
-
-                  {/* Header */}
                   <div className="px-6 sm:px-8 py-6 flex items-start justify-between gap-4" style={{ borderBottom: '1px solid #F0F0F0' }}>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-3 mb-2">
@@ -70,19 +75,17 @@ export default function PublicationsPage() {
                     </div>
                   </div>
 
-                  {/* Inline PDF viewer */}
-                  {pub.url && (
+                  {pub.pdf_url && (
                     <div style={{ background: '#2A2A2A' }}>
                       <iframe
-                        src={pub.url}
+                        src={pub.pdf_url}
                         title={pub.title}
                         style={{ width: '100%', height: '700px', border: 'none', display: 'block' }}
                       />
                     </div>
                   )}
 
-                  {/* Download bar */}
-                  {pub.downloadAvailable && pub.url && (
+                  {pub.download_available && pub.pdf_url && (
                     <div
                       className="px-6 sm:px-8 py-4 flex items-center justify-between gap-4 flex-wrap"
                       style={{ borderTop: '1px solid #F0F0F0' }}>
@@ -90,7 +93,7 @@ export default function PublicationsPage() {
                         Scroll inside the viewer to read · PDF document
                       </p>
                       <a
-                        href={pub.url}
+                        href={pub.pdf_url}
                         download
                         className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-bold transition-all hover:opacity-80"
                         style={{ background: '#8B0000', color: '#fff' }}>

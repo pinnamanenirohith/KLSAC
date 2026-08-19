@@ -1,7 +1,6 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Zap, Calendar, MapPin, Clock, Filter } from 'lucide-react';
-import { ACTIVITIES } from '@/lib/content/activities';
 import { DOMAIN_META } from '@/lib/demo-data';
 
 const DOMAIN_ORDER = ['all', 'TEC', 'LCH', 'HWB', 'ESO', 'IIE'];
@@ -12,15 +11,36 @@ const DIFFICULTY_COLOR: Record<string, string> = {
   Advanced:     '#8B0000',
 };
 
+interface Activity {
+  code: string;
+  club_slug: string;
+  domain: string;
+  title: string;
+  description: string;
+  competencies: string;
+  activity_date: string;
+  venue: string;
+  time_slot?: string;
+  difficulty: string;
+  sdc_credits: number;
+}
+
 export default function ActivitiesPage() {
   const [domain, setDomain] = useState('all');
+  const [activities, setActivities] = useState<Activity[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const visible = ACTIVITIES.filter(a => domain === 'all' || a.domain === domain);
+  useEffect(() => {
+    fetch('/api/public/activities')
+      .then(r => r.json())
+      .then(d => { setActivities(d.data ?? []); setLoading(false); })
+      .catch(() => setLoading(false));
+  }, []);
+
+  const visible = domain === 'all' ? activities : activities.filter(a => a.domain === domain);
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-8" style={{ paddingTop: '112px', paddingBottom: '80px' }}>
-
-      {/* Page header */}
       <div className="mb-12 text-center">
         <span
           className="text-xs font-black tracking-[0.2em] uppercase px-4 py-1.5 rounded-full inline-block mb-4"
@@ -37,7 +57,6 @@ export default function ActivitiesPage() {
         </p>
       </div>
 
-      {/* Domain filter tabs */}
       <div className="flex flex-wrap gap-2 justify-center mb-12">
         <div className="flex items-center gap-1.5 mr-1" style={{ color: '#71717a' }}>
           <Filter size={14} />
@@ -65,8 +84,11 @@ export default function ActivitiesPage() {
         })}
       </div>
 
-      {/* Grid */}
-      {visible.length === 0 ? (
+      {loading ? (
+        <div className="text-center py-24" style={{ color: '#71717a' }}>
+          <p className="font-semibold">Loading activities…</p>
+        </div>
+      ) : visible.length === 0 ? (
         <div className="text-center py-24" style={{ color: '#71717a' }}>
           <Zap size={48} className="mx-auto mb-4 opacity-20" />
           <p className="font-semibold">No activities found for this domain.</p>
@@ -80,23 +102,16 @@ export default function ActivitiesPage() {
             const isPast    = act.activity_date < new Date().toISOString().split('T')[0];
             return (
               <div
-                key={`${act.code}__${act.clubSlug}__${idx}`}
+                key={`${act.code}__${act.club_slug}__${idx}`}
                 className="rounded-2xl border flex flex-col overflow-hidden transition-all hover:shadow-xl hover:-translate-y-1"
                 style={{ background: '#fff', borderColor: '#e4e4e7', opacity: isPast ? 0.72 : 1 }}>
-                {/* Domain colour top bar */}
                 <div className="h-1" style={{ background: color }} />
-
                 <div className="p-6 flex flex-col gap-3 flex-1">
-                  {/* Tags */}
                   <div className="flex items-center gap-2 flex-wrap">
-                    <span
-                      className="text-xs font-black px-2.5 py-0.5 rounded-full"
-                      style={{ background: `${color}15`, color }}>
+                    <span className="text-xs font-black px-2.5 py-0.5 rounded-full" style={{ background: `${color}15`, color }}>
                       {act.domain}
                     </span>
-                    <span
-                      className="text-xs font-semibold px-2.5 py-0.5 rounded-full"
-                      style={{ background: `${diffColor}12`, color: diffColor }}>
+                    <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full" style={{ background: `${diffColor}12`, color: diffColor }}>
                       {act.difficulty ?? 'Beginner'}
                     </span>
                     {isPast && (
@@ -105,14 +120,10 @@ export default function ActivitiesPage() {
                       </span>
                     )}
                   </div>
-
                   <h2 className="font-bold text-lg leading-snug text-gray-900">{act.title}</h2>
-
                   <p className="text-sm line-clamp-2 flex-1" style={{ color: '#71717a' }}>
                     {act.description}
                   </p>
-
-                  {/* Meta */}
                   <div
                     className="grid grid-cols-2 gap-2 text-xs mt-auto pt-3"
                     style={{ borderTop: '1px solid #f0f0f0', color: '#71717a' }}>
@@ -123,9 +134,9 @@ export default function ActivitiesPage() {
                       <span className="flex items-center gap-1.5 col-span-2">
                         <Calendar size={12} />
                         {new Date(act.activity_date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
-                        {act.time && (
+                        {act.time_slot && (
                           <span className="flex items-center gap-1 ml-1">
-                            <Clock size={11} /> {act.time}
+                            <Clock size={11} /> {act.time_slot}
                           </span>
                         )}
                       </span>

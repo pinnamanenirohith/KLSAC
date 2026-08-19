@@ -1,20 +1,27 @@
-﻿import Link from 'next/link';
+import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
-import { NEWS_ARTICLES } from '@/lib/content/site-content';
+import { supabase } from '@/lib/supabase-admin';
 import { FadeIn } from '../_components/FadeIn';
+
+export const revalidate = 60;
 
 export const metadata = {
   title: 'News & Updates',
   description: 'Latest news, announcements, and updates from KL SAC.',
 };
 
-export default function NewsPage() {
-  const featured = NEWS_ARTICLES[0];
-  const rest = NEWS_ARTICLES.slice(1);
+export default async function NewsPage() {
+  const { data } = await supabase
+    .from('news_articles')
+    .select('*')
+    .order('date', { ascending: false });
+
+  const articles = data ?? [];
+  const featured = articles[0];
+  const rest = articles.slice(1);
 
   return (
     <>
-      {/* ─── Hero ─────────────────────────────────────────────────────── */}
       <section style={{ background: '#fff', paddingTop: '92px', paddingBottom: '56px' }}>
         <div className="max-w-7xl mx-auto px-5 sm:px-10 pt-8">
           <p className="text-[10px] font-black tracking-[0.25em] uppercase mb-4" style={{ color: '#8B0000' }}>
@@ -31,7 +38,6 @@ export default function NewsPage() {
         </div>
       </section>
 
-      {/* ─── Featured Article ─────────────────────────────────────────── */}
       {featured && (
         <section style={{ background: '#fff' }}>
           <div className="max-w-7xl mx-auto px-5 sm:px-10 pb-16">
@@ -40,20 +46,15 @@ export default function NewsPage() {
                 href={`/news/${featured.slug}`}
                 className="group grid grid-cols-1 lg:grid-cols-5 gap-0 rounded-2xl overflow-hidden transition-shadow hover:shadow-lg"
                 style={{ border: '1px solid #E4E4E7' }}>
-
-                {/* Cover image */}
-                <div
-                  className="lg:col-span-2 min-h-56 overflow-hidden"
-                  style={{ background: 'rgba(139,0,0,0.05)' }}>
-                  {featured.photo ? (
-                    <img src={featured.photo} alt={featured.title} className="w-full h-full object-cover" />
+                <div className="lg:col-span-2 min-h-56 overflow-hidden" style={{ background: 'rgba(139,0,0,0.05)' }}>
+                  {featured.photo_url ? (
+                    <img src={featured.photo_url} alt={featured.title} className="w-full h-full object-cover" />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center">
                       <span className="font-black text-4xl" style={{ color: '#E4E4E7' }}>KL</span>
                     </div>
                   )}
                 </div>
-
                 <div className="lg:col-span-3 p-8 sm:p-12 flex flex-col justify-center">
                   <span className="text-[10px] font-black uppercase tracking-widest mb-3 block" style={{ color: '#8B0000' }}>
                     {featured.category}
@@ -70,7 +71,7 @@ export default function NewsPage() {
                     <span className="text-xs" style={{ color: '#A1A1AA' }}>
                       {new Date(featured.date).toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })}
                     </span>
-                    <span className="flex items-center gap-1 text-xs font-bold transition-colors group-hover:text-crimson" style={{ color: '#8B0000' }}>
+                    <span className="flex items-center gap-1 text-xs font-bold" style={{ color: '#8B0000' }}>
                       Read more <ArrowRight size={12} />
                     </span>
                   </div>
@@ -81,7 +82,6 @@ export default function NewsPage() {
         </section>
       )}
 
-      {/* ─── News List ────────────────────────────────────────────────── */}
       <section style={{ background: '#F7F7F8' }}>
         <div className="max-w-7xl mx-auto px-5 sm:px-10 py-20">
           <FadeIn>
@@ -92,8 +92,6 @@ export default function NewsPage() {
                   href={`/news/${article.slug}`}
                   className="group flex flex-col sm:flex-row gap-5 sm:gap-8 py-7 transition-colors hover:bg-white/50"
                   style={{ borderBottom: '1px solid #E4E4E7' }}>
-
-                  {/* Date */}
                   <div className="sm:w-20 shrink-0">
                     <p className="font-black text-2xl leading-none" style={{ color: '#0D0D0D' }}>
                       {new Date(article.date).getDate()}
@@ -103,8 +101,6 @@ export default function NewsPage() {
                       {' '}{new Date(article.date).getFullYear().toString().slice(2)}
                     </p>
                   </div>
-
-                  {/* Content */}
                   <div className="flex-1 min-w-0">
                     <span className="text-[10px] font-black uppercase tracking-wider block mb-1" style={{ color: '#8B0000' }}>
                       {article.category}
@@ -116,19 +112,13 @@ export default function NewsPage() {
                       {article.excerpt}
                     </p>
                   </div>
-
-                  {/* Thumbnail */}
-                  {article.photo && (
+                  {article.photo_url && (
                     <div className="hidden sm:block w-28 h-20 shrink-0 rounded-xl overflow-hidden">
-                      <img src={article.photo} alt={article.title} className="w-full h-full object-cover" loading="lazy" />
+                      <img src={article.photo_url} alt={article.title} className="w-full h-full object-cover" loading="lazy" />
                     </div>
                   )}
-
                   <div className="hidden sm:flex items-center shrink-0">
-                    <ArrowRight
-                      size={18}
-                      className="transition-transform group-hover:translate-x-1"
-                      style={{ color: '#D1D1D6' }} />
+                    <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" style={{ color: '#D1D1D6' }} />
                   </div>
                 </Link>
               ))}
