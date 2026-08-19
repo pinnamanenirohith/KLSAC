@@ -32,9 +32,6 @@ export default function StoriesPage() {
           <p className="text-lg leading-relaxed mb-5" style={{ color: 'rgba(255,255,255,0.42)', maxWidth: '56ch' }}>
             Behind every achievement is a student who chose to engage. These are their stories.
           </p>
-          <p className="text-xs" style={{ color: 'rgba(255,255,255,0.18)' }}>
-            [PLACEHOLDER — Official student stories require consent and editorial review]
-          </p>
         </div>
       </section>
 
@@ -52,13 +49,17 @@ export default function StoriesPage() {
                 style={{ border: '1px solid #E4E4E7' }}>
 
                 <div
-                  className="lg:col-span-2 min-h-64 lg:min-h-80"
+                  className="lg:col-span-2 min-h-64 lg:min-h-80 overflow-hidden"
                   style={{ background: `linear-gradient(135deg, ${DOMAIN_COLORS[featured.domainCode] ?? '#8B0000'}18, ${DOMAIN_COLORS[featured.domainCode] ?? '#8B0000'}08)` }}>
-                  <div className="w-full h-full flex items-center justify-center">
-                    <span className="text-5xl font-black" style={{ color: `${DOMAIN_COLORS[featured.domainCode] ?? '#D1D1D6'}30` }}>
-                      {featured.domainCode}
-                    </span>
-                  </div>
+                  {featured.photo ? (
+                    <img src={featured.photo} alt={featured.title} className="w-full h-full object-cover" />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center">
+                      <span className="text-5xl font-black" style={{ color: `${DOMAIN_COLORS[featured.domainCode] ?? '#D1D1D6'}30` }}>
+                        {featured.domainCode}
+                      </span>
+                    </div>
+                  )}
                 </div>
 
                 <div className="lg:col-span-3 p-8 sm:p-12 flex flex-col justify-center">
@@ -113,13 +114,17 @@ export default function StoriesPage() {
                   style={{ background: '#fff', border: '1px solid #E4E4E7' }}>
 
                   <div
-                    className="h-36"
+                    className="h-36 overflow-hidden"
                     style={{ background: `linear-gradient(135deg, ${DOMAIN_COLORS[story.domainCode] ?? '#E4E4E7'}18, ${DOMAIN_COLORS[story.domainCode] ?? '#E4E4E7'}08)` }}>
-                    <div className="w-full h-full flex items-center justify-center">
-                      <span className="text-2xl font-black" style={{ color: '#E4E4E7' }}>
-                        {story.domainCode}
-                      </span>
-                    </div>
+                    {story.photo ? (
+                      <img src={story.photo} alt={story.title} className="w-full h-full object-cover" loading="lazy" />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center">
+                        <span className="text-2xl font-black" style={{ color: '#E4E4E7' }}>
+                          {story.domainCode}
+                        </span>
+                      </div>
+                    )}
                   </div>
 
                   <div className="flex flex-col flex-1 p-5">

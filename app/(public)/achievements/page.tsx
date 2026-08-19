@@ -48,18 +48,37 @@ export default function AchievementsPage() {
                 return (
                   <div
                     key={ach.id}
-                    className="flex flex-col sm:flex-row gap-4 sm:gap-8 py-7"
+                    className="flex flex-col sm:flex-row gap-6 sm:gap-8 py-8"
                     style={{ borderBottom: '1px solid #E4E4E7', opacity: ach.title.startsWith('[PLACEHOLDER') ? 0.6 : 1 }}>
 
-                    {/* Year */}
-                    <div className="sm:w-16 shrink-0">
-                      <span className="font-black text-base" style={{ color: '#0D0D0D' }}>
-                        {ach.year}
-                      </span>
-                    </div>
+                    {/* Photo */}
+                    {ach.photo && (
+                      <div className="sm:w-48 shrink-0">
+                        <div className="rounded-2xl overflow-hidden" style={{ aspectRatio: '4/3' }}>
+                          <img
+                            src={ach.photo}
+                            alt={ach.title}
+                            className="w-full h-full object-cover"
+                            loading="lazy"
+                          />
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Year (when no photo) */}
+                    {!ach.photo && (
+                      <div className="sm:w-16 shrink-0">
+                        <span className="font-black text-base" style={{ color: '#0D0D0D' }}>
+                          {ach.year}
+                        </span>
+                      </div>
+                    )}
 
                     {/* Content */}
                     <div className="flex-1 min-w-0">
+                      {ach.photo && (
+                        <p className="font-black text-xs mb-2" style={{ color: '#A1A1AA' }}>{ach.year}</p>
+                      )}
                       <div className="flex flex-wrap items-center gap-2 mb-2">
                         <span
                           className="text-[10px] font-black uppercase tracking-widest px-2.5 py-0.5 rounded-full"
@@ -70,7 +89,7 @@ export default function AchievementsPage() {
                           {ach.domainCode} · {ach.clubName}
                         </span>
                       </div>
-                      <h3 className="font-bold text-base sm:text-lg leading-snug mb-1" style={{ color: '#0D0D0D' }}>
+                      <h3 className="font-bold text-base sm:text-lg leading-snug mb-2" style={{ color: '#0D0D0D' }}>
                         {ach.title}
                       </h3>
                       <p className="text-sm leading-relaxed" style={{ color: '#71717A' }}>

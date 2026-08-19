@@ -68,9 +68,6 @@ export default async function StoryDetailPage({ params }: { params: Promise<{ sl
             </div>
           </div>
 
-          <p className="mt-5 text-xs" style={{ color: 'rgba(255,255,255,0.2)' }}>
-            [PLACEHOLDER — Official student story requires consent and editorial review]
-          </p>
         </div>
       </section>
 
@@ -78,6 +75,12 @@ export default async function StoryDetailPage({ params }: { params: Promise<{ sl
       <section style={{ background: '#fff' }}>
         <div className="max-w-4xl mx-auto px-5 sm:px-10 py-20">
           <FadeIn>
+            {story.photo && (
+              <div className="rounded-2xl overflow-hidden mb-12" style={{ aspectRatio: '16/7' }}>
+                <img src={story.photo} alt={story.title} className="w-full h-full object-cover" />
+              </div>
+            )}
+
             <blockquote
               className="text-xl sm:text-2xl font-bold leading-relaxed mb-12 pl-6"
               style={{
@@ -88,9 +91,13 @@ export default async function StoryDetailPage({ params }: { params: Promise<{ sl
               {story.excerpt}
             </blockquote>
 
-            <p className="text-base sm:text-lg leading-relaxed" style={{ color: '#3F3F46' }}>
-              {story.body}
-            </p>
+            <div className="flex flex-col gap-5">
+              {story.body.split('\n\n').map((para, i) => (
+                <p key={i} className="text-base sm:text-lg leading-relaxed" style={{ color: '#3F3F46' }}>
+                  {para}
+                </p>
+              ))}
+            </div>
           </FadeIn>
         </div>
       </section>

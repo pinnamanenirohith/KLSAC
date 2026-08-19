@@ -83,6 +83,7 @@ export interface StudentStory {
   excerpt: string;
   body: string;
   tags: string[];
+  photo?: string;
 }
 
 export const STUDENT_STORIES: StudentStory[] = [
@@ -97,6 +98,7 @@ export const STUDENT_STORIES: StudentStory[] = [
       'We had one goal — to take KL University to the national stage. Winning the regional round of the University eSports Championship in BGMI and earning the chance to represent Andhra Pradesh in Kolkata made every late-night practice session worth it.',
     body:
       'The KL eSports Team advanced to the National Finals of the University eSports Championship, earning the opportunity to represent Andhra Pradesh at the national level in BGMI (Battlegrounds Mobile India).\n\nAhead of the finals in Kolkata, the team met with the Pro Vice Chancellor, alongside the Director of the Student Activity Center and the President of the KL Student Council, to share this achievement and receive their best wishes for the national championship.\n\nThe continued encouragement and support from university leadership, along with the constant guidance of the Student Activity Center, have been instrumental in enabling our students to pursue competitive excellence at the national level.\n\nFrom KL to the National Stage.',
+    photo: '/success-stories/esports-national-2025.jpg',
     tags: ['KL eSports Club', 'BGMI', 'National Finals', 'eSports', 'LCH', 'Andhra Pradesh'],
   },
   {
@@ -110,6 +112,7 @@ export const STUDENT_STORIES: StudentStory[] = [
       'Leading 15,000+ students and 42+ clubs taught me more about technology, collaboration, and accountability than any classroom ever could. Motorola Solutions was not just a placement — it was the proof that student leadership shapes real careers.',
     body:
       'Pavan Karthik Mandadapu, former President of the KL Student Activity Center, began his professional journey as a Software Engineer at Motorola Solutions.\n\nThis milestone marks more than the beginning of a professional career. It reflects years of learning, leadership, resilience, and meaningful experiences gained through academic and student leadership responsibilities at KL University.\n\nDuring his tenure as Student Council President, Pavan Karthik had the opportunity to represent more than 15,000 students, work alongside 42+ student clubs, and lead and coordinate numerous student initiatives. These experiences provided valuable exposure to leadership, strategic planning, teamwork, stakeholder coordination, and student service.\n\nHis tenure at the Student Activity Center was a transformative chapter in his personal and professional development. Working with students, faculty, councils, and student organisations enabled him to develop a strong perspective on leadership, collaboration, accountability, and service — lessons he now carries forward into the corporate environment.\n\nPavan Karthik expressed his sincere gratitude to Sai Vijay Pisini, Director of the Student Activity Center, for his constant guidance and unwavering belief throughout his leadership journey.\n\nOne Journey. Many Lessons. A New Beginning.',
+    photo: '/success-stories/pavan-karthik-motorola.jpg',
     tags: ['Student Council', 'Alumni', 'Motorola Solutions', 'Software Engineering', 'IIE', 'Placement'],
   },
   {
@@ -123,6 +126,7 @@ export const STUDENT_STORIES: StudentStory[] = [
       'I lead the Student Activity Center, train as a professional badminton player, and am now a Software Engineering Intern at Motorola Solutions. None of these happened in spite of each other — they happened because of each other.',
     body:
       'Sayani Datta, current President of the KL Student Activity Center and a professional badminton player, began her professional journey as a Software Engineering Intern at Motorola Solutions.\n\nA curious and innovation-driven technology enthusiast, Sayani has demonstrated a strong interest in cloud infrastructure and software engineering while simultaneously taking on significant leadership responsibilities within the university.\n\nAs President of the KL Student Activity Center, Sayani plays an important role in student leadership, coordination, administration, and the planning and execution of student activities across the university. Her role involves working with student councils, clubs, student leaders, and various stakeholders to strengthen student engagement and create meaningful opportunities for the university community.\n\nBeyond academics and leadership, Sayani has also distinguished herself as a professional badminton player, demonstrating the discipline, competitive spirit, and consistency required to excel both on and off the field.\n\nHer selection as a Software Engineering Intern at Motorola Solutions reflects her ability to balance technology, leadership, and extracurricular excellence.\n\nFrom leading student initiatives to building the future of technology — a new chapter begins.',
+    photo: '/success-stories/sayani-datta-motorola.jpg',
     tags: ['Student Council', 'Motorola Solutions', 'Software Engineering', 'Badminton', 'IIE', 'Placement'],
   },
   {
@@ -206,6 +210,7 @@ export interface Achievement {
   organization: string;
   year: string;
   description: string;
+  photo?: string;
 }
 
 export const ACHIEVEMENTS: Achievement[] = [
@@ -219,6 +224,7 @@ export const ACHIEVEMENTS: Achievement[] = [
     year: '2025',
     description:
       'The KL eSports Team won the regional round of the University eSports Championship 2025 in BGMI (Battlegrounds Mobile India), earning the right to represent Andhra Pradesh at the National Finals in Kolkata. Before departing, the team was felicitated by the Pro Vice Chancellor alongside the SAC Director and Student Council President.',
+    photo: '/success-stories/esports-national-2025.jpg',
   },
   {
     id: 'ach-pavan-motorola-2025',
@@ -230,6 +236,7 @@ export const ACHIEVEMENTS: Achievement[] = [
     year: '2025',
     description:
       'Pavan Karthik Mandadapu, former President of the KL Student Activity Center, began his professional career as a Software Engineer at Motorola Solutions. During his tenure he represented over 15,000 students across 42+ clubs. His leadership experience at SAC — spanning strategic planning, stakeholder coordination, and student governance — proved instrumental in his transition into the corporate world.',
+    photo: '/success-stories/pavan-karthik-motorola.jpg',
   },
   {
     id: 'ach-sayani-motorola-2026',
@@ -241,6 +248,7 @@ export const ACHIEVEMENTS: Achievement[] = [
     year: '2026',
     description:
       'Sayani Datta, current President of the KL Student Activity Center (Internships & Career Development) and professional badminton player, was selected as a Software Engineering Intern at Motorola Solutions. Her achievement demonstrates that student leadership, technical ambition, and extracurricular discipline can work in concert to open significant professional opportunities.',
+    photo: '/success-stories/sayani-datta-motorola.jpg',
   },
 ];
 
