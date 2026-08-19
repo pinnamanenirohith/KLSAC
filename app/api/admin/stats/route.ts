@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import { requireAdmin } from '@/lib/auth';
 import { supabase } from '@/lib/supabase-admin';
 
@@ -17,5 +18,6 @@ export async function PUT(req: NextRequest) {
       .update({ value: u.value, updated_at: new Date().toISOString() })
       .eq('key', u.key);
   }
+  revalidatePath('/');
   return NextResponse.json({ success: true });
 }

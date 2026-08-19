@@ -3,7 +3,7 @@ import { ArrowRight } from 'lucide-react';
 import { supabase } from '@/lib/supabase-admin';
 import { FadeIn } from '../_components/FadeIn';
 
-export const revalidate = 60;
+export const revalidate = 0;
 
 export const metadata = {
   title: 'News & Updates',

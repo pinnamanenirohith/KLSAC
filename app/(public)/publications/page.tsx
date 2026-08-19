@@ -2,7 +2,7 @@ import { supabase } from '@/lib/supabase-admin';
 import { FadeIn } from '../_components/FadeIn';
 import { Download, FileText } from 'lucide-react';
 
-export const revalidate = 60;
+export const revalidate = 0;
 
 export const metadata = {
   title: 'Publications',

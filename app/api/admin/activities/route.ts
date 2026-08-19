@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import { requireAdmin } from '@/lib/auth';
 import { supabase } from '@/lib/supabase-admin';
 
@@ -17,6 +18,7 @@ export async function POST(req: NextRequest) {
   const body = await req.json();
   const { data, error: e } = await supabase.from('activities').insert(body).select().single();
   if (e) return NextResponse.json({ error: e.message }, { status: 400 });
+  revalidatePath('/activities');
   return NextResponse.json({ success: true, data });
 }
 
@@ -27,6 +29,7 @@ export async function PUT(req: NextRequest) {
   const { code, ...rest } = await req.json();
   const { error: e } = await supabase.from('activities').update(rest).eq('code', code);
   if (e) return NextResponse.json({ error: e.message }, { status: 400 });
+  revalidatePath('/activities');
   return NextResponse.json({ success: true });
 }
 
@@ -36,5 +39,6 @@ export async function DELETE(req: NextRequest) {
 
   const { code } = await req.json();
   await supabase.from('activities').delete().eq('code', code);
+  revalidatePath('/activities');
   return NextResponse.json({ success: true });
 }
