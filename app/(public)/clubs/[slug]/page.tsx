@@ -221,7 +221,7 @@ export default async function ClubDetailPage({ params }: { params: Promise<{ slu
                   ))}
                 </div>
                 <p className="text-xs text-center" style={{ color: '#A1A1AA' }}>
-                  Event photos submitted by club members via the{' '}
+                  Activity photos submitted by club members via the{' '}
                   <Link
                     href="https://sac.kluniversity.in"
                     target="_blank"
@@ -264,7 +264,7 @@ export default async function ClubDetailPage({ params }: { params: Promise<{ slu
             <div className="flex items-end justify-between mb-10 flex-wrap gap-4">
               <div>
                 <p className="text-[10px] font-black tracking-[0.22em] uppercase mb-3" style={{ color: domain.color }}>
-                  Upcoming Events & Posters
+                  Upcoming Activities
                 </p>
                 <h2
                   className="font-black leading-tight"
@@ -276,7 +276,7 @@ export default async function ClubDetailPage({ params }: { params: Promise<{ slu
                 href="/activities"
                 className="text-xs font-bold hover:opacity-70 transition-opacity"
                 style={{ color: domain.color }}>
-                All events →
+                All activities →
               </Link>
             </div>
           </FadeIn>
@@ -351,10 +351,10 @@ export default async function ClubDetailPage({ params }: { params: Promise<{ slu
                 style={{ background: '#fff', border: '1.5px dashed #D1D1D6' }}>
                 <Calendar size={32} className="mx-auto mb-4" style={{ color: '#D1D1D6' }} />
                 <p className="font-bold text-sm mb-1" style={{ color: '#71717A' }}>
-                  No upcoming events posted yet.
+                  No upcoming activities posted yet.
                 </p>
                 <p className="text-xs" style={{ color: '#A1A1AA' }}>
-                  Event posters will appear here once scheduled.
+                  Activity details will appear here once scheduled.
                 </p>
               </div>
             </FadeIn>
@@ -423,7 +423,7 @@ export default async function ClubDetailPage({ params }: { params: Promise<{ slu
                 Competition wins and honours will be listed here.
               </p>
               <p className="text-xs mb-6" style={{ color: '#A1A1AA' }}>
-                National, state and inter-university achievements from club events.
+                National, state and inter-university achievements from club activities.
               </p>
               <Link
                 href="/achievements"

@@ -167,7 +167,7 @@ export default function StoriesPage() {
               Write your own story.
             </h2>
             <p className="text-base mb-8" style={{ color: 'rgba(255,255,255,0.42)' }}>
-              Join a club, participate in events, build your student development record.
+              Join a club, participate in activities, build your student development record.
             </p>
             <Link
               href="https://sac.kluniversity.in"

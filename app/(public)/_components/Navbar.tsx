@@ -8,7 +8,7 @@ import { DOMAINS } from '@/lib/content/domains';
 
 const NAV_LINKS = [
   { href: '/about',         label: 'About'        },
-  { href: '/events',        label: 'Events'        },
+  { href: '/activities',     label: 'Activities'    },
   { href: '/stories',       label: 'Stories'       },
   { href: '/achievements',  label: 'Achievements'  },
   { href: '/news',          label: 'News'          },

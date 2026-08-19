@@ -11,7 +11,7 @@ const COLLAB_AREAS = [
   {
     icon: Building2,
     title: 'Industry Partnerships',
-    desc: 'Sponsor events, host workshops, provide live project briefs, or offer internship pathways for students engaged through SAC clubs.',
+    desc: 'Sponsor activities, host workshops, provide live project briefs, or offer internship pathways for students engaged through SAC clubs.',
   },
   {
     icon: GraduationCap,
@@ -39,7 +39,7 @@ const ENGAGEMENT_STEPS = [
   {
     num: '02',
     title: 'Define Scope',
-    desc: 'We align your objectives with the appropriate SAC domain or club. Events, mentorship, sponsorships, and project briefs are all possible.',
+    desc: 'We align your objectives with the appropriate SAC domain or club. Activities, mentorship, sponsorships, and project briefs are all possible.',
   },
   {
     num: '03',

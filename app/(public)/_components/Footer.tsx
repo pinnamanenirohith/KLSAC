@@ -7,7 +7,7 @@ const NAVIGATE = [
   { href: '/about',         label: 'About SAC'      },
   { href: '/domains',       label: 'Domains'         },
   { href: '/clubs',         label: 'All Clubs'       },
-  { href: '/events',        label: 'Events'          },
+  { href: '/activities',     label: 'Activities'      },
   { href: '/stories',       label: 'Student Stories' },
   { href: '/achievements',  label: 'Achievements'    },
   { href: '/news',          label: 'News'            },

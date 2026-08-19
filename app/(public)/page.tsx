@@ -387,7 +387,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ════════════════════════════════════════════ UPCOMING EVENTS ══ */}
+      {/* ════════════════════════════════════════════ UPCOMING ACTIVITIES ══ */}
       <section style={{ background: '#F7F7F8' }}>
         <div className="max-w-7xl mx-auto px-5 sm:px-10 py-28">
           <FadeIn className="flex items-end justify-between mb-12 gap-6">
@@ -398,11 +398,11 @@ export default async function HomePage() {
               <h2
                 className="font-black leading-tight"
                 style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', color: '#0D0D0D', letterSpacing: '-0.02em' }}>
-                Upcoming Events
+                Upcoming Activities
               </h2>
             </div>
             <Link
-              href="/events"
+              href="/activities"
               className="hidden sm:inline-flex items-center gap-2 font-bold text-sm shrink-0 mb-1 transition-opacity hover:opacity-70"
               style={{ color: '#8B0000' }}>
               Full calendar
@@ -414,8 +414,8 @@ export default async function HomePage() {
             <div style={{ borderTop: '1px solid #E4E4E7' }}>
               {upcomingEvents.length === 0 ? (
                 <div className="py-16 text-center" style={{ color: '#A1A1AA' }}>
-                  <p className="font-semibold">No upcoming events at this time.</p>
-                  <p className="text-sm mt-1">Check back soon or visit the events page.</p>
+                  <p className="font-semibold">No upcoming activities at this time.</p>
+                  <p className="text-sm mt-1">Check back soon or visit the activities page.</p>
                 </div>
               ) : upcomingEvents.map((ev: any) => {
                 const date   = new Date(ev.activity_date);
@@ -462,10 +462,10 @@ export default async function HomePage() {
 
             <div className="mt-8">
               <Link
-                href="/events"
+                href="/activities"
                 className="inline-flex items-center gap-2 font-bold text-sm"
                 style={{ color: '#8B0000' }}>
-                View all events <ArrowRight size={14} />
+                View all activities <ArrowRight size={14} />
               </Link>
             </div>
           </FadeIn>

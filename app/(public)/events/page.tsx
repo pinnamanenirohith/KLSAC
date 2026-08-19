@@ -6,8 +6,8 @@ import { FadeIn } from '../_components/FadeIn';
 export const revalidate = 300;
 
 export const metadata = {
-  title: 'Events',
-  description: 'Upcoming and past events, activities, and workshops organised by KL SAC clubs.',
+  title: 'Activities',
+  description: 'Upcoming and past activities and workshops organised by KL SAC clubs.',
 };
 
 async function getEvents() {
@@ -42,7 +42,7 @@ export default async function EventsPage() {
           <h1
             className="font-black leading-[1.05] mb-4"
             style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', color: '#0D0D0D', letterSpacing: '-0.025em' }}>
-            Events & Activities
+            Activities
           </h1>
           <p className="text-lg" style={{ color: '#71717A', maxWidth: '52ch' }}>
             Competitions, workshops, performances, and outreach activities organised by KL SAC clubs across all five domains.
@@ -57,7 +57,7 @@ export default async function EventsPage() {
             <FadeIn>
               <div className="flex items-center gap-3 mb-8">
                 <span className="w-2.5 h-2.5 rounded-full" style={{ background: '#8B0000' }} />
-                <h2 className="font-black text-xl" style={{ color: '#0D0D0D' }}>Upcoming Events</h2>
+                <h2 className="font-black text-xl" style={{ color: '#0D0D0D' }}>Upcoming Activities</h2>
                 <span
                   className="text-xs font-bold px-2.5 py-0.5 rounded-full"
                   style={{ background: 'rgba(139,0,0,0.08)', color: '#8B0000' }}>
@@ -82,7 +82,7 @@ export default async function EventsPage() {
             <FadeIn>
               <div className="flex items-center gap-3 mb-8">
                 <span className="w-2.5 h-2.5 rounded-full" style={{ background: '#D1D5DB' }} />
-                <h2 className="font-black text-xl" style={{ color: '#0D0D0D' }}>Past Events</h2>
+                <h2 className="font-black text-xl" style={{ color: '#0D0D0D' }}>Past Activities</h2>
                 <span
                   className="text-xs font-bold px-2.5 py-0.5 rounded-full"
                   style={{ background: '#F4F4F5', color: '#71717A' }}>
@@ -105,7 +105,7 @@ export default async function EventsPage() {
           <div className="max-w-7xl mx-auto px-5 sm:px-10 py-32 text-center">
             <CalendarDays size={48} className="mx-auto mb-5 opacity-20" style={{ color: '#71717A' }} />
             <p className="font-bold text-lg" style={{ color: '#71717A' }}>
-              No events to display at this time.
+              No activities to display at this time.
             </p>
           </div>
         </section>

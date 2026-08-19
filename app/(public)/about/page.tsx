@@ -217,7 +217,7 @@ export default function AboutPage() {
                     'Discover what SAC is and what it offers',
                     'Explore all 25 clubs and 5 domains',
                     'Read about student stories and achievements',
-                    'Learn about upcoming events',
+                    'Learn about upcoming activities',
                     'Find collaboration opportunities',
                     'Understand the SAC development framework',
                   ].map(item => (
@@ -239,7 +239,7 @@ export default function AboutPage() {
                 <ul className="flex flex-col gap-3 text-sm mb-6" style={{ color: 'rgba(255,255,255,0.42)' }}>
                   {[
                     'Register for clubs',
-                    'Enroll in activities and events',
+                    'Enroll in activities',
                     'Track SDC (Student Development) credits',
                     'Access your AI Career Roadmap',
                     'View your activity history',

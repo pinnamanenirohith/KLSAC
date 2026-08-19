@@ -133,7 +133,7 @@ export default async function DomainDetailPage({ params }: { params: Promise<{ s
                 <h2
                   className="font-black leading-tight"
                   style={{ fontSize: 'clamp(1.5rem, 3vw, 2.25rem)', color: '#0D0D0D', letterSpacing: '-0.02em' }}>
-                  Moments from our events.
+                  Moments from our activities.
                 </h2>
               </div>
               <span
@@ -181,7 +181,7 @@ export default async function DomainDetailPage({ params }: { params: Promise<{ s
                   ))}
                 </div>
                 <p className="text-xs text-center" style={{ color: '#A1A1AA' }}>
-                  Event and activity photos will appear here.
+                  Activity photos will appear here.
                 </p>
               </>
             )}
