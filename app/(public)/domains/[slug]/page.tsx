@@ -262,7 +262,7 @@ export default async function DomainDetailPage({ params }: { params: Promise<{ s
                           {activity.sdc_credits} SDC credits
                         </div>
                         <Link
-                          href="https://sac.kluniversity.in"
+                          href="https://sacactivities.kluniversity.in"
                           target="_blank"
                           rel="noopener"
                           className="text-[11px] font-bold px-3.5 py-1.5 rounded-full transition-all hover:opacity-80"
@@ -401,7 +401,7 @@ export default async function DomainDetailPage({ params }: { params: Promise<{ s
               <ArrowRight size={14} />
             </Link>
             <Link
-              href="https://sac.kluniversity.in"
+              href="https://sacactivities.kluniversity.in"
               target="_blank"
               rel="noopener"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-bold transition-all hover:bg-white/15"

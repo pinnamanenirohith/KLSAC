@@ -1,4 +1,4 @@
-import type { Metadata, Viewport } from 'next';
+﻿import type { Metadata, Viewport } from 'next';
 import { Plus_Jakarta_Sans } from 'next/font/google';
 import './globals.css';
 
@@ -31,14 +31,14 @@ export const metadata: Metadata = {
     'Vijayawada',
     'Andhra Pradesh',
   ],
-  authors: [{ name: 'KL SAC', url: 'https://sac.kluniversity.in' }],
+  authors: [{ name: 'KL SAC', url: 'https://sacactivities.kluniversity.in' }],
   creator: 'KL SAC',
   publisher: 'KL University',
-  metadataBase: new URL('https://sac.kluniversity.in'),
+  metadataBase: new URL('https://sacactivities.kluniversity.in'),
   openGraph: {
     type: 'website',
     locale: 'en_IN',
-    url: 'https://sac.kluniversity.in',
+    url: 'https://sacactivities.kluniversity.in',
     siteName: 'KL SAC',
     title: 'KL SAC — Student Activity Center, KL University',
     description:

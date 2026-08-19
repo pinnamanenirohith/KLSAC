@@ -96,7 +96,7 @@ export default function ContactPage() {
                     For club registration, activity details, and SDC credits — use the Student Dashboard.
                   </p>
                   <Link
-                    href="https://sac.kluniversity.in"
+                    href="https://sacactivities.kluniversity.in"
                     target="_blank"
                     rel="noopener"
                     className="inline-flex items-center gap-1.5 text-xs font-bold"
@@ -135,7 +135,7 @@ export default function ContactPage() {
                     {
                       title: 'Student Support',
                       desc: 'For KL students with questions about their club or activity participation.',
-                      href: 'https://sac.kluniversity.in',
+                      href: 'https://sacactivities.kluniversity.in',
                     },
                   ].map(item => (
                     <Link

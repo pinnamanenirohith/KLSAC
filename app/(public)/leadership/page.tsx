@@ -1,4 +1,4 @@
-import { Camera } from 'lucide-react';
+﻿import { Camera } from 'lucide-react';
 import Link from 'next/link';
 import { STUDENT_COUNCIL } from '@/lib/content/student-council';
 import { CLUBS } from '@/lib/content/clubs';
@@ -53,7 +53,7 @@ export default function LeadershipPage() {
               <p className="text-xs mt-1" style={{ color: '#A1A1AA' }}>
                 Upload via{' '}
                 <Link
-                  href="https://sac.kluniversity.in"
+                  href="https://sacactivities.kluniversity.in"
                   target="_blank"
                   rel="noopener"
                   className="font-bold hover:underline"

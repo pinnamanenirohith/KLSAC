@@ -154,7 +154,7 @@ function EventRow({ ev, dim }: { ev: any; dim: boolean }) {
       {/* Register CTA (only upcoming) */}
       {!dim && (
         <Link
-          href="https://sac.kluniversity.in"
+          href="https://sacactivities.kluniversity.in"
           target="_blank"
           rel="noopener"
           className="hidden sm:inline-flex items-center gap-1 text-xs font-bold shrink-0 mt-1 opacity-0 group-hover:opacity-100 transition-opacity"

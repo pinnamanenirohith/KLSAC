@@ -1,4 +1,4 @@
-import Link from 'next/link';
+﻿import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowUpRight } from 'lucide-react';
 import { DOMAINS } from '@/lib/content/domains';
@@ -143,7 +143,7 @@ export default function Footer() {
             <p className="text-xs mb-3" style={{ color: 'rgba(255,255,255,0.3)' }}>
               Register for clubs, track SDC credits and manage your student journey.
             </p>
-            <Link href="https://sac.kluniversity.in" target="_blank" rel="noopener"
+            <Link href="https://sacactivities.kluniversity.in" target="_blank" rel="noopener"
                   className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-bold transition-all hover:scale-[1.03]"
                   style={{ background: '#8B0000', color: '#fff' }}>
               Student Dashboard

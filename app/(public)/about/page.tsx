@@ -252,7 +252,7 @@ export default function AboutPage() {
                   ))}
                 </ul>
                 <Link
-                  href="https://sac.kluniversity.in"
+                  href="https://sacactivities.kluniversity.in"
                   target="_blank"
                   rel="noopener"
                   className="inline-flex items-center gap-2 text-xs font-bold transition-opacity hover:opacity-75"

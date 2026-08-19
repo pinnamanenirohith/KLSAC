@@ -1,4 +1,4 @@
-import Link from 'next/link';
+﻿import Link from 'next/link';
 import { ArrowRight, ArrowUpRight, ChevronDown } from 'lucide-react';
 import { DOMAINS } from '@/lib/content/domains';
 import { DEMO_CLUBS, DOMAIN_META } from '@/lib/demo-data';
@@ -108,7 +108,7 @@ export default async function HomePage() {
                 Browse Clubs
               </Link>
               <Link
-                href="https://sac.kluniversity.in"
+                href="https://sacactivities.kluniversity.in"
                 target="_blank"
                 rel="noopener"
                 className="inline-flex items-center gap-1.5 font-semibold text-sm transition-opacity hover:opacity-75"
@@ -447,7 +447,7 @@ export default async function HomePage() {
                     </div>
                     {/* CTA */}
                     <a
-                      href="https://sac.kluniversity.in"
+                      href="https://sacactivities.kluniversity.in"
                       target="_blank"
                       rel="noopener"
                       className="text-xs font-bold shrink-0 mt-1 transition-all opacity-0 group-hover:opacity-100 inline-flex items-center gap-1"
@@ -680,7 +680,7 @@ export default async function HomePage() {
                 <ArrowRight size={16} />
               </Link>
               <Link
-                href="https://sac.kluniversity.in"
+                href="https://sacactivities.kluniversity.in"
                 target="_blank"
                 rel="noopener"
                 className="inline-flex items-center gap-2 px-8 py-4 rounded-full font-bold text-base transition-all hover:bg-white/10"

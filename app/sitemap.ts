@@ -1,9 +1,9 @@
-import type { MetadataRoute } from 'next';
+﻿import type { MetadataRoute } from 'next';
 import { DOMAIN_SLUGS } from '@/lib/content/domains';
 import { CLUB_SLUGS } from '@/lib/content/clubs';
 import { NEWS_SLUGS, STORY_SLUGS } from '@/lib/content/site-content';
 
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://sac.kluniversity.in';
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://sacactivities.kluniversity.in';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();

@@ -170,7 +170,7 @@ export default function StoriesPage() {
               Join a club, participate in activities, build your student development record.
             </p>
             <Link
-              href="https://sac.kluniversity.in"
+              href="https://sacactivities.kluniversity.in"
               target="_blank"
               rel="noopener"
               className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full font-bold text-base transition-all hover:scale-[1.03]"
