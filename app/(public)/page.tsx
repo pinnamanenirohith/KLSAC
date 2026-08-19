@@ -177,22 +177,22 @@ export default async function HomePage() {
             </h2>
           </FadeIn>
 
-          <div className="max-w-3xl">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-0">
             {JOURNEY_STEPS.map((step, i) => (
               <FadeIn key={step.title} delay={i * 0.07}>
                 <div
-                  className="flex gap-8 sm:gap-12 py-8"
-                  style={{ borderBottom: i < JOURNEY_STEPS.length - 1 ? '1px solid #EBEBEB' : 'none' }}>
+                  className="flex gap-6 py-8"
+                  style={{ borderBottom: '1px solid #EBEBEB' }}>
                   <span
                     className="font-black shrink-0 leading-none pt-1"
-                    style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', color: '#E8E8EC', width: '3rem', fontVariantNumeric: 'tabular-nums' }}>
+                    style={{ fontSize: '2rem', color: '#E8E8EC', width: '3rem', fontVariantNumeric: 'tabular-nums' }}>
                     {String(i + 1).padStart(2, '0')}
                   </span>
                   <div>
-                    <p className="font-black text-lg uppercase tracking-[0.1em] mb-2" style={{ color: '#0D0D0D' }}>
+                    <p className="font-black text-base uppercase tracking-[0.1em] mb-2" style={{ color: '#0D0D0D' }}>
                       {step.title}
                     </p>
-                    <p className="text-base leading-relaxed" style={{ color: '#71717A' }}>
+                    <p className="text-sm leading-relaxed" style={{ color: '#71717A' }}>
                       {step.description}
                     </p>
                   </div>
