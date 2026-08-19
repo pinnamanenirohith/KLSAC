@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { requireAdmin } from '@/lib/auth';
-import { supabase } from '@/lib/supabase';
+import { supabase } from '@/lib/supabase-admin';
 
 export async function GET() {
   const { data } = await supabase.from('sac_announcements').select('*').order('created_at', { ascending: false });
