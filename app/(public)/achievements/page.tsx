@@ -22,7 +22,7 @@ export default function AchievementsPage() {
     <>
       {/* ─── Hero ─────────────────────────────────────────────────────── */}
       <section style={{ background: '#0A0A0F', paddingTop: '92px', paddingBottom: '72px' }}>
-        <div className="max-w-7xl mx-auto px-5 sm:px-10">
+        <div className="max-w-[1440px] mx-auto px-5 sm:px-10">
           <p className="text-[10px] font-black tracking-[0.25em] uppercase mb-5" style={{ color: '#8B0000' }}>
             Achievements
           </p>
@@ -39,7 +39,7 @@ export default function AchievementsPage() {
 
       {/* ─── Achievements list ────────────────────────────────────────── */}
       <section style={{ background: '#fff' }}>
-        <div className="max-w-7xl mx-auto px-5 sm:px-10 py-20">
+        <div className="max-w-[1440px] mx-auto px-5 sm:px-10 py-20">
           <FadeIn>
             <div style={{ borderTop: '1px solid #E4E4E7' }}>
               {ACHIEVEMENTS.map((ach: Achievement, i) => {
@@ -112,3 +112,4 @@ export default function AchievementsPage() {
     </>
   );
 }
+

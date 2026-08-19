@@ -35,7 +35,7 @@ export default async function EventsPage() {
     <>
       {/* ─── Hero ─────────────────────────────────────────────────────── */}
       <section style={{ background: '#fff', paddingTop: '92px', paddingBottom: '56px' }}>
-        <div className="max-w-7xl mx-auto px-5 sm:px-10 pt-8">
+        <div className="max-w-[1440px] mx-auto px-5 sm:px-10 pt-8">
           <p className="text-[10px] font-black tracking-[0.25em] uppercase mb-4" style={{ color: '#8B0000' }}>
             Calendar
           </p>
@@ -53,7 +53,7 @@ export default async function EventsPage() {
       {/* ─── Upcoming Events ──────────────────────────────────────────── */}
       {upcoming.length > 0 && (
         <section style={{ background: '#fff' }}>
-          <div className="max-w-7xl mx-auto px-5 sm:px-10 pb-20">
+          <div className="max-w-[1440px] mx-auto px-5 sm:px-10 pb-20">
             <FadeIn>
               <div className="flex items-center gap-3 mb-8">
                 <span className="w-2.5 h-2.5 rounded-full" style={{ background: '#8B0000' }} />
@@ -78,7 +78,7 @@ export default async function EventsPage() {
       {/* ─── Past Events ──────────────────────────────────────────────── */}
       {past.length > 0 && (
         <section style={{ background: '#F7F7F8' }}>
-          <div className="max-w-7xl mx-auto px-5 sm:px-10 py-20">
+          <div className="max-w-[1440px] mx-auto px-5 sm:px-10 py-20">
             <FadeIn>
               <div className="flex items-center gap-3 mb-8">
                 <span className="w-2.5 h-2.5 rounded-full" style={{ background: '#D1D5DB' }} />
@@ -102,7 +102,7 @@ export default async function EventsPage() {
 
       {upcoming.length === 0 && past.length === 0 && (
         <section style={{ background: '#fff' }}>
-          <div className="max-w-7xl mx-auto px-5 sm:px-10 py-32 text-center">
+          <div className="max-w-[1440px] mx-auto px-5 sm:px-10 py-32 text-center">
             <CalendarDays size={48} className="mx-auto mb-5 opacity-20" style={{ color: '#71717A' }} />
             <p className="font-bold text-lg" style={{ color: '#71717A' }}>
               No activities to display at this time.
@@ -166,3 +166,4 @@ function EventRow({ ev, dim }: { ev: any; dim: boolean }) {
     </div>
   );
 }
+

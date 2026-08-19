@@ -1,4 +1,4 @@
-import { supabase } from '@/lib/supabase-admin';
+﻿import { supabase } from '@/lib/supabase-admin';
 import { FadeIn } from '../_components/FadeIn';
 import { Download, FileText } from 'lucide-react';
 
@@ -27,7 +27,7 @@ export default async function PublicationsPage() {
   return (
     <>
       <section style={{ background: '#fff', paddingTop: '92px', paddingBottom: '48px' }}>
-        <div className="max-w-7xl mx-auto px-5 sm:px-10 pt-8">
+        <div className="max-w-[1440px] mx-auto px-5 sm:px-10 pt-8">
           <p className="text-[10px] font-black tracking-[0.25em] uppercase mb-4" style={{ color: '#8B0000' }}>
             Publications
           </p>
@@ -37,7 +37,7 @@ export default async function PublicationsPage() {
             Reports & Publications
           </h1>
           <p className="text-lg" style={{ color: '#71717A', maxWidth: '52ch' }}>
-            Annual reports, magazines, and documentation from KL SAC — read inline or download.
+            Annual reports, magazines, and documentation from KL SAC â€” read inline or download.
           </p>
         </div>
       </section>
@@ -90,7 +90,7 @@ export default async function PublicationsPage() {
                       className="px-6 sm:px-8 py-4 flex items-center justify-between gap-4 flex-wrap"
                       style={{ borderTop: '1px solid #F0F0F0' }}>
                       <p className="text-xs" style={{ color: '#A1A1AA' }}>
-                        Scroll inside the viewer to read · PDF document
+                        Scroll inside the viewer to read Â· PDF document
                       </p>
                       <a
                         href={pub.pdf_url}
@@ -111,3 +111,4 @@ export default async function PublicationsPage() {
     </>
   );
 }
+

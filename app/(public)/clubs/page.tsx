@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import { useState } from 'react';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
@@ -31,11 +31,11 @@ export default function ClubsPage() {
 
   return (
     <>
-      {/* ─── Hero ─────────────────────────────────────────────────────── */}
+      {/* â”€â”€â”€ Hero â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <section style={{ background: '#fff', paddingTop: '92px', paddingBottom: '0' }}>
-        <div className="max-w-7xl mx-auto px-5 sm:px-10 pt-10 pb-0">
+        <div className="max-w-[1440px] mx-auto px-5 sm:px-10 pt-10 pb-0">
           <p className="text-[10px] font-black tracking-[0.25em] uppercase mb-4" style={{ color: '#8B0000' }}>
-            25 Clubs · 5 Domains
+            25 Clubs Â· 5 Domains
           </p>
           <h1
             className="font-black leading-[1.05] mb-5"
@@ -43,7 +43,7 @@ export default function ClubsPage() {
             Find Your Community.
           </h1>
           <p className="text-lg mb-10" style={{ color: '#71717A', maxWidth: '56ch' }}>
-            Twenty-five clubs across five domains. Every passion, every ambition — there's a club for you at KL SAC.
+            Twenty-five clubs across five domains. Every passion, every ambition â€” there's a club for you at KL SAC.
           </p>
 
           {/* Filter tabs */}
@@ -69,9 +69,9 @@ export default function ClubsPage() {
         </div>
       </section>
 
-      {/* ─── Club List ────────────────────────────────────────────────── */}
+      {/* â”€â”€â”€ Club List â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <section style={{ background: '#fff' }}>
-        <div className="max-w-7xl mx-auto px-5 sm:px-10 pt-10 pb-24">
+        <div className="max-w-[1440px] mx-auto px-5 sm:px-10 pt-10 pb-24">
           {visibleDomains.map(domain => {
             const domainClubs = CLUBS.filter(c => c.domainCode === domain.code);
             return (
@@ -139,3 +139,4 @@ export default function ClubsPage() {
     </>
   );
 }
+

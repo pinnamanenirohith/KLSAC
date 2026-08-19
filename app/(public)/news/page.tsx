@@ -1,4 +1,4 @@
-import Link from 'next/link';
+﻿import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import { supabase } from '@/lib/supabase-admin';
 import { FadeIn } from '../_components/FadeIn';
@@ -23,7 +23,7 @@ export default async function NewsPage() {
   return (
     <>
       <section style={{ background: '#fff', paddingTop: '92px', paddingBottom: '56px' }}>
-        <div className="max-w-7xl mx-auto px-5 sm:px-10 pt-8">
+        <div className="max-w-[1440px] mx-auto px-5 sm:px-10 pt-8">
           <p className="text-[10px] font-black tracking-[0.25em] uppercase mb-4" style={{ color: '#8B0000' }}>
             News & Updates
           </p>
@@ -40,7 +40,7 @@ export default async function NewsPage() {
 
       {featured && (
         <section style={{ background: '#fff' }}>
-          <div className="max-w-7xl mx-auto px-5 sm:px-10 pb-16">
+          <div className="max-w-[1440px] mx-auto px-5 sm:px-10 pb-16">
             <FadeIn>
               <Link
                 href={`/news/${featured.slug}`}
@@ -83,7 +83,7 @@ export default async function NewsPage() {
       )}
 
       <section style={{ background: '#F7F7F8' }}>
-        <div className="max-w-7xl mx-auto px-5 sm:px-10 py-20">
+        <div className="max-w-[1440px] mx-auto px-5 sm:px-10 py-20">
           <FadeIn>
             <div style={{ borderTop: '1px solid #E4E4E7' }}>
               {rest.map(article => (
@@ -129,3 +129,4 @@ export default async function NewsPage() {
     </>
   );
 }
+

@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
@@ -10,7 +10,7 @@ import type { Club } from '@/lib/content/clubs';
 
 const CRIMSON = '#8B0000';
 
-// ─── Member Card ──────────────────────────────────────────────────────────────
+// â”€â”€â”€ Member Card â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function MemberCard({
   member,
   roleFallback,
@@ -98,7 +98,7 @@ function MemberCard({
           {member?.name ?? nameFallback ?? 'Name TBA'}
         </p>
         <p className="text-xs mt-0.5 truncate" style={{ color: isPlaceholder ? '#D1D1D6' : CRIMSON }}>
-          {member?.role ?? roleFallback ?? '—'}
+          {member?.role ?? roleFallback ?? 'â€”'}
         </p>
         {member?.subtitle && (
           <p className="text-[10px] mt-0.5 leading-snug" style={{ color: '#71717A', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
@@ -107,7 +107,7 @@ function MemberCard({
         )}
         {member?.year && (
           <p className="text-[10px] mt-0.5 truncate" style={{ color: '#A1A1AA' }}>
-            {member.year}{member.branch ? ` · ${member.branch.split(' ')[0]}` : ''}
+            {member.year}{member.branch ? ` Â· ${member.branch.split(' ')[0]}` : ''}
           </p>
         )}
         {member?.designation && (
@@ -120,7 +120,7 @@ function MemberCard({
   );
 }
 
-// ─── Profile Modal ─────────────────────────────────────────────────────────────
+// â”€â”€â”€ Profile Modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function ProfileModal({ member, onClose }: { member: CouncilMember; onClose: () => void }) {
   const initials = member.name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
 
@@ -196,13 +196,13 @@ function ProfileModal({ member, onClose }: { member: CouncilMember; onClose: () 
                     <span style={{ color: '#3F3F46' }}>{member.year}</span>
                   )}
                   {member.branch && (
-                    <span style={{ color: '#71717A' }}>· {member.branch}</span>
+                    <span style={{ color: '#71717A' }}>Â· {member.branch}</span>
                   )}
                   {member.designation && (
                     <span style={{ color: '#71717A' }}>{member.designation}</span>
                   )}
                   {member.clubLead && (
-                    <span style={{ color: CRIMSON }}>· Leads {member.clubLead}</span>
+                    <span style={{ color: CRIMSON }}>Â· Leads {member.clubLead}</span>
                   )}
                 </div>
 
@@ -300,7 +300,7 @@ function ProfileModal({ member, onClose }: { member: CouncilMember; onClose: () 
   );
 }
 
-// ─── Section label ─────────────────────────────────────────────────────────────
+// â”€â”€â”€ Section label â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function SectionLabel({ label, sub }: { label: string; sub?: string }) {
   return (
     <div className="mb-8">
@@ -318,7 +318,7 @@ function SectionLabel({ label, sub }: { label: string; sub?: string }) {
   );
 }
 
-// ─── Main export ──────────────────────────────────────────────────────────────
+// â”€â”€â”€ Main export â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export default function CouncilGrid({
   members,
   clubs,
@@ -342,9 +342,9 @@ export default function CouncilGrid({
 
   return (
     <>
-      {/* ── Presidents ──────────────────────────────────────────────── */}
+      {/* â”€â”€ Presidents â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <section style={{ background: '#fff' }}>
-        <div className="max-w-7xl mx-auto px-5 sm:px-10 py-20">
+        <div className="max-w-[1440px] mx-auto px-5 sm:px-10 py-20">
           <SectionLabel label="Student Council Leadership" sub="Presidents of KL SAC." />
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 sm:gap-6">
             {presidents.length > 0
@@ -358,9 +358,9 @@ export default function CouncilGrid({
         </div>
       </section>
 
-      {/* ── Vice Presidents ─────────────────────────────────────────── */}
+      {/* â”€â”€ Vice Presidents â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <section style={{ background: '#F7F7F8' }}>
-        <div className="max-w-7xl mx-auto px-5 sm:px-10 py-20">
+        <div className="max-w-[1440px] mx-auto px-5 sm:px-10 py-20">
           <SectionLabel label="Vice Presidents" sub="Domain & division leadership." />
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5">
             {vps.length > 0
@@ -374,10 +374,10 @@ export default function CouncilGrid({
         </div>
       </section>
 
-      {/* ── Secretaries ─────────────────────────────────────────────── */}
+      {/* â”€â”€ Secretaries â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       {(secs.length > 0 || jsecs.length > 0) && (
         <section style={{ background: '#fff' }}>
-          <div className="max-w-7xl mx-auto px-5 sm:px-10 py-20">
+          <div className="max-w-[1440px] mx-auto px-5 sm:px-10 py-20">
             <SectionLabel label="Secretaries" sub="Division heads & coordinators." />
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
               {[...secs, ...jsecs].map(m => (
@@ -388,9 +388,9 @@ export default function CouncilGrid({
         </section>
       )}
 
-      {/* ── Club Leads ──────────────────────────────────────────────── */}
+      {/* â”€â”€ Club Leads â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <section style={{ background: '#fff' }}>
-        <div className="max-w-7xl mx-auto px-5 sm:px-10 py-20">
+        <div className="max-w-[1440px] mx-auto px-5 sm:px-10 py-20">
           <SectionLabel label="Club Leads" sub="Coordinators of all 25 clubs." />
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
             {clubs.map(club => {
@@ -412,9 +412,9 @@ export default function CouncilGrid({
         </div>
       </section>
 
-      {/* ── Faculty ─────────────────────────────────────────────────── */}
+      {/* â”€â”€ Faculty â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <section style={{ background: '#F7F7F8' }}>
-        <div className="max-w-7xl mx-auto px-5 sm:px-10 py-20">
+        <div className="max-w-[1440px] mx-auto px-5 sm:px-10 py-20">
           <SectionLabel label="Faculty" sub="Mentors & In-Charges." />
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-14">
 
@@ -453,8 +453,9 @@ export default function CouncilGrid({
         </div>
       </section>
 
-      {/* ── Profile Modal ────────────────────────────────────────────── */}
+      {/* â”€â”€ Profile Modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       {selected && <ProfileModal member={selected} onClose={close} />}
     </>
   );
 }
+

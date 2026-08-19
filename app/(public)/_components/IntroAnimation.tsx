@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useState, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -9,7 +9,7 @@ const DISPLAY = "'Arial Black','Helvetica Neue',Arial,sans-serif";
 const SANS    = "'Helvetica Neue',Helvetica,Arial,sans-serif";
 const DRAW    = [0.76, 0, 0.24, 1] as [number, number, number, number];
 
-/* ── Word reel — alternates white / crimson ──────────────
+/* â”€â”€ Word reel â€” alternates white / crimson â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
    "LIVE" is last and gets its own held scene with branding  */
 const WORDS = [
   { text: 'MUSIC',   red: false },
@@ -25,7 +25,7 @@ const WORDS = [
   { text: 'THRIVE',  red: false },
   { text: 'INSPIRE', red: true  },
   { text: 'BELONG',  red: false },
-  { text: 'LIVE',    red: true  }, // ← held with KL SAC branding
+  { text: 'LIVE',    red: true  }, // â† held with KL SAC branding
 ];
 
 const WORD_MS  = 150;
@@ -85,13 +85,13 @@ export function IntroAnimation() {
           aria-hidden="true"
         >
 
-          {/* ══ Word reel + LIVE scene ════════════════════ */}
+          {/* â•â• Word reel + LIVE scene â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
           {(phase === 'reel' || phase === 'live-scene') && (
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
 
               {/* The current word.
                   LIVE uses a stable key so it doesn't re-punch when the
-                  phase switches from reel → live-scene.                   */}
+                  phase switches from reel â†’ live-scene.                   */}
               <motion.p
                 key={idx === LAST_IDX ? 'live-word' : `w${idx}`}
                 initial={{ scale: 1.1, opacity: 1 }}
@@ -112,7 +112,7 @@ export function IntroAnimation() {
             </div>
           )}
 
-          {/* ══ KL SAC ═══════════════════════════════════ */}
+          {/* â•â• KL SAC â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
           {phase === 'kl-sac' && (
             <motion.div
               key="kl-sac"
@@ -138,7 +138,7 @@ export function IntroAnimation() {
             </motion.div>
           )}
 
-          {/* ══ YOUR TIME. tagline ════════════════════════ */}
+          {/* â•â• YOUR TIME. tagline â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
           {phase === 'tagline' && (
             <motion.div
               key="tagline"
@@ -164,7 +164,7 @@ export function IntroAnimation() {
             </motion.div>
           )}
 
-          {/* Tap to skip — barely visible */}
+          {/* Tap to skip â€” barely visible */}
           <p style={{
             position: 'absolute', bottom: 22, margin: 0,
             fontFamily: SANS, fontSize: 8,
@@ -179,3 +179,4 @@ export function IntroAnimation() {
     </AnimatePresence>
   );
 }
+

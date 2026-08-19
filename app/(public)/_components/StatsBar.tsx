@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import { useEffect, useState, useRef } from 'react';
 import { Users, BookOpen, Layers } from 'lucide-react';
 
@@ -54,3 +54,4 @@ export default function StatsBar() {
     </div>
   );
 }
+

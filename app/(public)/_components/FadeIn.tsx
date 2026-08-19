@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import { motion, useReducedMotion } from 'framer-motion';
 import type { ReactNode, CSSProperties } from 'react';
 
@@ -77,3 +77,4 @@ export function Stagger({ children, className, style, stagger = 0.08, once = tru
     </motion.div>
   );
 }
+

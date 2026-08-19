@@ -1,4 +1,4 @@
-import Navbar from './_components/Navbar';
+﻿import Navbar from './_components/Navbar';
 import Footer from './_components/Footer';
 import { IntroAnimation } from './_components/IntroAnimation';
 
@@ -12,3 +12,4 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
     </>
   );
 }
+

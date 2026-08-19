@@ -20,7 +20,7 @@ export default function StoriesPage() {
     <>
       {/* ─── Hero ─────────────────────────────────────────────────────── */}
       <section style={{ background: '#0A0A0F', paddingTop: '92px', paddingBottom: '72px' }}>
-        <div className="max-w-7xl mx-auto px-5 sm:px-10">
+        <div className="max-w-[1440px] mx-auto px-5 sm:px-10">
           <p className="text-[10px] font-black tracking-[0.25em] uppercase mb-5" style={{ color: '#8B0000' }}>
             Student Stories
           </p>
@@ -38,7 +38,7 @@ export default function StoriesPage() {
       {/* ─── Featured Story ───────────────────────────────────────────── */}
       {featured && (
         <section style={{ background: '#fff' }}>
-          <div className="max-w-7xl mx-auto px-5 sm:px-10 py-20">
+          <div className="max-w-[1440px] mx-auto px-5 sm:px-10 py-20">
             <FadeIn>
               <p className="text-[10px] font-black tracking-[0.22em] uppercase mb-6" style={{ color: '#8B0000' }}>
                 Featured Story
@@ -98,7 +98,7 @@ export default function StoriesPage() {
       {/* ─── Story Grid ───────────────────────────────────────────────── */}
       {rest.length > 0 && (
         <section style={{ background: '#F7F7F8' }}>
-          <div className="max-w-7xl mx-auto px-5 sm:px-10 py-20">
+          <div className="max-w-[1440px] mx-auto px-5 sm:px-10 py-20">
             <FadeIn>
               <p className="text-[10px] font-black tracking-[0.22em] uppercase mb-10" style={{ color: '#A1A1AA' }}>
                 More Stories
@@ -159,7 +159,7 @@ export default function StoriesPage() {
 
       {/* ─── CTA ──────────────────────────────────────────────────────── */}
       <section style={{ background: '#0A0A0F' }}>
-        <div className="max-w-7xl mx-auto px-5 sm:px-10 py-20 text-center">
+        <div className="max-w-[1440px] mx-auto px-5 sm:px-10 py-20 text-center">
           <FadeIn>
             <h2
               className="font-black leading-tight mb-5"
@@ -184,3 +184,4 @@ export default function StoriesPage() {
     </>
   );
 }
+

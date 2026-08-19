@@ -58,7 +58,7 @@ export default function CollaboratePage() {
     <>
       {/* ─── Hero ─────────────────────────────────────────────────────── */}
       <section style={{ background: '#0A0A0F', paddingTop: '92px', paddingBottom: '72px' }}>
-        <div className="max-w-7xl mx-auto px-5 sm:px-10">
+        <div className="max-w-[1440px] mx-auto px-5 sm:px-10">
           <p className="text-[10px] font-black tracking-[0.25em] uppercase mb-5" style={{ color: '#8B0000' }}>
             Collaborate
           </p>
@@ -82,7 +82,7 @@ export default function CollaboratePage() {
 
       {/* ─── Collaboration Areas ──────────────────────────────────────── */}
       <section style={{ background: '#fff' }}>
-        <div className="max-w-7xl mx-auto px-5 sm:px-10 py-24">
+        <div className="max-w-[1440px] mx-auto px-5 sm:px-10 py-24">
           <FadeIn>
             <p className="text-[10px] font-black tracking-[0.22em] uppercase mb-10" style={{ color: '#8B0000' }}>
               Ways to Collaborate
@@ -109,7 +109,7 @@ export default function CollaboratePage() {
 
       {/* ─── Who Collaborates ─────────────────────────────────────────── */}
       <section style={{ background: '#F7F7F8' }}>
-        <div className="max-w-7xl mx-auto px-5 sm:px-10 py-20">
+        <div className="max-w-[1440px] mx-auto px-5 sm:px-10 py-20">
           <FadeIn>
             <p className="text-[10px] font-black tracking-[0.22em] uppercase mb-10" style={{ color: '#A1A1AA' }}>
               Who We Work With
@@ -138,7 +138,7 @@ export default function CollaboratePage() {
 
       {/* ─── Engagement Process ───────────────────────────────────────── */}
       <section style={{ background: '#fff' }}>
-        <div className="max-w-7xl mx-auto px-5 sm:px-10 py-24">
+        <div className="max-w-[1440px] mx-auto px-5 sm:px-10 py-24">
           <FadeIn>
             <p className="text-[10px] font-black tracking-[0.22em] uppercase mb-10" style={{ color: '#8B0000' }}>
               How It Works
@@ -171,7 +171,7 @@ export default function CollaboratePage() {
 
       {/* ─── CTA ──────────────────────────────────────────────────────── */}
       <section style={{ background: '#8B0000' }}>
-        <div className="max-w-7xl mx-auto px-5 sm:px-10 py-20">
+        <div className="max-w-[1440px] mx-auto px-5 sm:px-10 py-20">
           <FadeIn>
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-8">
               <div>
@@ -198,3 +198,4 @@ export default function CollaboratePage() {
     </>
   );
 }
+

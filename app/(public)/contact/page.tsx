@@ -12,7 +12,7 @@ export default function ContactPage() {
     <>
       {/* ─── Hero ─────────────────────────────────────────────────────── */}
       <section style={{ background: '#fff', paddingTop: '92px', paddingBottom: '56px' }}>
-        <div className="max-w-7xl mx-auto px-5 sm:px-10 pt-8">
+        <div className="max-w-[1440px] mx-auto px-5 sm:px-10 pt-8">
           <p className="text-[10px] font-black tracking-[0.25em] uppercase mb-4" style={{ color: '#8B0000' }}>
             Contact
           </p>
@@ -29,7 +29,7 @@ export default function ContactPage() {
 
       {/* ─── Contact Grid ─────────────────────────────────────────────── */}
       <section style={{ background: '#fff' }}>
-        <div className="max-w-7xl mx-auto px-5 sm:px-10 pb-24">
+        <div className="max-w-[1440px] mx-auto px-5 sm:px-10 pb-24">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-16">
 
             {/* Left: Contact info */}
@@ -182,3 +182,4 @@ export default function ContactPage() {
     </>
   );
 }
+

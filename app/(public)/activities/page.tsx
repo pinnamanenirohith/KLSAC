@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import { useState, useEffect } from 'react';
 import { Zap, Calendar, MapPin, Clock, Filter } from 'lucide-react';
 import { DOMAIN_META } from '@/lib/demo-data';
@@ -40,7 +40,7 @@ export default function ActivitiesPage() {
   const visible = domain === 'all' ? activities : activities.filter(a => a.domain === domain);
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-8" style={{ paddingTop: '112px', paddingBottom: '80px' }}>
+    <div className="max-w-[1440px] mx-auto px-4 sm:px-8" style={{ paddingTop: '112px', paddingBottom: '80px' }}>
       <div className="mb-12 text-center">
         <span
           className="text-xs font-black tracking-[0.2em] uppercase px-4 py-1.5 rounded-full inline-block mb-4"
@@ -86,7 +86,7 @@ export default function ActivitiesPage() {
 
       {loading ? (
         <div className="text-center py-24" style={{ color: '#71717a' }}>
-          <p className="font-semibold">Loading activities…</p>
+          <p className="font-semibold">Loading activitiesâ€¦</p>
         </div>
       ) : visible.length === 0 ? (
         <div className="text-center py-24" style={{ color: '#71717a' }}>
@@ -156,3 +156,4 @@ export default function ActivitiesPage() {
     </div>
   );
 }
+

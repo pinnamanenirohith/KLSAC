@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import { useEffect, useState } from 'react';
 import { Megaphone } from 'lucide-react';
 
@@ -20,9 +20,9 @@ export default function AnnouncementTicker() {
       <Megaphone size={16} className="shrink-0" />
       <div className="overflow-hidden whitespace-nowrap">
         <span className="inline-block animate-[marquee_20s_linear_infinite]">
-          {items.map(a => a.title).join('  •  ')}
+          {items.map(a => a.title).join('  â€¢  ')}
           &nbsp;&nbsp;&nbsp;
-          {items.map(a => a.title).join('  •  ')}
+          {items.map(a => a.title).join('  â€¢  ')}
         </span>
       </div>
       <style>{`
@@ -34,3 +34,4 @@ export default function AnnouncementTicker() {
     </div>
   );
 }
+

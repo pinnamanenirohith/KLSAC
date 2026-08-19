@@ -15,7 +15,7 @@ export default function LeadershipPage() {
     <>
       {/* ─── Hero ─────────────────────────────────────────────────────── */}
       <section style={{ background: '#0A0A0F', paddingTop: '92px', paddingBottom: '72px' }}>
-        <div className="max-w-7xl mx-auto px-5 sm:px-10">
+        <div className="max-w-[1440px] mx-auto px-5 sm:px-10">
           <p className="text-[10px] font-black tracking-[0.25em] uppercase mb-5" style={{ color: '#8B0000' }}>
             Governance
           </p>
@@ -32,7 +32,7 @@ export default function LeadershipPage() {
 
       {/* ─── Group Photo ──────────────────────────────────────────────── */}
       <section style={{ background: '#F7F7F8', borderBottom: '1px solid #E4E4E7' }}>
-        <div className="max-w-7xl mx-auto px-5 sm:px-10 py-10">
+        <div className="max-w-[1440px] mx-auto px-5 sm:px-10 py-10">
           <p className="text-[10px] font-black tracking-[0.22em] uppercase mb-5" style={{ color: '#8B0000' }}>
             Student Council Group Photo
           </p>
@@ -71,7 +71,7 @@ export default function LeadershipPage() {
 
       {/* ─── Governance Framework ─────────────────────────────────────── */}
       <section style={{ background: '#0A0A0F' }}>
-        <div className="max-w-7xl mx-auto px-5 sm:px-10 py-20">
+        <div className="max-w-[1440px] mx-auto px-5 sm:px-10 py-20">
           <p className="text-[10px] font-black tracking-[0.22em] uppercase mb-5" style={{ color: '#8B0000' }}>
             Governance Framework
           </p>
@@ -101,3 +101,4 @@ export default function LeadershipPage() {
     </>
   );
 }
+

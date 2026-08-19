@@ -25,7 +25,7 @@ export default function Footer() {
     <footer style={{ background: '#0A0A0F', color: '#fff' }}>
 
       {/* ── Main columns ── */}
-      <div className="max-w-7xl mx-auto px-6 sm:px-10 pt-16 pb-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-12">
+      <div className="max-w-[1440px] mx-auto px-6 sm:px-10 pt-16 pb-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-12">
 
         {/* Brand */}
         <div>
@@ -154,7 +154,7 @@ export default function Footer() {
       </div>
 
       {/* ── Bottom bar ── */}
-      <div className="max-w-7xl mx-auto px-6 sm:px-10 py-5 flex flex-col sm:flex-row items-center justify-between gap-3"
+      <div className="max-w-[1440px] mx-auto px-6 sm:px-10 py-5 flex flex-col sm:flex-row items-center justify-between gap-3"
            style={{ borderTop: '1px solid rgba(255,255,255,0.07)' }}>
         <p className="text-xs" style={{ color: 'rgba(255,255,255,0.22)' }}>
           © {new Date().getFullYear()} KL University — Student Activity Center. All rights reserved.
@@ -176,3 +176,4 @@ export default function Footer() {
     </footer>
   );
 }
+
