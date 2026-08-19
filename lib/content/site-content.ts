@@ -269,7 +269,7 @@ export const PUBLICATIONS: Publication[] = [
       'A curated collection of stories, achievements, and highlights from KL SAC activities during August 2026. Covering cultural events, student milestones, and community initiatives across all five domains.',
     pages: null,
     downloadAvailable: true,
-    url: '/publications/august-story-vol1.pdf',
+    url: '/publications/independence-day-2026.pdf',
   },
   {
     id: 'pub-independence-day',
@@ -280,7 +280,7 @@ export const PUBLICATIONS: Publication[] = [
       'Official documentation of the Independence Day 2026 celebrations at KL University, organised by KL SAC. Includes event proceedings, participation records, and highlights from the flag-hoisting ceremony and cultural programmes.',
     pages: null,
     downloadAvailable: true,
-    url: '/publications/independence-day-2026.pdf',
+    url: '/publications/august-story-vol1.pdf',
   },
 ];
 
