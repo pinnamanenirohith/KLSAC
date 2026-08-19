@@ -31,7 +31,7 @@ export async function getHomepageStats() {
     clubs:      json?.data?.clubs      ?? 36,
     domains:    json?.data?.domains    ?? 5,
     students:   json?.data?.students   ?? 3661,
-    activities: json?.data?.activities ?? null,
+    activities: json?.data?.activities ?? 400,
   };
 }
 
