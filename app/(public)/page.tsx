@@ -28,7 +28,7 @@ export default async function HomePage() {
     getHomepageEvents(4),
     supabase.from('stories').select('slug, title, student_name, student_year, club_name, domain_code, excerpt, photo, featured, sort_order').order('sort_order', { ascending: true }).limit(3),
     supabase.from('site_settings').select('key, value'),
-    supabase.from('news_articles').select('slug, title, excerpt, photo, category, date').order('date', { ascending: false }).limit(3),
+    supabase.from('news_articles').select('slug, title, excerpt, photo_url, category, date, featured').order('featured', { ascending: false }).order('date', { ascending: false }).limit(3),
     supabase.from('domains').select('slug, code, name, tagline, color, accent_bg').order('sort_order', { ascending: true }),
     supabase.from('clubs').select('domain_code'),
     supabase.from('sac_stats').select('key, value'),
@@ -637,8 +637,8 @@ export default async function HomePage() {
                       style={{
                         background: 'linear-gradient(135deg, #5B0000 0%, #8B0000 100%)',
                       }}>
-                      {article.photo ? (
-                        <img src={article.photo} alt={article.title} className="w-full h-full object-cover" loading="lazy" />
+                      {article.photo_url ? (
+                        <img src={article.photo_url} alt={article.title} className="w-full h-full object-cover" loading="lazy" />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center">
                           <span className="text-[10px] font-bold tracking-widest uppercase opacity-20" style={{ color: '#fff' }}>KL SAC</span>

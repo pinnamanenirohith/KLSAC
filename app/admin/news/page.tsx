@@ -2,16 +2,19 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
-import { Plus, Trash2, Pencil, Image as ImageIcon } from 'lucide-react';
+import { Plus, Trash2, Pencil, Image as ImageIcon, ArrowUp, ArrowDown, AlertCircle } from 'lucide-react';
 
 export default function NewsAdminPage() {
   const [articles, setArticles] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading]   = useState(true);
+  const [needsMigration, setNeedsMigration] = useState(false);
+  const [reordering, setReordering] = useState(false);
 
   async function load() {
     const r = await fetch('/api/admin/news');
     const d = await r.json();
     setArticles(d.data ?? []);
+    setNeedsMigration(d.needsMigration ?? false);
     setLoading(false);
   }
   useEffect(() => { load(); }, []);
@@ -23,9 +26,36 @@ export default function NewsAdminPage() {
     load();
   }
 
+  async function move(index: number, direction: 'up' | 'down') {
+    const next = [...articles];
+    const swapIndex = direction === 'up' ? index - 1 : index + 1;
+    if (swapIndex < 0 || swapIndex >= next.length) return;
+    [next[index], next[swapIndex]] = [next[swapIndex], next[index]];
+    setArticles(next);
+    setReordering(true);
+    try {
+      const res = await fetch('/api/admin/news', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ orderedSlugs: next.map(a => a.slug) }),
+      });
+      const d = await res.json();
+      if (!res.ok) {
+        if (d.needsMigration) setNeedsMigration(true);
+        throw new Error(d.error);
+      }
+      toast.success('Order saved');
+    } catch (err: any) {
+      toast.error(err.message);
+      load(); // revert on failure
+    } finally {
+      setReordering(false);
+    }
+  }
+
   return (
     <div>
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="text-2xl font-black mb-1" style={{ color: '#0D0D0D', letterSpacing: '-0.02em' }}>News Articles</h1>
           <p className="text-sm" style={{ color: '#71717A' }}>Articles appear on the public news page immediately after saving.</p>
@@ -36,6 +66,21 @@ export default function NewsAdminPage() {
           <Plus size={14} /> New Article
         </Link>
       </div>
+
+      {/* Migration banner */}
+      {needsMigration && (
+        <div className="mb-6 rounded-2xl border p-4 flex gap-3"
+             style={{ background: '#fffbeb', borderColor: '#fcd34d' }}>
+          <AlertCircle size={18} style={{ color: '#d97706', shrink: 0, marginTop: 1 }} />
+          <div>
+            <p className="text-sm font-bold" style={{ color: '#92400e' }}>Run this SQL in Supabase to enable ordering:</p>
+            <code className="text-xs block mt-1 p-2 rounded font-mono" style={{ background: '#fef3c7', color: '#78350f' }}>
+              ALTER TABLE news_articles ADD COLUMN IF NOT EXISTS sort_order integer DEFAULT 0;
+            </code>
+            <p className="text-xs mt-1" style={{ color: '#a16207' }}>Go to Supabase → SQL Editor → paste and run. Until then articles are ordered by date.</p>
+          </div>
+        </div>
+      )}
 
       {loading ? (
         <p className="text-sm" style={{ color: '#71717A' }}>Loading…</p>
@@ -48,14 +93,30 @@ export default function NewsAdminPage() {
         <div className="rounded-2xl border overflow-hidden" style={{ background: '#fff', borderColor: '#E4E4E7' }}>
           {articles.map((a, i) => (
             <div key={a.slug}
-                 className="flex items-center gap-4 px-5 py-4"
+                 className="flex items-center gap-3 px-4 py-3.5"
                  style={{ borderBottom: i < articles.length - 1 ? '1px solid #F0F0F0' : 'none' }}>
+
+              {/* Order controls */}
+              <div className="flex flex-col gap-0.5 shrink-0">
+                <button onClick={() => move(i, 'up')} disabled={i === 0 || reordering}
+                        className="p-1 rounded hover:bg-gray-100 disabled:opacity-20 transition-opacity">
+                  <ArrowUp size={12} style={{ color: '#71717A' }} />
+                </button>
+                <button onClick={() => move(i, 'down')} disabled={i === articles.length - 1 || reordering}
+                        className="p-1 rounded hover:bg-gray-100 disabled:opacity-20 transition-opacity">
+                  <ArrowDown size={12} style={{ color: '#71717A' }} />
+                </button>
+              </div>
+
+              {/* Thumbnail */}
               <div className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0"
                    style={{ background: a.photo_url ? '#fff' : '#F7F7F8', overflow: 'hidden' }}>
                 {a.photo_url
                   ? <img src={a.photo_url} alt="" className="w-full h-full object-cover" />
                   : <ImageIcon size={16} style={{ color: '#A1A1AA' }} />}
               </div>
+
+              {/* Info */}
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-0.5">
                   <span className="font-bold text-sm truncate" style={{ color: '#0D0D0D' }}>{a.title}</span>
@@ -68,6 +129,8 @@ export default function NewsAdminPage() {
                   {a.category} · {new Date(a.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
                 </span>
               </div>
+
+              {/* Actions */}
               <div className="flex items-center gap-1 shrink-0">
                 <Link href={`/admin/news/${a.slug}`}
                       className="p-2 rounded-lg transition-colors hover:bg-gray-100">
@@ -81,6 +144,12 @@ export default function NewsAdminPage() {
             </div>
           ))}
         </div>
+      )}
+
+      {!needsMigration && articles.length > 0 && (
+        <p className="text-xs mt-3" style={{ color: '#A1A1AA' }}>
+          Use ↑ ↓ arrows to set the display order. Featured articles always appear first on the homepage.
+        </p>
       )}
     </div>
   );
