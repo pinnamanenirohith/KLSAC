@@ -34,13 +34,25 @@ export default function PublicationsAdminPage() {
     if (!file) return;
     setUploading(true);
     try {
-      const fd = new FormData();
-      fd.append('file', file);
-      fd.append('folder', 'publications');
-      const res = await fetch('/api/admin/upload', { method: 'POST', body: fd });
-      const d   = await res.json();
-      if (!res.ok) throw new Error(d.error);
-      set('pdf_url', d.url);
+      const ext = file.name.split('.').pop() ?? 'pdf';
+      // Get a presigned upload URL — file goes directly to Supabase, bypassing the 4.5 MB Vercel limit
+      const urlRes = await fetch('/api/admin/upload-url', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ folder: 'publications', ext }),
+      });
+      const urlData = await urlRes.json();
+      if (!urlRes.ok) throw new Error(urlData.error ?? 'Failed to get upload URL');
+
+      // Upload directly from the browser to Supabase Storage
+      const uploadRes = await fetch(urlData.signedUrl, {
+        method: 'PUT',
+        headers: { 'Content-Type': file.type || 'application/pdf' },
+        body: file,
+      });
+      if (!uploadRes.ok) throw new Error('Upload to storage failed');
+
+      set('pdf_url', urlData.publicUrl);
       toast.success('PDF uploaded');
     } catch (err: any) {
       toast.error(err.message);
