@@ -1,10 +1,15 @@
+import { requireAdmin } from '@/lib/auth';
+import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import StoryForm from '../_components/StoryForm';
 
 export const metadata = { title: 'Add Story — KL SAC Admin' };
 
-export default function NewStoryPage() {
+export default async function NewStoryPage() {
+  const { error } = await requireAdmin();
+  if (error) redirect('/admin/login');
+
   return (
     <div>
       <Link href="/admin/stories"

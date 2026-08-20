@@ -1,4 +1,5 @@
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
+import { requireAdmin } from '@/lib/auth';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import { supabase } from '@/lib/supabase-admin';
@@ -7,6 +8,9 @@ import StoryForm from '../_components/StoryForm';
 export const metadata = { title: 'Edit Story — KL SAC Admin' };
 
 export default async function EditStoryPage({ params }: { params: { slug: string } }) {
+  const { error } = await requireAdmin();
+  if (error) redirect('/admin/login');
+
   const { data } = await supabase.from('stories').select('*').eq('slug', params.slug).single();
   if (!data) notFound();
 

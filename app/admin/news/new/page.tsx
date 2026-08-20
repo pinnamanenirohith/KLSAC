@@ -1,10 +1,15 @@
+import { requireAdmin } from '@/lib/auth';
+import { redirect } from 'next/navigation';
 import NewsForm from '../_components/NewsForm';
 import Link from 'next/link';
 import { ChevronLeft } from 'lucide-react';
 
 export const metadata = { title: 'New Article — KL SAC Admin' };
 
-export default function NewArticlePage() {
+export default async function NewArticlePage() {
+  const { error } = await requireAdmin();
+  if (error) redirect('/admin/login');
+
   return (
     <div>
       <Link href="/admin/news"

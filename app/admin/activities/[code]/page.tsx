@@ -1,5 +1,6 @@
 import { supabase } from '@/lib/supabase';
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
+import { requireAdmin } from '@/lib/auth';
 import ActivityForm from '../_components/ActivityForm';
 import Link from 'next/link';
 import { ChevronLeft } from 'lucide-react';
@@ -7,6 +8,9 @@ import { ChevronLeft } from 'lucide-react';
 export const metadata = { title: 'Edit Activity — KL SAC Admin' };
 
 export default async function EditActivityPage({ params }: { params: Promise<{ code: string }> }) {
+  const { error } = await requireAdmin();
+  if (error) redirect('/admin/login');
+
   const { code } = await params;
   const { data } = await supabase.from('activities').select('*').eq('code', decodeURIComponent(code)).single();
   if (!data) notFound();

@@ -1,10 +1,14 @@
 import { supabase } from '@/lib/supabase-admin';
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
+import { requireAdmin } from '@/lib/auth';
 import AchievementForm from '../_components/AchievementForm';
 
 export const dynamic = 'force-dynamic';
 
 export default async function EditAchievementPage({ params }: { params: { id: string } }) {
+  const { error } = await requireAdmin();
+  if (error) redirect('/admin/login');
+
   const { data } = await supabase.from('achievements').select('*').eq('id', params.id).single();
   if (!data) notFound();
 

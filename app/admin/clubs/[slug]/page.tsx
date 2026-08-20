@@ -1,4 +1,5 @@
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
+import { requireAdmin } from '@/lib/auth';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import { supabase } from '@/lib/supabase-admin';
@@ -7,6 +8,9 @@ import ClubForm from '../_components/ClubForm';
 export const metadata = { title: 'Edit Club — KL SAC Admin' };
 
 export default async function EditClubPage({ params }: { params: { slug: string } }) {
+  const { error } = await requireAdmin();
+  if (error) redirect('/admin/login');
+
   const { data } = await supabase.from('clubs').select('*').eq('slug', params.slug).single();
   if (!data) notFound();
 

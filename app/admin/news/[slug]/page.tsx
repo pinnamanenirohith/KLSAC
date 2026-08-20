@@ -1,5 +1,6 @@
 import { supabase } from '@/lib/supabase';
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
+import { requireAdmin } from '@/lib/auth';
 import NewsForm from '../_components/NewsForm';
 import Link from 'next/link';
 import { ChevronLeft } from 'lucide-react';
@@ -7,6 +8,9 @@ import { ChevronLeft } from 'lucide-react';
 export const metadata = { title: 'Edit Article — KL SAC Admin' };
 
 export default async function EditArticlePage({ params }: { params: Promise<{ slug: string }> }) {
+  const { error } = await requireAdmin();
+  if (error) redirect('/admin/login');
+
   const { slug } = await params;
   const { data } = await supabase.from('news_articles').select('*').eq('slug', slug).single();
   if (!data) notFound();

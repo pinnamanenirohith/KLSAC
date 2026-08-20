@@ -1,5 +1,7 @@
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase-admin';
+import { requireAdmin } from '@/lib/auth';
+import { redirect } from 'next/navigation';
 import { Plus, Trophy } from 'lucide-react';
 import AchievementDeleteButton from './_components/AchievementDeleteButton';
 
@@ -13,6 +15,9 @@ const LEVEL_COLORS: Record<string, { bg: string; color: string }> = {
 };
 
 export default async function AchievementsAdminPage() {
+  const { error } = await requireAdmin();
+  if (error) redirect('/admin/login');
+
   const { data } = await supabase.from('achievements').select('*').order('sort_order', { ascending: true }).order('year', { ascending: false });
   const achievements = data ?? [];
 

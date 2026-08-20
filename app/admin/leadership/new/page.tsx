@@ -1,10 +1,15 @@
+import { requireAdmin } from '@/lib/auth';
+import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import MemberForm from '../_components/MemberForm';
 
 export const metadata = { title: 'Add Member — KL SAC Admin' };
 
-export default function NewMemberPage() {
+export default async function NewMemberPage() {
+  const { error } = await requireAdmin();
+  if (error) redirect('/admin/login');
+
   return (
     <div>
       <Link href="/admin/leadership"

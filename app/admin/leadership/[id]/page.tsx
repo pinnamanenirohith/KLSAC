@@ -1,4 +1,5 @@
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
+import { requireAdmin } from '@/lib/auth';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import { supabase } from '@/lib/supabase-admin';
@@ -7,6 +8,9 @@ import MemberForm from '../_components/MemberForm';
 export const metadata = { title: 'Edit Member — KL SAC Admin' };
 
 export default async function EditMemberPage({ params }: { params: { id: string } }) {
+  const { error } = await requireAdmin();
+  if (error) redirect('/admin/login');
+
   const { data } = await supabase.from('council_members').select('*').eq('id', params.id).single();
   if (!data) notFound();
 

@@ -1,10 +1,15 @@
+import { requireAdmin } from '@/lib/auth';
+import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import ClubForm from '../_components/ClubForm';
 
 export const metadata = { title: 'New Club — KL SAC Admin' };
 
-export default function NewClubPage() {
+export default async function NewClubPage() {
+  const { error } = await requireAdmin();
+  if (error) redirect('/admin/login');
+
   return (
     <div>
       <Link href="/admin/clubs"
