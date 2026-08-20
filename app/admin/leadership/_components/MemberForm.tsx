@@ -174,6 +174,7 @@ export default function MemberForm({ initial, mode }: Props) {
       </Field>
 
       <Field label="Photo">
+        <p className="text-xs mb-1" style={{ color: '#A1A1AA' }}>400 × 400 px · Square · Professional headshot, face centred</p>
         <div className="flex flex-col gap-2">
           {form.photo && (
             <img src={form.photo} alt="preview"

@@ -183,7 +183,10 @@ export default function DomainForm({ domain }: { domain: DomainRow }) {
 
       {/* Cover Photo */}
       <div className="rounded-2xl border p-6 space-y-4" style={{ background: '#fff', borderColor: '#E4E4E7' }}>
-        <h2 className="font-black text-base" style={{ color: '#0D0D0D' }}>Cover Photo</h2>
+        <div>
+          <h2 className="font-black text-base" style={{ color: '#0D0D0D' }}>Cover Photo</h2>
+          <p className="text-xs mt-0.5" style={{ color: '#A1A1AA' }}>1920 × 600 px · 16:5 ratio · Wide banner image</p>
+        </div>
         {coverUrl ? (
           <div className="relative rounded-xl overflow-hidden" style={{ aspectRatio: '16/5' }}>
             <img src={coverUrl} alt="Cover" className="w-full h-full object-cover" />
@@ -210,7 +213,10 @@ export default function DomainForm({ domain }: { domain: DomainRow }) {
 
       {/* Gallery */}
       <div className="rounded-2xl border p-6 space-y-4" style={{ background: '#fff', borderColor: '#E4E4E7' }}>
-        <h2 className="font-black text-base" style={{ color: '#0D0D0D' }}>Photo Gallery</h2>
+        <div>
+          <h2 className="font-black text-base" style={{ color: '#0D0D0D' }}>Photo Gallery</h2>
+          <p className="text-xs mt-0.5" style={{ color: '#A1A1AA' }}>800 × 600 px · 4:3 ratio · Domain event / activity photos</p>
+        </div>
         <div className="grid grid-cols-3 gap-3">
           {gallery.map((src, i) => (
             <div key={i} className="relative rounded-xl overflow-hidden" style={{ aspectRatio: '4/3' }}>

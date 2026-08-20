@@ -123,6 +123,7 @@ export default function NewsForm({ initial, mode }: Props) {
 
       {/* Photo */}
       <Field label="Cover photo">
+        <p className="text-xs mb-1" style={{ color: '#A1A1AA' }}>1200 × 630 px · 16:9 ratio · Article/event cover image</p>
         <div className="flex flex-col gap-2">
           {form.photo_url && (
             <img src={form.photo_url} alt="preview"

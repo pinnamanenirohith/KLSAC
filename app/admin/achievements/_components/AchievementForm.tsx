@@ -115,7 +115,7 @@ export default function AchievementForm({ achievement }: Props) {
 
       <Field label="Presenting Organisation" k="organization" hint="Who awarded or organised this — competition body, company, institution" />
       <Field label="Description" k="description" hint="2–4 sentences about the achievement and its significance" textarea />
-      <Field label="Photo URL" k="photo" hint="Optional — paste a URL or leave blank" />
+      <Field label="Photo URL" k="photo" hint="Optional · 800 × 600 px or 1:1 square · Paste a URL or leave blank" />
 
       {!isNew && (
         <div>

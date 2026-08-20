@@ -182,6 +182,7 @@ export default function ClubForm({ initial, mode }: Props) {
 
       {/* Logo */}
       <Field label="Logo">
+        <p className="text-xs mb-1" style={{ color: '#A1A1AA' }}>200 × 200 px · Square · PNG with transparent background preferred</p>
         <div className="flex flex-col gap-2">
           {form.logo_url && (
             <img src={form.logo_url} alt="logo preview"
@@ -201,6 +202,7 @@ export default function ClubForm({ initial, mode }: Props) {
 
       {/* Cover photo */}
       <Field label="Cover Photo (banner shown on club page)">
+        <p className="text-xs mb-1" style={{ color: '#A1A1AA' }}>1920 × 600 px · 16:5 ratio · Landscape, wide banner</p>
         <div className="flex flex-col gap-2">
           {form.cover_url && (
             <div className="relative rounded-xl overflow-hidden" style={{ aspectRatio: '16/5' }}>
@@ -226,6 +228,7 @@ export default function ClubForm({ initial, mode }: Props) {
 
       {/* Gallery */}
       <Field label="Gallery Photos (shown on club page)">
+        <p className="text-xs mb-1" style={{ color: '#A1A1AA' }}>800 × 600 px · 4:3 ratio · Landscape event/activity photos</p>
         <div className="flex flex-col gap-3">
           {form.gallery.length > 0 && (
             <div className="grid grid-cols-3 gap-2">
