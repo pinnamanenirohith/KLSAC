@@ -34,8 +34,6 @@ export default function StoryForm({ initial, mode }: Props) {
     body:         initial?.body         ?? '',
     photo:        initial?.photo        ?? '',
     tags:         (initial?.tags ?? []).join(', '),
-    featured:     initial?.featured     ?? false,
-    sort_order:   initial?.sort_order   ?? 0,
   });
 
   function set(k: string, v: any) { setForm(f => ({ ...f, [k]: v })); }
@@ -67,9 +65,8 @@ export default function StoryForm({ initial, mode }: Props) {
     try {
       const payload = {
         ...form,
-        slug:       form.slug || slugify(form.title),
-        tags:       form.tags.split(',').map((t: string) => t.trim()).filter(Boolean),
-        sort_order: Number(form.sort_order),
+        slug: form.slug || slugify(form.title),
+        tags: form.tags.split(',').map((t: string) => t.trim()).filter(Boolean),
       };
       const res = await fetch('/api/admin/stories', {
         method: mode === 'create' ? 'POST' : 'PUT',
@@ -96,18 +93,11 @@ export default function StoryForm({ initial, mode }: Props) {
                className={inp} style={sty} />
       </Field>
 
-      <div className="grid grid-cols-2 gap-4">
-        <Field label="Slug (URL) *">
-          <input required value={form.slug}
-                 onChange={e => set('slug', slugify(e.target.value))}
-                 className={inp} style={sty} placeholder="auto-generated" />
-        </Field>
-        <Field label="Sort Order">
-          <input type="number" value={form.sort_order}
-                 onChange={e => set('sort_order', e.target.value)}
-                 className={inp} style={sty} />
-        </Field>
-      </div>
+      <Field label="Slug (URL) *">
+        <input required value={form.slug}
+               onChange={e => set('slug', slugify(e.target.value))}
+               className={inp} style={sty} placeholder="auto-generated" />
+      </Field>
 
       <div className="grid grid-cols-2 gap-4">
         <Field label="Student Name *">
@@ -169,15 +159,6 @@ export default function StoryForm({ initial, mode }: Props) {
                onChange={e => set('tags', e.target.value)}
                className={inp} style={sty} placeholder="e.g. Coding, Hackathon, TEC" />
       </Field>
-
-      <div className="flex items-center gap-3">
-        <input type="checkbox" id="featured" checked={form.featured}
-               onChange={e => set('featured', e.target.checked)}
-               className="w-4 h-4 rounded accent-red-800" />
-        <label htmlFor="featured" className="text-sm font-bold" style={{ color: '#0D0D0D' }}>
-          Featured story (shows first on homepage and stories page)
-        </label>
-      </div>
 
       <button type="submit" disabled={saving}
               className="flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-bold text-sm hover:opacity-90 disabled:opacity-50 w-fit"

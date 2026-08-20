@@ -26,7 +26,7 @@ const JOURNEY_STEPS = [
 export default async function HomePage() {
   const [events, storiesRes, settingsRes, newsRes, domainsRes, clubsRes, statsRes] = await Promise.all([
     getHomepageEvents(4),
-    supabase.from('stories').select('slug, title, student_name, student_year, club_name, domain_code, excerpt, photo, featured, sort_order').order('sort_order', { ascending: true }).limit(3),
+    supabase.from('stories').select('slug, title, student_name, student_year, club_name, domain_code, excerpt, photo, homepage_order').gt('homepage_order', 0).order('homepage_order', { ascending: true }),
     supabase.from('site_settings').select('key, value'),
     supabase.from('news_articles').select('slug, title, excerpt, photo_url, category, date').gt('homepage_order', 0).order('homepage_order', { ascending: true }).limit(3),
     supabase.from('domains').select('slug, code, name, tagline, color, accent_bg').order('sort_order', { ascending: true }),
@@ -40,8 +40,8 @@ export default async function HomePage() {
   const settingsMap: Record<string, string> = {};
   (settingsRes.data ?? []).forEach((s: any) => { if (s.value) settingsMap[s.key] = s.value; });
   const heroVideoUrl = settingsMap['hero_video_url'] || '/hero.mp4';
-  const featuredStory = stories.find(s => s.featured) ?? stories[0] ?? null;
-  const sideStories   = stories.filter(s => s.slug !== featuredStory?.slug).slice(0, 2);
+  const featuredStory = stories.find(s => s.homepage_order === 1) ?? null;
+  const sideStories   = stories.filter(s => (s.homepage_order ?? 0) > 1).slice(0, 2);
 
   const clubCountByDomain: Record<string, number> = {};
   (clubsRes.data ?? []).forEach((c: any) => {
