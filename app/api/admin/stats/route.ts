@@ -13,10 +13,13 @@ export async function PUT(req: NextRequest) {
   if (error) return NextResponse.json({ error }, { status: 401 });
 
   const LABELS: Record<string, { label: string; suffix: string }> = {
-    students:   { label: 'Student Members',   suffix: '+' },
-    activities: { label: 'Annual Activities', suffix: '+' },
-    clubs:      { label: 'Active Clubs',      suffix: ''  },
-    achievements: { label: 'Achievements',    suffix: '+' },
+    students:            { label: 'Student Members',               suffix: '+' },
+    activities:          { label: 'Annual Activities',             suffix: '+' },
+    clubs:               { label: 'Active Clubs',                  suffix: ''  },
+    achievements:        { label: 'Achievements',                  suffix: '+' },
+    ach_national:        { label: 'National Achievements',         suffix: '+' },
+    ach_state:           { label: 'State Achievements',            suffix: '+' },
+    ach_university:      { label: 'University Achievements',       suffix: '+' },
   };
   const updates: { key: string; value: number }[] = await req.json();
   for (const u of updates) {

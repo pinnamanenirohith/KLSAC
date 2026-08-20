@@ -36,10 +36,6 @@ export default async function HomePage() {
   ]);
 
   const achievements = achievementsRes.data ?? [];
-  const achByLevel = achievements.reduce((acc: Record<string, number>, a: any) => {
-    acc[a.level] = (acc[a.level] ?? 0) + 1;
-    return acc;
-  }, {});
 
   const stories = storiesRes.data ?? [];
   const newsArticles = newsRes.data ?? [];
@@ -524,18 +520,26 @@ export default async function HomePage() {
           </FadeIn>
 
           <FadeIn>
-            {achievements.length === 0 ? (
-              <p className="text-sm" style={{ color: 'rgba(255,255,255,0.3)' }}>
-                No achievements added yet. Add them from Admin → Achievements.
-              </p>
-            ) : (
-              <div className="flex flex-col gap-3">
-                {/* Level summary counts */}
-                {(['International', 'National', 'State', 'University'] as const)
-                  .filter(lvl => achByLevel[lvl] > 0)
-                  .map(lvl => {
-                    const opacity = lvl === 'International' || lvl === 'National'
-                      ? '1' : lvl === 'State' ? '0.7' : '0.45';
+            {(() => {
+              const levelStats = (['National', 'State', 'University'] as const)
+                .map(lvl => ({ lvl, count: sacStatsMap['ach_' + lvl.toLowerCase()] ?? 0 }))
+                .filter(({ count }) => count > 0);
+              const hasStats = levelStats.length > 0;
+              const hasAchievements = achievements.length > 0;
+
+              if (!hasStats && !hasAchievements) {
+                return (
+                  <p className="text-sm" style={{ color: 'rgba(255,255,255,0.3)' }}>
+                    No achievements added yet. Add them from Admin → Achievements.
+                  </p>
+                );
+              }
+
+              return (
+                <div className="flex flex-col gap-3">
+                  {/* Level summary counts from manually-entered stats */}
+                  {levelStats.map(({ lvl, count }) => {
+                    const opacity = lvl === 'National' ? '1' : lvl === 'State' ? '0.7' : '0.45';
                     return (
                       <div key={lvl} className="flex items-center gap-3 text-sm"
                            style={{ color: `rgba(255,255,255,${opacity})` }}>
@@ -543,44 +547,47 @@ export default async function HomePage() {
                               style={{ background: 'rgba(255,255,255,0.08)', color: `rgba(255,255,255,${opacity})` }}>
                           {lvl}
                         </span>
-                        <span className="font-bold">{achByLevel[lvl]}</span>
+                        <span className="font-bold">{count}</span>
                         <span style={{ color: 'rgba(255,255,255,0.25)' }}>
-                          {achByLevel[lvl] === 1 ? 'achievement' : 'achievements'}
+                          {count === 1 ? 'achievement' : 'achievements'}
                         </span>
                       </div>
                     );
                   })}
 
-                {/* Achievement list */}
-                <div className="mt-4 rounded-2xl overflow-hidden"
-                     style={{ border: '1px solid rgba(255,255,255,0.06)' }}>
-                  {achievements.map((ach: any, i: number) => {
-                    const isTop = ach.level === 'International' || ach.level === 'National';
-                    return (
-                      <div key={ach.id}
-                           className="flex items-center gap-4 px-5 py-4"
-                           style={{ borderBottom: i < achievements.length - 1 ? '1px solid rgba(255,255,255,0.04)' : 'none',
-                                    background: '#111118' }}>
-                        <span className="text-[10px] font-black tracking-widest uppercase px-2 py-0.5 rounded shrink-0"
-                              style={{
-                                background: isTop ? 'rgba(139,0,0,0.3)' : 'rgba(255,255,255,0.06)',
-                                color:      isTop ? '#ff6b6b'            : 'rgba(255,255,255,0.4)',
-                              }}>
-                          {ach.level}
-                        </span>
-                        <p className="flex-1 text-sm font-semibold truncate"
-                           style={{ color: isTop ? '#fff' : 'rgba(255,255,255,0.6)' }}>
-                          {ach.title}
-                        </p>
-                        <span className="text-xs shrink-0" style={{ color: 'rgba(255,255,255,0.25)' }}>
-                          {ach.club_name} · {ach.year}
-                        </span>
-                      </div>
-                    );
-                  })}
+                  {/* Achievement list */}
+                  {hasAchievements && (
+                    <div className="mt-4 rounded-2xl overflow-hidden"
+                         style={{ border: '1px solid rgba(255,255,255,0.06)' }}>
+                      {achievements.map((ach: any, i: number) => {
+                        const isTop = ach.level === 'International' || ach.level === 'National';
+                        return (
+                          <div key={ach.id}
+                               className="flex items-center gap-4 px-5 py-4"
+                               style={{ borderBottom: i < achievements.length - 1 ? '1px solid rgba(255,255,255,0.04)' : 'none',
+                                        background: '#111118' }}>
+                            <span className="text-[10px] font-black tracking-widest uppercase px-2 py-0.5 rounded shrink-0"
+                                  style={{
+                                    background: isTop ? 'rgba(139,0,0,0.3)' : 'rgba(255,255,255,0.06)',
+                                    color:      isTop ? '#ff6b6b'            : 'rgba(255,255,255,0.4)',
+                                  }}>
+                              {ach.level}
+                            </span>
+                            <p className="flex-1 text-sm font-semibold truncate"
+                               style={{ color: isTop ? '#fff' : 'rgba(255,255,255,0.6)' }}>
+                              {ach.title}
+                            </p>
+                            <span className="text-xs shrink-0" style={{ color: 'rgba(255,255,255,0.25)' }}>
+                              {ach.club_name} · {ach.year}
+                            </span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
                 </div>
-              </div>
-            )}
+              );
+            })()}
           </FadeIn>
         </div>
       </section>
