@@ -309,18 +309,19 @@ export default async function HomePage() {
             <FadeIn className="lg:col-span-3">
               <Link href={`/stories/${STUDENT_STORIES[0].slug}`} className="group block h-full">
                 <div
-                  className="rounded-2xl overflow-hidden h-72 lg:h-80 flex items-end mb-5 relative"
-                  style={{ background: 'linear-gradient(135deg, #1a0005 0%, #5b0000 100%)' }}>
+                  className="rounded-2xl overflow-hidden mb-5 relative"
+                  style={{ background: 'linear-gradient(135deg, #1a0005 0%, #5b0000 100%)', aspectRatio: '16/7' }}>
                   {/* Photo */}
                   {STUDENT_STORIES[0].photo && (
                     <img
                       src={STUDENT_STORIES[0].photo}
                       alt={STUDENT_STORIES[0].title}
-                      className="absolute inset-0 w-full h-full object-cover"
+                      className="absolute inset-0 w-full h-full"
+                      style={{ objectFit: 'cover', objectPosition: 'center center' }}
                     />
                   )}
                   {/* Story meta overlay */}
-                  <div className="relative p-6 w-full"
+                  <div className="absolute bottom-0 left-0 right-0 p-6"
                        style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 100%)' }}>
                     <span
                       className="text-[10px] font-black tracking-widest uppercase mb-2 inline-block"
@@ -348,17 +349,18 @@ export default async function HomePage() {
                 <FadeIn key={story.slug} delay={0.1 + i * 0.1} className="flex-1">
                   <Link href={`/stories/${story.slug}`} className="group block h-full">
                     <div
-                      className="rounded-xl overflow-hidden h-40 flex items-end mb-4 relative"
-                      style={{ background: i === 0 ? 'linear-gradient(135deg, #2D0000 0%, #8B0000 100%)' : 'linear-gradient(135deg, #1a0000 0%, #7C0000 100%)' }}>
+                      className="rounded-xl overflow-hidden mb-4 relative"
+                      style={{ background: i === 0 ? 'linear-gradient(135deg, #2D0000 0%, #8B0000 100%)' : 'linear-gradient(135deg, #1a0000 0%, #7C0000 100%)', aspectRatio: '16/9' }}>
                       {story.photo && (
                         <img
                           src={story.photo}
                           alt={story.title}
-                          className="absolute inset-0 w-full h-full object-cover"
+                          className="absolute inset-0 w-full h-full"
+                          style={{ objectFit: 'cover', objectPosition: 'center center' }}
                           loading="lazy"
                         />
                       )}
-                      <div className="relative p-4 w-full"
+                      <div className="absolute bottom-0 left-0 right-0 p-4"
                            style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 100%)' }}>
                         <span className="text-[9px] font-black tracking-widest uppercase"
                               style={{ color: 'rgba(255,255,255,0.65)' }}>
