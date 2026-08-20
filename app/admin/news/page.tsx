@@ -2,13 +2,14 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
-import { Plus, Trash2, Pencil, Image as ImageIcon, ArrowUp, ArrowDown, AlertCircle } from 'lucide-react';
+import { Plus, Trash2, Pencil, Image as ImageIcon, ArrowUp, ArrowDown, AlertCircle, Star, Home } from 'lucide-react';
 
 export default function NewsAdminPage() {
-  const [articles, setArticles] = useState<any[]>([]);
-  const [loading, setLoading]   = useState(true);
+  const [articles, setArticles]         = useState<any[]>([]);
+  const [loading, setLoading]           = useState(true);
   const [needsMigration, setNeedsMigration] = useState(false);
-  const [reordering, setReordering] = useState(false);
+  const [reordering, setReordering]     = useState(false);
+  const [updating, setUpdating]         = useState<string | null>(null);
 
   async function load() {
     const r = await fetch('/api/admin/news');
@@ -44,14 +45,53 @@ export default function NewsAdminPage() {
         if (d.needsMigration) setNeedsMigration(true);
         throw new Error(d.error);
       }
-      toast.success('Order saved');
+      toast.success('News page order saved');
     } catch (err: any) {
       toast.error(err.message);
-      load(); // revert on failure
+      load();
     } finally {
       setReordering(false);
     }
   }
+
+  async function patch(slug: string, fields: Record<string, any>) {
+    setUpdating(slug);
+    try {
+      const res = await fetch('/api/admin/news', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ slug, ...fields }),
+      });
+      const d = await res.json();
+      if (!res.ok) throw new Error(d.error);
+      await load();
+    } catch (err: any) {
+      toast.error(err.message);
+    } finally {
+      setUpdating(null);
+    }
+  }
+
+  function cycleHomepage(slug: string, current: number) {
+    const next = current >= 3 ? 0 : current + 1;
+    const label = next === 0 ? 'Removed from homepage' : `Set as homepage position ${next}`;
+    patch(slug, { homepage_order: next }).then(() => toast.success(label));
+  }
+
+  function toggleFeatured(slug: string, current: boolean) {
+    const next = !current;
+    patch(slug, { featured: next }).then(() =>
+      toast.success(next ? 'Set as news page highlight' : 'Removed as news page highlight')
+    );
+  }
+
+  const HP_LABEL: Record<number, string> = { 0: '—', 1: '1st', 2: '2nd', 3: '3rd' };
+  const HP_COLOR: Record<number, { bg: string; color: string }> = {
+    0: { bg: '#F4F4F6', color: '#A1A1AA' },
+    1: { bg: '#8B0000', color: '#fff'     },
+    2: { bg: '#B22222', color: '#fff'     },
+    3: { bg: '#CD5C5C', color: '#fff'     },
+  };
 
   return (
     <div>
@@ -67,6 +107,19 @@ export default function NewsAdminPage() {
         </Link>
       </div>
 
+      {/* Legend */}
+      <div className="mb-5 flex flex-wrap gap-4 text-xs" style={{ color: '#71717A' }}>
+        <span className="flex items-center gap-1.5">
+          <ArrowUp size={12} /><ArrowDown size={12} /> <strong>↑↓ arrows</strong> — order on the /news page
+        </span>
+        <span className="flex items-center gap-1.5">
+          <Home size={12} /> <strong>HP badge</strong> — homepage position (click to cycle Off / 1st / 2nd / 3rd)
+        </span>
+        <span className="flex items-center gap-1.5">
+          <Star size={12} /> <strong>★ star</strong> — big highlighted article on /news page (only one at a time)
+        </span>
+      </div>
+
       {/* Migration banner */}
       {needsMigration && (
         <div className="mb-6 rounded-2xl border p-4 flex gap-3"
@@ -77,7 +130,6 @@ export default function NewsAdminPage() {
             <code className="text-xs block mt-1 p-2 rounded font-mono" style={{ background: '#fef3c7', color: '#78350f' }}>
               ALTER TABLE news_articles ADD COLUMN IF NOT EXISTS sort_order integer DEFAULT 0;
             </code>
-            <p className="text-xs mt-1" style={{ color: '#a16207' }}>Go to Supabase → SQL Editor → paste and run. Until then articles are ordered by date.</p>
           </div>
         </div>
       )}
@@ -91,65 +143,83 @@ export default function NewsAdminPage() {
         </div>
       ) : (
         <div className="rounded-2xl border overflow-hidden" style={{ background: '#fff', borderColor: '#E4E4E7' }}>
-          {articles.map((a, i) => (
-            <div key={a.slug}
-                 className="flex items-center gap-3 px-4 py-3.5"
-                 style={{ borderBottom: i < articles.length - 1 ? '1px solid #F0F0F0' : 'none' }}>
+          {articles.map((a, i) => {
+            const hp = a.homepage_order ?? 0;
+            const hpStyle = HP_COLOR[hp] ?? HP_COLOR[0];
+            const isUpdating = updating === a.slug;
+            return (
+              <div key={a.slug}
+                   className="flex items-center gap-3 px-4 py-3.5"
+                   style={{ borderBottom: i < articles.length - 1 ? '1px solid #F0F0F0' : 'none',
+                            opacity: isUpdating ? 0.6 : 1 }}>
 
-              {/* Order controls */}
-              <div className="flex flex-col gap-0.5 shrink-0">
-                <button onClick={() => move(i, 'up')} disabled={i === 0 || reordering}
-                        className="p-1 rounded hover:bg-gray-100 disabled:opacity-20 transition-opacity">
-                  <ArrowUp size={12} style={{ color: '#71717A' }} />
-                </button>
-                <button onClick={() => move(i, 'down')} disabled={i === articles.length - 1 || reordering}
-                        className="p-1 rounded hover:bg-gray-100 disabled:opacity-20 transition-opacity">
-                  <ArrowDown size={12} style={{ color: '#71717A' }} />
-                </button>
-              </div>
-
-              {/* Thumbnail */}
-              <div className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0"
-                   style={{ background: a.photo_url ? '#fff' : '#F7F7F8', overflow: 'hidden' }}>
-                {a.photo_url
-                  ? <img src={a.photo_url} alt="" className="w-full h-full object-cover" />
-                  : <ImageIcon size={16} style={{ color: '#A1A1AA' }} />}
-              </div>
-
-              {/* Info */}
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 mb-0.5">
-                  <span className="font-bold text-sm truncate" style={{ color: '#0D0D0D' }}>{a.title}</span>
-                  {a.featured && (
-                    <span className="text-[10px] font-black px-1.5 py-0.5 rounded-full shrink-0"
-                          style={{ background: '#fff0f0', color: '#8B0000' }}>Featured</span>
-                  )}
+                {/* News-page order arrows */}
+                <div className="flex flex-col gap-0.5 shrink-0">
+                  <button onClick={() => move(i, 'up')} disabled={i === 0 || reordering || !!updating}
+                          className="p-1 rounded hover:bg-gray-100 disabled:opacity-20 transition-opacity"
+                          title="Move up in /news page">
+                    <ArrowUp size={12} style={{ color: '#71717A' }} />
+                  </button>
+                  <button onClick={() => move(i, 'down')} disabled={i === articles.length - 1 || reordering || !!updating}
+                          className="p-1 rounded hover:bg-gray-100 disabled:opacity-20 transition-opacity"
+                          title="Move down in /news page">
+                    <ArrowDown size={12} style={{ color: '#71717A' }} />
+                  </button>
                 </div>
-                <span className="text-xs" style={{ color: '#A1A1AA' }}>
-                  {a.category} · {new Date(a.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
-                </span>
-              </div>
 
-              {/* Actions */}
-              <div className="flex items-center gap-1 shrink-0">
-                <Link href={`/admin/news/${a.slug}`}
-                      className="p-2 rounded-lg transition-colors hover:bg-gray-100">
-                  <Pencil size={14} style={{ color: '#71717A' }} />
-                </Link>
-                <button onClick={() => del(a.slug, a.title)}
-                        className="p-2 rounded-lg transition-colors hover:bg-red-50">
-                  <Trash2 size={14} style={{ color: '#8B0000' }} />
+                {/* Thumbnail */}
+                <div className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0"
+                     style={{ background: a.photo_url ? '#fff' : '#F7F7F8', overflow: 'hidden' }}>
+                  {a.photo_url
+                    ? <img src={a.photo_url} alt="" className="w-full h-full object-cover" />
+                    : <ImageIcon size={16} style={{ color: '#A1A1AA' }} />}
+                </div>
+
+                {/* Info */}
+                <div className="flex-1 min-w-0">
+                  <span className="font-bold text-sm truncate block" style={{ color: '#0D0D0D' }}>{a.title}</span>
+                  <span className="text-xs" style={{ color: '#A1A1AA' }}>
+                    {a.category} · {new Date(a.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+                  </span>
+                </div>
+
+                {/* Homepage position badge */}
+                <button
+                  onClick={() => cycleHomepage(a.slug, hp)}
+                  disabled={isUpdating}
+                  title={`Homepage position: ${HP_LABEL[hp]}. Click to change.`}
+                  className="flex items-center gap-1 px-2 py-1 rounded-lg text-[10px] font-black shrink-0 transition-all hover:opacity-80"
+                  style={{ background: hpStyle.bg, color: hpStyle.color }}>
+                  <Home size={10} />
+                  {HP_LABEL[hp]}
                 </button>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
 
-      {!needsMigration && articles.length > 0 && (
-        <p className="text-xs mt-3" style={{ color: '#A1A1AA' }}>
-          Use ↑ ↓ arrows to set the display order. Featured articles always appear first on the homepage.
-        </p>
+                {/* News-page featured star */}
+                <button
+                  onClick={() => toggleFeatured(a.slug, a.featured)}
+                  disabled={isUpdating}
+                  title={a.featured ? 'Big highlight on /news page (click to remove)' : 'Set as big highlight on /news page'}
+                  className="p-1.5 rounded-lg transition-colors hover:bg-yellow-50 shrink-0">
+                  <Star size={15}
+                    fill={a.featured ? '#f59e0b' : 'none'}
+                    style={{ color: a.featured ? '#f59e0b' : '#D1D1D6' }} />
+                </button>
+
+                {/* Edit + Delete */}
+                <div className="flex items-center gap-1 shrink-0">
+                  <Link href={`/admin/news/${a.slug}`}
+                        className="p-2 rounded-lg transition-colors hover:bg-gray-100">
+                    <Pencil size={14} style={{ color: '#71717A' }} />
+                  </Link>
+                  <button onClick={() => del(a.slug, a.title)}
+                          className="p-2 rounded-lg transition-colors hover:bg-red-50">
+                    <Trash2 size={14} style={{ color: '#8B0000' }} />
+                  </button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
       )}
     </div>
   );

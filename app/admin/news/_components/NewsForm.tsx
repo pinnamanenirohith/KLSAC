@@ -105,7 +105,7 @@ export default function NewsForm({ initial, mode }: Props) {
       <label className="flex items-center gap-2 cursor-pointer select-none">
         <input type="checkbox" checked={form.featured} onChange={e => set('featured', e.target.checked)}
                className="w-4 h-4 accent-red-800" />
-        <span className="text-sm font-semibold" style={{ color: '#0D0D0D' }}>Feature on homepage</span>
+        <span className="text-sm font-semibold" style={{ color: '#0D0D0D' }}>Highlight on news page (big article at top)</span>
       </label>
 
       {/* Excerpt */}

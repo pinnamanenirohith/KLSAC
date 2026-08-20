@@ -14,11 +14,13 @@ export default async function NewsPage() {
   const { data } = await supabase
     .from('news_articles')
     .select('*')
+    .order('sort_order', { ascending: true })
     .order('date', { ascending: false });
 
   const articles = data ?? [];
-  const featured = articles[0];
-  const rest = articles.slice(1);
+  // The starred article is the big highlight; fall back to first if none starred
+  const featured = articles.find(a => a.featured) ?? articles[0];
+  const rest = articles.filter(a => a.slug !== featured?.slug);
 
   return (
     <>

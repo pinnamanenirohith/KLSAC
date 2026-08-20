@@ -4,7 +4,7 @@ import { requireAdmin } from '@/lib/auth';
 import { supabase } from '@/lib/supabase-admin';
 
 export async function GET() {
-  // Try sort_order first (needs migration); fall back to date if column doesn't exist yet.
+  // Try sort_order first; fall back to date if column doesn't exist yet.
   let { data, error } = await supabase
     .from('news_articles')
     .select('*')
@@ -41,6 +41,22 @@ export async function PUT(req: NextRequest) {
   if (error) return NextResponse.json({ error }, { status: 401 });
 
   const { slug, ...rest } = await req.json();
+
+  // Enforce uniqueness: if setting homepage_order to 1/2/3, clear it from any other article.
+  if (rest.homepage_order && rest.homepage_order > 0) {
+    await supabase.from('news_articles')
+      .update({ homepage_order: 0 })
+      .eq('homepage_order', rest.homepage_order)
+      .neq('slug', slug);
+  }
+
+  // Enforce uniqueness: only one article can be the news-page highlight.
+  if (rest.featured === true) {
+    await supabase.from('news_articles')
+      .update({ featured: false })
+      .neq('slug', slug);
+  }
+
   const { error: e } = await supabase.from('news_articles')
     .update({ ...rest, updated_at: new Date().toISOString() }).eq('slug', slug);
   if (e) return NextResponse.json({ error: e.message }, { status: 400 });
@@ -56,8 +72,8 @@ export async function PATCH(req: NextRequest) {
   if (error) return NextResponse.json({ error }, { status: 401 });
 
   const { orderedSlugs } = await req.json() as { orderedSlugs: string[] };
-  const updates = orderedSlugs.map((slug, i) =>
-    supabase.from('news_articles').update({ sort_order: i }).eq('slug', slug)
+  const updates = orderedSlugs.map((s, i) =>
+    supabase.from('news_articles').update({ sort_order: i }).eq('slug', s)
   );
   const results = await Promise.all(updates);
   const failed = results.find(r => r.error);
