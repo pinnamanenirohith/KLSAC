@@ -4,8 +4,23 @@ import { requireAdmin } from '@/lib/auth';
 import { supabase } from '@/lib/supabase-admin';
 
 export async function GET() {
-  const { data } = await supabase.from('achievements').select('*').order('sort_order', { ascending: true }).order('year', { ascending: false });
-  return NextResponse.json({ success: true, data: data ?? [] });
+  let { data, error } = await supabase
+    .from('achievements')
+    .select('*')
+    .order('sort_order', { ascending: true })
+    .order('year', { ascending: false });
+
+  let needsMigration = false;
+  if (error) {
+    needsMigration = true;
+    const fallback = await supabase
+      .from('achievements')
+      .select('*')
+      .order('year', { ascending: false });
+    data = fallback.data;
+  }
+
+  return NextResponse.json({ success: true, data: data ?? [], needsMigration });
 }
 
 export async function POST(req: NextRequest) {
@@ -34,6 +49,25 @@ export async function PUT(req: NextRequest) {
   if (e) return NextResponse.json({ error: e.message }, { status: 400 });
 
   revalidatePath('/achievements');
+  revalidatePath('/');
+  return NextResponse.json({ success: true });
+}
+
+// Reorder: receives the full ordered list of ids, assigns sort_order 0..n
+export async function PATCH(req: NextRequest) {
+  const { error } = await requireAdmin();
+  if (error) return NextResponse.json({ error }, { status: 401 });
+
+  const { orderedIds } = await req.json() as { orderedIds: string[] };
+  const updates = orderedIds.map((id, i) =>
+    supabase.from('achievements').update({ sort_order: i }).eq('id', id)
+  );
+  const results = await Promise.all(updates);
+  const failed = results.find(r => r.error);
+  if (failed?.error) return NextResponse.json({ error: failed.error.message, needsMigration: true }, { status: 400 });
+
+  revalidatePath('/achievements');
+  revalidatePath('/');
   return NextResponse.json({ success: true });
 }
 
@@ -46,5 +80,6 @@ export async function DELETE(req: NextRequest) {
   if (e) return NextResponse.json({ error: e.message }, { status: 400 });
 
   revalidatePath('/achievements');
+  revalidatePath('/');
   return NextResponse.json({ success: true });
 }

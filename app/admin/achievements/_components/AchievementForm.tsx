@@ -7,13 +7,48 @@ import { Save } from 'lucide-react';
 const LEVELS = ['International', 'National', 'State', 'University'] as const;
 const DOMAIN_CODES = ['TEC', 'LCH', 'HWB', 'ESO', 'IIE'] as const;
 
-type Props = {
-  achievement?: any;
-};
+const inputCls = 'w-full px-4 py-2.5 rounded-xl border text-sm outline-none transition-all';
+const inputStyle = { borderColor: '#E4E4E7', background: '#F7F7F8' } as React.CSSProperties;
+const focusStyle = { borderColor: '#8B0000' } as React.CSSProperties;
+
+// Field must be defined outside AchievementForm — if defined inside, React
+// recreates a new component type on every state change, unmounting and
+// remounting the input each keystroke and losing focus.
+function Field({ label, hint, textarea, value, onChange }: {
+  label: string;
+  hint?: string;
+  textarea?: boolean;
+  value: string;
+  onChange: (v: string) => void;
+}) {
+  return (
+    <div>
+      <label className="block text-sm font-bold mb-0.5" style={{ color: '#0D0D0D' }}>{label}</label>
+      {hint && <p className="text-xs mb-1.5" style={{ color: '#A1A1AA' }}>{hint}</p>}
+      {textarea ? (
+        <textarea rows={4} value={value}
+          onChange={e => onChange(e.target.value)}
+          className={inputCls + ' resize-none'}
+          style={inputStyle}
+          onFocus={e => Object.assign(e.target.style, focusStyle)}
+          onBlur={e => Object.assign(e.target.style, inputStyle)} />
+      ) : (
+        <input type="text" value={value}
+          onChange={e => onChange(e.target.value)}
+          className={inputCls}
+          style={inputStyle}
+          onFocus={e => Object.assign(e.target.style, focusStyle)}
+          onBlur={e => Object.assign(e.target.style, inputStyle)} />
+      )}
+    </div>
+  );
+}
 
 function genId(title: string) {
   return 'ach-' + title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '').slice(0, 48) + '-' + Date.now().toString(36);
 }
+
+type Props = { achievement?: any };
 
 export default function AchievementForm({ achievement }: Props) {
   const isNew = !achievement;
@@ -30,7 +65,6 @@ export default function AchievementForm({ achievement }: Props) {
     year:         achievement?.year         ?? String(new Date().getFullYear()),
     description:  achievement?.description  ?? '',
     photo:        achievement?.photo        ?? '',
-    sort_order:   achievement?.sort_order   ?? 0,
   });
 
   const set = (k: string, v: any) => setForm(f => ({ ...f, [k]: v }));
@@ -39,10 +73,7 @@ export default function AchievementForm({ achievement }: Props) {
     if (!form.title.trim()) { toast.error('Title is required.'); return; }
     setSaving(true);
     try {
-      const payload = {
-        ...form,
-        id: form.id.trim() || genId(form.title),
-      };
+      const payload = { ...form, id: form.id.trim() || genId(form.title) };
       const res = await fetch('/api/admin/achievements', {
         method: isNew ? 'POST' : 'PUT',
         headers: { 'Content-Type': 'application/json' },
@@ -59,37 +90,10 @@ export default function AchievementForm({ achievement }: Props) {
     }
   }
 
-  const inputCls = 'w-full px-4 py-2.5 rounded-xl border text-sm outline-none transition-all';
-  const inputStyle = { borderColor: '#E4E4E7', background: '#F7F7F8' };
-  const focusStyle = { borderColor: '#8B0000' };
-
-  function Field({ label, k, hint, textarea }: { label: string; k: string; hint?: string; textarea?: boolean }) {
-    return (
-      <div>
-        <label className="block text-sm font-bold mb-0.5" style={{ color: '#0D0D0D' }}>{label}</label>
-        {hint && <p className="text-xs mb-1.5" style={{ color: '#A1A1AA' }}>{hint}</p>}
-        {textarea ? (
-          <textarea rows={4} value={(form as any)[k]}
-            onChange={e => set(k, e.target.value)}
-            className={inputCls + ' resize-none'}
-            style={inputStyle}
-            onFocus={e => Object.assign(e.target.style, focusStyle)}
-            onBlur={e => Object.assign(e.target.style, inputStyle)} />
-        ) : (
-          <input type="text" value={(form as any)[k]}
-            onChange={e => set(k, e.target.value)}
-            className={inputCls}
-            style={inputStyle}
-            onFocus={e => Object.assign(e.target.style, focusStyle)}
-            onBlur={e => Object.assign(e.target.style, inputStyle)} />
-        )}
-      </div>
-    );
-  }
-
   return (
     <div className="max-w-2xl flex flex-col gap-5">
-      <Field label="Title" k="title" hint="Full achievement title as it should appear on the page" />
+      <Field label="Title" hint="Full achievement title as it should appear on the page"
+             value={form.title} onChange={v => set('title', v)} />
 
       <div className="grid grid-cols-2 gap-4">
         <div>
@@ -109,22 +113,19 @@ export default function AchievementForm({ achievement }: Props) {
       </div>
 
       <div className="grid grid-cols-2 gap-4">
-        <Field label="Club / Team Name" k="club_name" />
-        <Field label="Year" k="year" />
+        <Field label="Club / Team Name" value={form.club_name} onChange={v => set('club_name', v)} />
+        <Field label="Year" value={form.year} onChange={v => set('year', v)} />
       </div>
 
-      <Field label="Presenting Organisation" k="organization" hint="Who awarded or organised this — competition body, company, institution" />
-      <Field label="Description" k="description" hint="2–4 sentences about the achievement and its significance" textarea />
-      <Field label="Photo URL" k="photo" hint="Optional · 800 × 600 px or 1:1 square · Paste a URL or leave blank" />
-
-      {!isNew && (
-        <div>
-          <label className="block text-sm font-bold mb-0.5" style={{ color: '#0D0D0D' }}>Sort Order</label>
-          <input type="number" value={form.sort_order}
-            onChange={e => set('sort_order', Number(e.target.value))}
-            className={inputCls} style={{ ...inputStyle, width: '100px' }} />
-        </div>
-      )}
+      <Field label="Presenting Organisation"
+             hint="Who awarded or organised this — competition body, company, institution"
+             value={form.organization} onChange={v => set('organization', v)} />
+      <Field label="Description"
+             hint="2–4 sentences about the achievement and its significance"
+             textarea value={form.description} onChange={v => set('description', v)} />
+      <Field label="Photo URL"
+             hint="Optional · Square or 4:3 · Paste a URL or leave blank"
+             value={form.photo} onChange={v => set('photo', v)} />
 
       <div className="flex gap-3 pt-2">
         <button onClick={save} disabled={saving}
