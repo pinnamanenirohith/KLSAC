@@ -1,5 +1,8 @@
-﻿import { ACHIEVEMENTS, type Achievement } from '@/lib/content/site-content';
+import { supabase } from '@/lib/supabase-admin';
 import { FadeIn } from '../_components/FadeIn';
+import { Trophy } from 'lucide-react';
+
+export const dynamic = 'force-dynamic';
 
 export const metadata = {
   title: 'Achievements',
@@ -17,7 +20,15 @@ const LEVEL_STYLES: Record<string, { bg: string; color: string }> = {
   University:    { bg: '#F4F4F5',            color: '#52525B' },
 };
 
-export default function AchievementsPage() {
+export default async function AchievementsPage() {
+  const { data } = await supabase
+    .from('achievements')
+    .select('*')
+    .order('sort_order', { ascending: true })
+    .order('year', { ascending: false });
+
+  const achievements = data ?? [];
+
   return (
     <>
       {/* ─── Hero ─────────────────────────────────────────────────────── */}
@@ -41,75 +52,71 @@ export default function AchievementsPage() {
       <section style={{ background: '#fff' }}>
         <div className="w-full px-6 sm:px-12 xl:px-20 py-20">
           <FadeIn>
-            <div style={{ borderTop: '1px solid #E4E4E7' }}>
-              {ACHIEVEMENTS.map((ach: Achievement, i) => {
-                const domainColor = DOMAIN_COLORS[ach.domainCode] ?? '#8B0000';
-                const levelStyle = LEVEL_STYLES[ach.level] ?? LEVEL_STYLES.University;
-                return (
-                  <div
-                    key={ach.id}
-                    className="flex flex-col sm:flex-row gap-6 sm:gap-8 py-8"
-                    style={{ borderBottom: '1px solid #E4E4E7', opacity: ach.title.startsWith('[PLACEHOLDER') ? 0.6 : 1 }}>
+            {achievements.length === 0 ? (
+              <div className="rounded-2xl border p-20 text-center" style={{ borderColor: '#E4E4E7' }}>
+                <Trophy size={36} className="mx-auto mb-4" style={{ color: '#D1D1D6' }} />
+                <p className="font-bold text-lg mb-1" style={{ color: '#0D0D0D' }}>No achievements published yet.</p>
+                <p className="text-sm" style={{ color: '#A1A1AA' }}>
+                  Check back soon — our students are always earning new milestones.
+                </p>
+              </div>
+            ) : (
+              <div style={{ borderTop: '1px solid #E4E4E7' }}>
+                {achievements.map((ach: any) => {
+                  const domainColor = DOMAIN_COLORS[ach.domain_code] ?? '#8B0000';
+                  const levelStyle  = LEVEL_STYLES[ach.level]        ?? LEVEL_STYLES.University;
+                  return (
+                    <div
+                      key={ach.id}
+                      className="flex flex-col sm:flex-row gap-6 sm:gap-8 py-8"
+                      style={{ borderBottom: '1px solid #E4E4E7' }}>
 
-                    {/* Photo */}
-                    {ach.photo && (
-                      <div className="sm:w-48 shrink-0">
-                        <div className="rounded-2xl overflow-hidden" style={{ aspectRatio: '4/3' }}>
-                          <img
-                            src={ach.photo}
-                            alt={ach.title}
-                            className="w-full h-full object-cover"
-                            loading="lazy"
-                          />
+                      {ach.photo ? (
+                        <div className="sm:w-48 shrink-0">
+                          <div className="rounded-2xl overflow-hidden" style={{ aspectRatio: '4/3' }}>
+                            <img src={ach.photo} alt={ach.title} className="w-full h-full object-cover" loading="lazy" />
+                          </div>
                         </div>
-                      </div>
-                    )}
-
-                    {/* Year (when no photo) */}
-                    {!ach.photo && (
-                      <div className="sm:w-16 shrink-0">
-                        <span className="font-black text-base" style={{ color: '#0D0D0D' }}>
-                          {ach.year}
-                        </span>
-                      </div>
-                    )}
-
-                    {/* Content */}
-                    <div className="flex-1 min-w-0">
-                      {ach.photo && (
-                        <p className="font-black text-xs mb-2" style={{ color: '#A1A1AA' }}>{ach.year}</p>
+                      ) : (
+                        <div className="sm:w-16 shrink-0">
+                          <span className="font-black text-base" style={{ color: '#0D0D0D' }}>{ach.year}</span>
+                        </div>
                       )}
-                      <div className="flex flex-wrap items-center gap-2 mb-2">
-                        <span
-                          className="text-[10px] font-black uppercase tracking-widest px-2.5 py-0.5 rounded-full"
-                          style={{ background: levelStyle.bg, color: levelStyle.color }}>
-                          {ach.level}
-                        </span>
-                        <span className="text-[10px] font-black uppercase tracking-wider" style={{ color: domainColor }}>
-                          {ach.domainCode} · {ach.clubName}
-                        </span>
-                      </div>
-                      <h3 className="font-bold text-base sm:text-lg leading-snug mb-2" style={{ color: '#0D0D0D' }}>
-                        {ach.title}
-                      </h3>
-                      <p className="text-sm leading-relaxed" style={{ color: '#71717A' }}>
-                        {ach.description}
-                      </p>
-                      {ach.organization && (
-                        <p className="text-xs mt-2 font-semibold" style={{ color: '#A1A1AA' }}>
-                          {ach.organization}
+
+                      <div className="flex-1 min-w-0">
+                        {ach.photo && (
+                          <p className="font-black text-xs mb-2" style={{ color: '#A1A1AA' }}>{ach.year}</p>
+                        )}
+                        <div className="flex flex-wrap items-center gap-2 mb-2">
+                          <span
+                            className="text-[10px] font-black uppercase tracking-widest px-2.5 py-0.5 rounded-full"
+                            style={{ background: levelStyle.bg, color: levelStyle.color }}>
+                            {ach.level}
+                          </span>
+                          <span className="text-[10px] font-black uppercase tracking-wider" style={{ color: domainColor }}>
+                            {ach.domain_code} · {ach.club_name}
+                          </span>
+                        </div>
+                        <h3 className="font-bold text-base sm:text-lg leading-snug mb-2" style={{ color: '#0D0D0D' }}>
+                          {ach.title}
+                        </h3>
+                        <p className="text-sm leading-relaxed" style={{ color: '#71717A' }}>
+                          {ach.description}
                         </p>
-                      )}
+                        {ach.organization && (
+                          <p className="text-xs mt-2 font-semibold" style={{ color: '#A1A1AA' }}>
+                            {ach.organization}
+                          </p>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                );
-              })}
-            </div>
+                  );
+                })}
+              </div>
+            )}
           </FadeIn>
-
         </div>
       </section>
     </>
   );
 }
-
