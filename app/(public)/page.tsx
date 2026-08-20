@@ -3,7 +3,7 @@ import { ArrowRight, ArrowUpRight, ChevronDown } from 'lucide-react';
 import { DOMAINS } from '@/lib/content/domains';
 import { DEMO_CLUBS, DOMAIN_META } from '@/lib/demo-data';
 import { FadeIn } from './_components/FadeIn';
-import { getHomepageEvents, getHomepageStats } from '@/lib/data/homepage';
+import { getHomepageEvents } from '@/lib/data/homepage';
 import { supabase } from '@/lib/supabase-admin';
 
 export const dynamic = 'force-dynamic';
@@ -24,14 +24,14 @@ const JOURNEY_STEPS = [
 ];
 
 export default async function HomePage() {
-  const [events, stats, storiesRes, settingsRes, newsRes, domainsRes, clubsRes] = await Promise.all([
+  const [events, storiesRes, settingsRes, newsRes, domainsRes, clubsRes, statsRes] = await Promise.all([
     getHomepageEvents(4),
-    getHomepageStats(),
     supabase.from('stories').select('slug, title, student_name, student_year, club_name, domain_code, excerpt, photo, featured, sort_order').order('sort_order', { ascending: true }).limit(3),
     supabase.from('site_settings').select('key, value'),
     supabase.from('news_articles').select('slug, title, excerpt, photo, category, date').order('date', { ascending: false }).limit(3),
     supabase.from('domains').select('slug, code, name, tagline, color, accent_bg').order('sort_order', { ascending: true }),
     supabase.from('clubs').select('domain_code'),
+    supabase.from('sac_stats').select('key, value'),
   ]);
 
   const stories = storiesRes.data ?? [];
@@ -48,6 +48,11 @@ export default async function HomePage() {
     clubCountByDomain[c.domain_code] = (clubCountByDomain[c.domain_code] ?? 0) + 1;
   });
   const totalClubs = Object.values(clubCountByDomain).reduce((a, b) => a + b, 0);
+
+  const sacStatsMap: Record<string, number> = {};
+  (statsRes.data ?? []).forEach((s: any) => { sacStatsMap[s.key] = s.value; });
+  const statStudents   = sacStatsMap['students']   ?? 0;
+  const statActivities = sacStatsMap['activities'] ?? 0;
 
   const today   = new Date().toISOString().split('T')[0];
   const upcomingEvents = events.filter((e: any) => e.activity_date >= today).slice(0, 4);
@@ -110,7 +115,7 @@ export default async function HomePage() {
             <p
               className="text-lg sm:text-xl leading-relaxed mb-10 animate-fade-up delay-100"
               style={{ color: 'rgba(255,255,255,0.65)', maxWidth: '48ch' }}>
-              KL SAC is where {stats.clubs > 0 ? stats.clubs : ''} clubs, {stats.domains > 0 ? stats.domains : 'five'} domains, and thousands of students come together to build something larger than a degree.
+              KL SAC is where {totalClubs > 0 ? `${totalClubs} clubs, ` : ''}{domains.length > 0 ? `${domains.length} domains` : 'five domains'}, and thousands of students come together to build something larger than a degree.
             </p>
 
             {/* CTAs */}
@@ -153,10 +158,10 @@ export default async function HomePage() {
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-0 lg:divide-x"
                style={{ borderColor: 'rgba(255,255,255,0.07)' }}>
             {[
-              { value: stats.clubs.toString(),                     label: 'Active Clubs',          gold: true  },
-              { value: stats.domains.toString(),                   label: 'Learning Domains',       gold: true  },
-              { value: stats.students ? String(stats.students) + '+' : null, label: 'Student Members',      gold: false },
-              { value: stats.activities ? String(stats.activities) + '+' : null, label: 'Annual Activities',     gold: false },
+              { value: totalClubs   > 0 ? String(totalClubs)    : null,                    label: 'Active Clubs',     gold: true  },
+              { value: domains.length > 0 ? String(domains.length) : null,                 label: 'Learning Domains', gold: true  },
+              { value: statStudents   > 0 ? String(statStudents)   + '+' : null,           label: 'Student Members',  gold: false },
+              { value: statActivities > 0 ? String(statActivities) + '+' : null,           label: 'Annual Activities',gold: false },
             ].map((s) => (
               <div key={s.label} className="px-0 lg:px-10">
                 <div
