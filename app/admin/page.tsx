@@ -76,11 +76,16 @@ export default async function AdminDashboard() {
       <div className="mt-8 rounded-2xl border p-6" style={{ background: '#fff', borderColor: '#E4E4E7' }}>
         <h2 className="font-black text-base mb-3" style={{ color: '#0D0D0D' }}>Quick guide</h2>
         <ol className="list-decimal list-inside space-y-2 text-sm" style={{ color: '#71717A' }}>
-          <li>Use <strong>Stats</strong> to update student counts, club numbers, and activity totals on the homepage.</li>
-          <li>Use <strong>News</strong> to publish new articles with photos — they appear on the public news page instantly.</li>
-          <li>Use <strong>Activities</strong> to add new club activities — they show on the Activities page and club pages.</li>
+          <li>Use <strong>Homepage Stats</strong> to update the student count, club count, and activity totals shown on the public homepage.</li>
+          <li>Use <strong>News</strong> to publish articles with photos — they appear on the public news page instantly.</li>
+          <li>Use <strong>Stories</strong> to manage student success stories featured on the website.</li>
+          <li>Use <strong>Activities</strong> to add or edit club activities — they show on the Activities page and individual club pages.</li>
+          <li>Use <strong>Clubs</strong> to edit club names, descriptions, and listed competencies.</li>
+          <li>Use <strong>Domains</strong> to edit domain taglines, philosophy, competencies, and gallery images.</li>
+          <li>Use <strong>Leadership</strong> to manage Student Council members, photos, and roles.</li>
           <li>Use <strong>Publications</strong> to upload and manage PDFs (magazines, annual reports).</li>
-          <li>Use <strong>Announcements</strong> to push notices to the scrolling announcement bar on the website.</li>
+          <li>Use <strong>Announcements</strong> to push notices to the scrolling ticker bar on the website.</li>
+          <li>Use <strong>Site Settings</strong> to change the homepage hero video, page titles, and other site-wide text.</li>
         </ol>
       </div>
     </div>
