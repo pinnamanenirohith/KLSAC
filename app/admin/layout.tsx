@@ -1,7 +1,5 @@
 import { Toaster } from 'react-hot-toast';
 import { getAdminSession } from '@/lib/auth';
-import { redirect } from 'next/navigation';
-import { headers } from 'next/headers';
 import AdminSidebar from './_components/AdminSidebar';
 
 export const metadata = { title: 'KL SAC Admin' };
@@ -9,12 +7,10 @@ export const metadata = { title: 'KL SAC Admin' };
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const session = await getAdminSession();
 
-  const headersList = await headers();
-  const pathname = headersList.get('x-pathname') ?? '';
-
+  // No session — render children without sidebar.
+  // Middleware redirects all unauthenticated non-login requests to /admin/login,
+  // so only the login page reaches this branch.
   if (!session) {
-    if (pathname !== '/admin/login') redirect('/admin/login');
-    // On the login page itself — render without sidebar
     return (
       <>
         <Toaster position="top-right" />
@@ -22,9 +18,6 @@ export default async function AdminLayout({ children }: { children: React.ReactN
       </>
     );
   }
-
-  // Already logged in and visiting login page → go to dashboard
-  if (pathname === '/admin/login') redirect('/admin');
 
   // Valid session → full sidebar layout
   return (
