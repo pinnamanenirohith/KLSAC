@@ -4,7 +4,15 @@ import Image from 'next/image';
 import { useState, useEffect, useRef } from 'react';
 import { usePathname } from 'next/navigation';
 import { Menu, X, ChevronDown, ArrowUpRight } from 'lucide-react';
-import { DOMAINS } from '@/lib/content/domains';
+
+type NavDomain = {
+  slug: string;
+  code: string;
+  short_name: string;
+  tagline: string;
+  color: string;
+  accent_bg: string;
+};
 
 const NAV_LINKS = [
   { href: '/about',         label: 'About'        },
@@ -14,7 +22,7 @@ const NAV_LINKS = [
   { href: '/news',          label: 'News'          },
 ];
 
-export default function Navbar() {
+export default function Navbar({ domains, totalClubs }: { domains: NavDomain[]; totalClubs: number }) {
   const [scrolled,     setScrolled]     = useState(false);
   const [menuOpen,     setMenuOpen]     = useState(false);
   const [domainsOpen,  setDomainsOpen]  = useState(false);
@@ -117,11 +125,11 @@ export default function Navbar() {
                   style={{ background: '#fff', borderColor: '#E4E4E7' }}>
                   <div className="px-5 pt-4 pb-2">
                     <p className="text-xs font-black tracking-[0.18em] uppercase" style={{ color: '#A1A1AA' }}>
-                      Five Domains
+                      {domains.length > 0 ? `${domains.length} Domains` : 'Domains'}
                     </p>
                   </div>
                   <div className="grid grid-cols-2 gap-px p-2 pt-0" style={{ background: '#F4F4F5' }}>
-                    {DOMAINS.map(d => (
+                    {domains.map(d => (
                       <Link
                         key={d.code}
                         href={`/domains/${d.slug}`}
@@ -130,12 +138,12 @@ export default function Navbar() {
                         style={{ background: '#fff' }}>
                         <div
                           className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0 font-black text-xs"
-                          style={{ background: d.accentBg, color: d.color }}>
+                          style={{ background: d.accent_bg, color: d.color }}>
                           {d.code}
                         </div>
                         <div className="min-w-0">
                           <p className="font-bold text-sm leading-tight text-gray-900 group-hover:text-gray-700 truncate">
-                            {d.shortName}
+                            {d.short_name}
                           </p>
                           <p className="text-xs mt-0.5 truncate" style={{ color: '#71717A' }}>
                             {d.tagline}
@@ -156,7 +164,7 @@ export default function Navbar() {
                       onClick={() => setDomainsOpen(false)}
                       className="text-xs font-bold hover:opacity-75 transition-opacity"
                       style={{ color: '#8B0000' }}>
-                      Browse all 25 clubs →
+                      {totalClubs > 0 ? `Browse all ${totalClubs} clubs →` : 'Browse clubs →'}
                     </Link>
                   </div>
                 </div>
@@ -255,7 +263,7 @@ export default function Navbar() {
 
           {mobileDomainsOpen && (
             <div className="pl-3 flex flex-col gap-1 mb-1">
-              {DOMAINS.map(d => (
+              {domains.map(d => (
                 <Link
                   key={d.code}
                   href={`/domains/${d.slug}`}
@@ -263,10 +271,10 @@ export default function Navbar() {
                   className="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors hover:bg-gray-50">
                   <span
                     className="w-7 h-7 rounded-md flex items-center justify-center font-black text-[10px] shrink-0"
-                    style={{ background: d.accentBg, color: d.color }}>
+                    style={{ background: d.accent_bg, color: d.color }}>
                     {d.code}
                   </span>
-                  <span className="text-sm font-medium text-gray-700">{d.shortName}</span>
+                  <span className="text-sm font-medium text-gray-700">{d.short_name}</span>
                 </Link>
               ))}
               <Link
@@ -274,7 +282,7 @@ export default function Navbar() {
                 onClick={() => setMenuOpen(false)}
                 className="flex items-center gap-2 px-3 py-2 text-xs font-bold mt-1"
                 style={{ color: '#8B0000' }}>
-                View all 25 clubs →
+                {totalClubs > 0 ? `View all ${totalClubs} clubs →` : 'View all clubs →'}
               </Link>
             </div>
           )}
