@@ -9,9 +9,10 @@ export const metadata = { title: 'KL SAC Admin' };
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const session = await getAdminSession();
 
+  const headersList = await headers();
+  const pathname = headersList.get('x-pathname') ?? '';
+
   if (!session) {
-    const headersList = await headers();
-    const pathname = headersList.get('x-pathname') ?? '';
     if (pathname !== '/admin/login') redirect('/admin/login');
     // On the login page itself — render without sidebar
     return (
@@ -21,6 +22,9 @@ export default async function AdminLayout({ children }: { children: React.ReactN
       </>
     );
   }
+
+  // Already logged in and visiting login page → go to dashboard
+  if (pathname === '/admin/login') redirect('/admin');
 
   // Valid session → full sidebar layout
   return (
