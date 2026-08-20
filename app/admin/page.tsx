@@ -2,7 +2,7 @@ import { requireAdmin } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import Link from 'next/link';
-import { BarChart2, Newspaper, Zap, BookOpen, Megaphone, ArrowRight, Building2, Users, BookMarked, Settings } from 'lucide-react';
+import { BarChart2, Newspaper, Zap, BookOpen, Megaphone, ArrowRight, Building2, Users, BookMarked, Settings, Globe } from 'lucide-react';
 
 export const metadata = { title: 'Dashboard — KL SAC Admin' };
 
@@ -35,6 +35,7 @@ export default async function AdminDashboard() {
     { href: '/admin/stories',      label: 'Stories',         icon: BookMarked,  value: stories ? `${stories} stories` : 'Not seeded yet', desc: 'Manage student success stories' },
     { href: '/admin/activities',   label: 'Activities',      icon: Zap,         value: `${activities} in database`, desc: 'Create and manage club activities' },
     { href: '/admin/clubs',        label: 'Clubs',           icon: Building2,   value: clubs ? `${clubs} clubs` : 'Not seeded yet', desc: 'Edit club names, descriptions, and competencies' },
+    { href: '/admin/domains',      label: 'Domains',         icon: Globe,       value: '5 domains',                desc: 'Edit domain taglines, philosophy, competencies, and gallery' },
     { href: '/admin/leadership',   label: 'Leadership',      icon: Users,       value: council ? `${council} members` : 'Not seeded yet', desc: 'Manage Student Council members and roles' },
     { href: '/admin/publications', label: 'Publications',    icon: BookOpen,    value: `${pubs} publications`,      desc: 'Upload magazines, reports, and PDFs' },
     { href: '/admin/announcements',label: 'Announcements',   icon: Megaphone,   value: `${announcements} active`,   desc: 'Post notices to the announcement ticker' },

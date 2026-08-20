@@ -4,7 +4,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import {
   LayoutDashboard, BarChart2, Newspaper, Zap,
   BookOpen, Megaphone, LogOut, ExternalLink,
-  Users, Building2, BookMarked, Settings,
+  Users, Building2, BookMarked, Settings, Globe,
 } from 'lucide-react';
 
 const links = [
@@ -14,6 +14,7 @@ const links = [
   { href: '/admin/stories',       label: 'Stories',       icon: BookMarked      },
   { href: '/admin/activities',    label: 'Activities',    icon: Zap             },
   { href: '/admin/clubs',         label: 'Clubs',         icon: Building2       },
+  { href: '/admin/domains',       label: 'Domains',       icon: Globe           },
   { href: '/admin/leadership',    label: 'Leadership',    icon: Users           },
   { href: '/admin/publications',  label: 'Publications',  icon: BookOpen        },
   { href: '/admin/announcements', label: 'Announcements', icon: Megaphone       },
