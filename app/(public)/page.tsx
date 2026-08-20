@@ -1,5 +1,5 @@
 ﻿import Link from 'next/link';
-import { ArrowRight, ArrowUpRight, ChevronDown } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, ChevronDown, Megaphone, AlertTriangle, Calendar, Bell } from 'lucide-react';
 import { DOMAINS } from '@/lib/content/domains';
 import { DEMO_CLUBS, DOMAIN_META } from '@/lib/demo-data';
 import { FadeIn } from './_components/FadeIn';
@@ -24,7 +24,7 @@ const JOURNEY_STEPS = [
 ];
 
 export default async function HomePage() {
-  const [events, storiesRes, settingsRes, newsRes, domainsRes, clubsRes, statsRes] = await Promise.all([
+  const [events, storiesRes, settingsRes, newsRes, domainsRes, clubsRes, statsRes, announcementsRes] = await Promise.all([
     getHomepageEvents(4),
     supabase.from('stories').select('slug, title, student_name, student_year, club_name, domain_code, excerpt, photo, featured, sort_order').order('sort_order', { ascending: true }).limit(3),
     supabase.from('site_settings').select('key, value'),
@@ -32,6 +32,7 @@ export default async function HomePage() {
     supabase.from('domains').select('slug, code, name, tagline, color, accent_bg').order('sort_order', { ascending: true }),
     supabase.from('clubs').select('domain_code'),
     supabase.from('sac_stats').select('key, value'),
+    supabase.from('sac_announcements').select('id, title, body, type, link, link_label').eq('is_active', true).order('sort_order', { ascending: true }).limit(6),
   ]);
 
   const stories = storiesRes.data ?? [];
@@ -53,6 +54,8 @@ export default async function HomePage() {
   (statsRes.data ?? []).forEach((s: any) => { sacStatsMap[s.key] = s.value; });
   const statStudents   = sacStatsMap['students']   ?? 0;
   const statActivities = sacStatsMap['activities'] ?? 0;
+
+  const announcements = announcementsRes.data ?? [];
 
   const today   = new Date().toISOString().split('T')[0];
   const upcomingEvents = events.filter((e: any) => e.activity_date >= today).slice(0, 4);
@@ -674,6 +677,90 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* ═══════════════════════════════════════════════ ANNOUNCEMENTS ══ */}
+      {announcements.length > 0 && (
+        <section style={{ background: '#fff' }}>
+          <div className="w-full px-6 sm:px-12 xl:px-20 py-24">
+            <FadeIn className="flex items-end justify-between mb-12 gap-6">
+              <div>
+                <p className="text-[10px] font-black tracking-[0.22em] uppercase mb-4" style={{ color: '#8B0000' }}>
+                  Notices
+                </p>
+                <h2
+                  className="font-black leading-tight"
+                  style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', color: '#0D0D0D', letterSpacing: '-0.02em' }}>
+                  Announcements
+                </h2>
+              </div>
+              <Link
+                href="/announcements"
+                className="hidden sm:inline-flex items-center gap-2 font-bold text-sm shrink-0 mb-1 transition-opacity hover:opacity-70"
+                style={{ color: '#8B0000' }}>
+                View all
+                <ArrowRight size={14} />
+              </Link>
+            </FadeIn>
+
+            <FadeIn>
+              <div className="flex flex-col gap-4">
+                {announcements.map((a: any) => {
+                  const isUrgent  = a.type === 'urgent';
+                  const isEvent   = a.type === 'event';
+                  const Icon      = isUrgent ? AlertTriangle : isEvent ? Calendar : Megaphone;
+                  const accent    = isUrgent ? '#dc2626' : '#8B0000';
+                  const bg        = isUrgent ? '#fef2f2' : isEvent ? '#fff5f5' : '#FFF8F8';
+                  const border    = isUrgent ? '#fca5a5' : '#E8CCCC';
+                  return (
+                    <div key={a.id}
+                         className="rounded-2xl p-5 sm:p-6 flex gap-4 items-start"
+                         style={{ background: bg, border: `1px solid ${border}` }}>
+                      <div className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0 mt-0.5"
+                           style={{ background: isUrgent ? '#fee2e2' : '#FFE8E8' }}>
+                        <Icon size={16} style={{ color: accent }} />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex flex-wrap items-center gap-2 mb-1">
+                          {isUrgent && (
+                            <span className="text-[10px] font-black tracking-widest uppercase px-2 py-0.5 rounded"
+                                  style={{ background: '#fee2e2', color: '#dc2626' }}>
+                              Urgent
+                            </span>
+                          )}
+                          {isEvent && (
+                            <span className="text-[10px] font-black tracking-widest uppercase px-2 py-0.5 rounded"
+                                  style={{ background: '#FFE8E8', color: '#8B0000' }}>
+                              Event
+                            </span>
+                          )}
+                          <h3 className="font-bold text-base" style={{ color: '#0D0D0D' }}>{a.title}</h3>
+                        </div>
+                        {a.body && (
+                          <p className="text-sm leading-relaxed" style={{ color: '#71717A' }}>{a.body}</p>
+                        )}
+                        {a.link && (
+                          <Link href={a.link}
+                                className="inline-flex items-center gap-1.5 text-xs font-bold mt-2 transition-opacity hover:opacity-75"
+                                style={{ color: accent }}>
+                            {a.link_label || 'Learn more'} <ArrowRight size={11} />
+                          </Link>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+              <div className="mt-6 sm:hidden">
+                <Link href="/announcements"
+                      className="inline-flex items-center gap-2 font-bold text-sm"
+                      style={{ color: '#8B0000' }}>
+                  View all announcements <ArrowRight size={14} />
+                </Link>
+              </div>
+            </FadeIn>
+          </div>
+        </section>
+      )}
 
       {/* ═══════════════════════════════════════════════════════ CTA ══ */}
       <section style={{ background: '#0A0A0F' }}>

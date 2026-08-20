@@ -1,7 +1,6 @@
 import Navbar from './_components/Navbar';
 import Footer from './_components/Footer';
 import { IntroAnimation } from './_components/IntroAnimation';
-import AnnouncementTicker from './_components/AnnouncementTicker';
 import { supabase } from '@/lib/supabase-admin';
 
 export default async function SiteLayout({ children }: { children: React.ReactNode }) {
@@ -17,7 +16,6 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
     <>
       <IntroAnimation />
       <Navbar domains={domains} totalClubs={totalClubs} />
-      <AnnouncementTicker />
       <main>{children}</main>
       <Footer />
     </>
