@@ -71,7 +71,7 @@ export default function NewsAdminPage() {
       {needsMigration && (
         <div className="mb-6 rounded-2xl border p-4 flex gap-3"
              style={{ background: '#fffbeb', borderColor: '#fcd34d' }}>
-          <AlertCircle size={18} style={{ color: '#d97706', shrink: 0, marginTop: 1 }} />
+          <AlertCircle size={18} style={{ color: '#d97706', flexShrink: 0, marginTop: 1 }} />
           <div>
             <p className="text-sm font-bold" style={{ color: '#92400e' }}>Run this SQL in Supabase to enable ordering:</p>
             <code className="text-xs block mt-1 p-2 rounded font-mono" style={{ background: '#fef3c7', color: '#78350f' }}>
