@@ -106,6 +106,47 @@ insert into publications (id, title, type, year, description, pdf_url, download_
    '/publications/august-story-vol1.pdf', true, 2)
 on conflict (id) do nothing;
 
+-- ── Clubs ────────────────────────────────────────────────────────
+create table if not exists clubs (
+  id              uuid primary key default gen_random_uuid(),
+  slug            text unique not null,
+  name            text not null,
+  domain_code     text not null,
+  domain_slug     text not null,
+  tagline         text,
+  about           jsonb default '[]',
+  purpose         text,
+  competencies    jsonb default '[]',
+  activities_list jsonb default '[]',
+  logo_url        text,
+  sort_order      int default 0,
+  created_at      timestamptz default now(),
+  updated_at      timestamptz default now()
+);
+alter table clubs disable row level security;
+
+-- ── Council members ───────────────────────────────────────────────
+create table if not exists council_members (
+  id            text primary key,
+  name          text not null,
+  role          text not null,
+  subtitle      text,
+  photo         text,
+  year_of_study text,
+  branch        text,
+  linkedin      text,
+  journey       text,
+  achievements  jsonb default '[]',
+  clubs_list    jsonb default '[]',
+  club_lead     text,
+  is_faculty    boolean default false,
+  designation   text,
+  sort_order    int default 0,
+  created_at    timestamptz default now(),
+  updated_at    timestamptz default now()
+);
+alter table council_members disable row level security;
+
 -- ── Storage bucket for media uploads ────────────────────────────
 insert into storage.buckets (id, name, public)
   values ('sac-media', 'sac-media', true)
