@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import {
   LayoutDashboard, BarChart2, Newspaper, Zap,
-  BookOpen, Megaphone, LogOut, ExternalLink,
+  BookOpen, LogOut, ExternalLink,
   Users, Building2, BookMarked, Settings, Globe, Trophy,
 } from 'lucide-react';
 
@@ -18,7 +18,6 @@ const links = [
   { href: '/admin/domains',       label: 'Domains',       icon: Globe           },
   { href: '/admin/leadership',    label: 'Leadership',    icon: Users           },
   { href: '/admin/publications',  label: 'Publications',  icon: BookOpen        },
-  { href: '/admin/announcements', label: 'Announcements', icon: Megaphone       },
   { href: '/admin/settings',      label: 'Settings',      icon: Settings        },
 ];
 

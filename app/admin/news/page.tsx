@@ -72,10 +72,9 @@ export default function NewsAdminPage() {
     }
   }
 
-  function cycleHomepage(slug: string, current: number) {
-    const next = current >= 3 ? 0 : current + 1;
-    const label = next === 0 ? 'Removed from homepage' : `Set as homepage position ${next}`;
-    patch(slug, { homepage_order: next }).then(() => toast.success(label));
+  function setHomepagePos(slug: string, position: number) {
+    const label = position === 0 ? 'Removed from homepage' : `Set as homepage position ${position}`;
+    patch(slug, { homepage_order: position }).then(() => toast.success(label));
   }
 
   function toggleFeatured(slug: string, current: boolean) {
@@ -84,14 +83,6 @@ export default function NewsAdminPage() {
       toast.success(next ? 'Set as news page highlight' : 'Removed as news page highlight')
     );
   }
-
-  const HP_LABEL: Record<number, string> = { 0: '—', 1: '1st', 2: '2nd', 3: '3rd' };
-  const HP_COLOR: Record<number, { bg: string; color: string }> = {
-    0: { bg: '#F4F4F6', color: '#A1A1AA' },
-    1: { bg: '#8B0000', color: '#fff'     },
-    2: { bg: '#B22222', color: '#fff'     },
-    3: { bg: '#CD5C5C', color: '#fff'     },
-  };
 
   return (
     <div>
@@ -113,7 +104,7 @@ export default function NewsAdminPage() {
           <ArrowUp size={12} /><ArrowDown size={12} /> <strong>↑↓ arrows</strong> — order on the /news page
         </span>
         <span className="flex items-center gap-1.5">
-          <Home size={12} /> <strong>HP badge</strong> — homepage position (click to cycle Off / 1st / 2nd / 3rd)
+          <Home size={12} /> <strong>HP dropdown</strong> — homepage position (Off / 1st / 2nd / 3rd)
         </span>
         <span className="flex items-center gap-1.5">
           <Star size={12} /> <strong>★ star</strong> — big highlighted article on /news page (only one at a time)
@@ -145,7 +136,6 @@ export default function NewsAdminPage() {
         <div className="rounded-2xl border overflow-hidden" style={{ background: '#fff', borderColor: '#E4E4E7' }}>
           {articles.map((a, i) => {
             const hp = a.homepage_order ?? 0;
-            const hpStyle = HP_COLOR[hp] ?? HP_COLOR[0];
             const isUpdating = updating === a.slug;
             return (
               <div key={a.slug}
@@ -183,16 +173,26 @@ export default function NewsAdminPage() {
                   </span>
                 </div>
 
-                {/* Homepage position badge */}
-                <button
-                  onClick={() => cycleHomepage(a.slug, hp)}
-                  disabled={isUpdating}
-                  title={`Homepage position: ${HP_LABEL[hp]}. Click to change.`}
-                  className="flex items-center gap-1 px-2 py-1 rounded-lg text-[10px] font-black shrink-0 transition-all hover:opacity-80"
-                  style={{ background: hpStyle.bg, color: hpStyle.color }}>
-                  <Home size={10} />
-                  {HP_LABEL[hp]}
-                </button>
+                {/* Homepage position dropdown */}
+                <div className="flex items-center gap-1 shrink-0">
+                  <Home size={11} style={{ color: hp > 0 ? '#8B0000' : '#A1A1AA' }} />
+                  <select
+                    value={hp}
+                    onChange={e => setHomepagePos(a.slug, parseInt(e.target.value))}
+                    disabled={isUpdating}
+                    title="Homepage position"
+                    className="text-[11px] font-bold rounded-lg border px-1.5 py-1 cursor-pointer outline-none"
+                    style={{
+                      borderColor: hp > 0 ? '#8B0000' : '#E4E4E7',
+                      color:       hp > 0 ? '#8B0000' : '#A1A1AA',
+                      background:  hp > 0 ? '#FFF0F0' : '#F7F7F8',
+                    }}>
+                    <option value={0}>Off</option>
+                    <option value={1}>1st</option>
+                    <option value={2}>2nd</option>
+                    <option value={3}>3rd</option>
+                  </select>
+                </div>
 
                 {/* News-page featured star */}
                 <button
