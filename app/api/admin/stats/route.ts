@@ -15,8 +15,7 @@ export async function PUT(req: NextRequest) {
   const updates: { key: string; value: number }[] = await req.json();
   for (const u of updates) {
     await supabase.from('sac_stats')
-      .update({ value: u.value, updated_at: new Date().toISOString() })
-      .eq('key', u.key);
+      .upsert({ key: u.key, value: u.value, updated_at: new Date().toISOString() }, { onConflict: 'key' });
   }
   revalidatePath('/');
   revalidatePath('/', 'layout');
