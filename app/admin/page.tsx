@@ -2,32 +2,31 @@ import { requireAdmin } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import Link from 'next/link';
-import { BarChart2, Newspaper, Zap, BookOpen, Megaphone, ArrowRight, Building2, Users, BookMarked, Settings, Globe } from 'lucide-react';
+import { BarChart2, Newspaper, Zap, BookOpen, ArrowRight, Building2, Users, BookMarked, Settings, Globe } from 'lucide-react';
 
 export const metadata = { title: 'Dashboard — KL SAC Admin' };
 
 async function getStats() {
-  const [{ data: stats }, { count: news }, { count: activities }, { count: pubs }, { count: announcements }, { count: clubs }, { count: council }, { count: stories }] =
+  const [{ data: stats }, { count: news }, { count: activities }, { count: pubs }, { count: clubs }, { count: council }, { count: stories }] =
     await Promise.all([
       supabase.from('sac_stats').select('*'),
       supabase.from('news_articles').select('*', { count: 'exact', head: true }),
       supabase.from('activities').select('*', { count: 'exact', head: true }),
       supabase.from('publications').select('*', { count: 'exact', head: true }),
-      supabase.from('sac_announcements').select('*', { count: 'exact', head: true }).eq('is_active', true),
       supabase.from('clubs').select('*', { count: 'exact', head: true }),
       supabase.from('council_members').select('*', { count: 'exact', head: true }),
       supabase.from('stories').select('*', { count: 'exact', head: true }),
     ]);
   const statMap: Record<string, number> = {};
   (stats ?? []).forEach((s: any) => { statMap[s.key] = s.value; });
-  return { statMap, news: news ?? 0, activities: activities ?? 0, pubs: pubs ?? 0, announcements: announcements ?? 0, clubs: clubs ?? 0, council: council ?? 0, stories: stories ?? 0 };
+  return { statMap, news: news ?? 0, activities: activities ?? 0, pubs: pubs ?? 0, clubs: clubs ?? 0, council: council ?? 0, stories: stories ?? 0 };
 }
 
 export default async function AdminDashboard() {
   const { error } = await requireAdmin();
   if (error) redirect('/admin/login');
 
-  const { statMap, news, activities, pubs, announcements, clubs, council, stories } = await getStats();
+  const { statMap, news, activities, pubs, clubs, council, stories } = await getStats();
 
   const sections = [
     { href: '/admin/stats',        label: 'Homepage Stats',  icon: BarChart2,   value: `${statMap.students ?? 0} students · ${statMap.activities ?? 0} activities`,   desc: 'Edit the numbers shown on the homepage' },
@@ -38,7 +37,6 @@ export default async function AdminDashboard() {
     { href: '/admin/domains',      label: 'Domains',         icon: Globe,       value: '5 domains',                desc: 'Edit domain taglines, philosophy, competencies, and gallery' },
     { href: '/admin/leadership',   label: 'Leadership',      icon: Users,       value: council ? `${council} members` : 'Not seeded yet', desc: 'Manage Student Council members and roles' },
     { href: '/admin/publications', label: 'Publications',    icon: BookOpen,    value: `${pubs} publications`,      desc: 'Upload magazines, reports, and PDFs' },
-    { href: '/admin/announcements',label: 'Announcements',   icon: Megaphone,   value: `${announcements} active`,   desc: 'Post notices to the announcement ticker' },
     { href: '/admin/settings',     label: 'Site Settings',   icon: Settings,    value: 'Hero video · Page text',    desc: 'Change the homepage video, titles, and site-wide text' },
   ];
 
@@ -84,7 +82,6 @@ export default async function AdminDashboard() {
           <li>Use <strong>Domains</strong> to edit domain taglines, philosophy, competencies, and gallery images.</li>
           <li>Use <strong>Leadership</strong> to manage Student Council members, photos, and roles.</li>
           <li>Use <strong>Publications</strong> to upload and manage PDFs (magazines, annual reports).</li>
-          <li>Use <strong>Announcements</strong> to push notices to the scrolling ticker bar on the website.</li>
           <li>Use <strong>Site Settings</strong> to change the homepage hero video, page titles, and other site-wide text.</li>
         </ol>
       </div>

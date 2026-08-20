@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import {
   LayoutDashboard, BarChart2, Newspaper, Zap,
-  BookOpen, Megaphone, LogOut, ExternalLink,
+  BookOpen, LogOut, ExternalLink,
   Users, Building2, BookMarked, Settings, Globe, Trophy,
   Menu, X,
 } from 'lucide-react';
@@ -17,7 +17,6 @@ const NAV = [
       { href: '/admin/stories',       label: 'Stories',       icon: BookMarked   },
       { href: '/admin/achievements',  label: 'Achievements',  icon: Trophy       },
       { href: '/admin/activities',    label: 'Activities',    icon: Zap          },
-      { href: '/admin/announcements', label: 'Announcements', icon: Megaphone    },
       { href: '/admin/publications',  label: 'Publications',  icon: BookOpen     },
     ],
   },
