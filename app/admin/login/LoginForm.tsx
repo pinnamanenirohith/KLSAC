@@ -1,13 +1,11 @@
 'use client';
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 
 export default function LoginForm() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
 
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
@@ -21,7 +19,7 @@ export default function LoginForm() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? 'Login failed');
       toast.success(`Welcome back, ${data.name}!`);
-      router.push('/admin');
+      window.location.href = '/admin';
     } catch (err: any) {
       toast.error(err.message);
     } finally {

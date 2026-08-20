@@ -1,7 +1,7 @@
 'use client';
 import Link from 'next/link';
 import Image from 'next/image';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import {
   LayoutDashboard, BarChart2, Newspaper, Zap,
   BookOpen, Megaphone, LogOut, ExternalLink,
@@ -37,8 +37,7 @@ const NAV = [
 ];
 
 export default function AdminSidebar() {
-  const pathname  = usePathname();
-  const router    = useRouter();
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
 
   const active = (href: string) =>
@@ -46,7 +45,7 @@ export default function AdminSidebar() {
 
   async function logout() {
     await fetch('/api/admin/logout', { method: 'POST' });
-    router.push('/admin/login');
+    window.location.href = '/admin/login';
   }
 
   const sidebarContent = (
