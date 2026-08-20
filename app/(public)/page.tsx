@@ -24,7 +24,7 @@ const JOURNEY_STEPS = [
 ];
 
 export default async function HomePage() {
-  const [events, storiesRes, settingsRes, newsRes, domainsRes, clubsRes, statsRes, achievementsRes] = await Promise.all([
+  const [events, storiesRes, settingsRes, newsRes, domainsRes, clubsRes, statsRes] = await Promise.all([
     getHomepageEvents(4),
     supabase.from('stories').select('slug, title, student_name, student_year, club_name, domain_code, excerpt, photo, homepage_order').gt('homepage_order', 0).order('homepage_order', { ascending: true }),
     supabase.from('site_settings').select('key, value'),
@@ -32,10 +32,7 @@ export default async function HomePage() {
     supabase.from('domains').select('slug, code, name, tagline, color, accent_bg').order('sort_order', { ascending: true }),
     supabase.from('clubs').select('domain_code'),
     supabase.from('sac_stats').select('key, value'),
-    supabase.from('achievements').select('id, title, level, club_name, domain_code, year').order('sort_order', { ascending: true }).order('year', { ascending: false }).limit(6),
   ]);
-
-  const achievements = achievementsRes.data ?? [];
 
   const stories = storiesRes.data ?? [];
   const newsArticles = newsRes.data ?? [];
@@ -521,70 +518,48 @@ export default async function HomePage() {
 
           <FadeIn>
             {(() => {
-              const levelStats = (['National', 'State', 'University'] as const)
-                .map(lvl => ({ lvl, count: sacStatsMap['ach_' + lvl.toLowerCase()] ?? 0 }))
-                .filter(({ count }) => count > 0);
-              const hasStats = levelStats.length > 0;
-              const hasAchievements = achievements.length > 0;
+              const levels = [
+                { label: 'National',   key: 'ach_national',   bar: 'linear-gradient(90deg, #8B0000, #C41E3A)' },
+                { label: 'State',      key: 'ach_state',       bar: 'linear-gradient(90deg, #78350F, #D97706)' },
+                { label: 'University', key: 'ach_university',  bar: 'linear-gradient(90deg, #27272A, #71717A)' },
+              ].map(l => ({ ...l, count: sacStatsMap[l.key] ?? 0 }));
 
-              if (!hasStats && !hasAchievements) {
+              const maxCount = Math.max(...levels.map(l => l.count), 1);
+              const hasAny   = levels.some(l => l.count > 0);
+
+              if (!hasAny) {
                 return (
                   <p className="text-sm" style={{ color: 'rgba(255,255,255,0.3)' }}>
-                    No achievements added yet. Add them from Admin → Achievements.
+                    No achievements added yet. Set counts in Admin → Achievements.
                   </p>
                 );
               }
 
               return (
-                <div className="flex flex-col gap-3">
-                  {/* Level summary counts from manually-entered stats */}
-                  {levelStats.map(({ lvl, count }) => {
-                    const opacity = lvl === 'National' ? '1' : lvl === 'State' ? '0.7' : '0.45';
-                    return (
-                      <div key={lvl} className="flex items-center gap-3 text-sm"
-                           style={{ color: `rgba(255,255,255,${opacity})` }}>
-                        <span className="text-[10px] font-black tracking-widest uppercase px-2 py-0.5 rounded shrink-0"
-                              style={{ background: 'rgba(255,255,255,0.08)', color: `rgba(255,255,255,${opacity})` }}>
-                          {lvl}
-                        </span>
-                        <span className="font-bold">{count}</span>
-                        <span style={{ color: 'rgba(255,255,255,0.25)' }}>
-                          {count === 1 ? 'achievement' : 'achievements'}
-                        </span>
-                      </div>
-                    );
-                  })}
-
-                  {/* Achievement list */}
-                  {hasAchievements && (
-                    <div className="mt-4 rounded-2xl overflow-hidden"
-                         style={{ border: '1px solid rgba(255,255,255,0.06)' }}>
-                      {achievements.map((ach: any, i: number) => {
-                        const isTop = ach.level === 'International' || ach.level === 'National';
-                        return (
-                          <div key={ach.id}
-                               className="flex items-center gap-4 px-5 py-4"
-                               style={{ borderBottom: i < achievements.length - 1 ? '1px solid rgba(255,255,255,0.04)' : 'none',
-                                        background: '#111118' }}>
-                            <span className="text-[10px] font-black tracking-widest uppercase px-2 py-0.5 rounded shrink-0"
-                                  style={{
-                                    background: isTop ? 'rgba(139,0,0,0.3)' : 'rgba(255,255,255,0.06)',
-                                    color:      isTop ? '#ff6b6b'            : 'rgba(255,255,255,0.4)',
-                                  }}>
-                              {ach.level}
+                <div style={{ maxWidth: '640px' }}>
+                  <div className="flex flex-col gap-6">
+                    {levels.map(l => {
+                      const pct = l.count > 0 ? Math.round((l.count / maxCount) * 100) : 0;
+                      return (
+                        <div key={l.label}>
+                          <div className="flex items-end justify-between mb-2.5">
+                            <span className="text-[10px] font-black tracking-[0.2em] uppercase"
+                                  style={{ color: 'rgba(255,255,255,0.38)' }}>
+                              {l.label}
                             </span>
-                            <p className="flex-1 text-sm font-semibold truncate"
-                               style={{ color: isTop ? '#fff' : 'rgba(255,255,255,0.6)' }}>
-                              {ach.title}
-                            </p>
-                            <span className="text-xs shrink-0" style={{ color: 'rgba(255,255,255,0.25)' }}>
-                              {ach.club_name} · {ach.year}
+                            <span className="font-black leading-none"
+                                  style={{ fontSize: 'clamp(1.75rem, 3vw, 2.5rem)', color: l.count > 0 ? '#fff' : 'rgba(255,255,255,0.12)', letterSpacing: '-0.03em' }}>
+                              {l.count > 0 ? l.count : '—'}
                             </span>
                           </div>
-                        );
-                      })}
-                    </div>
-                  )}
+                          <div className="w-full rounded-full overflow-hidden" style={{ height: '6px', background: 'rgba(255,255,255,0.06)' }}>
+                            <div className="h-full rounded-full"
+                                 style={{ width: `${pct}%`, background: l.bar }} />
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
                 </div>
               );
             })()}
