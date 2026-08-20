@@ -7,11 +7,12 @@ import MemberForm from '../_components/MemberForm';
 
 export const metadata = { title: 'Edit Member — KL SAC Admin' };
 
-export default async function EditMemberPage({ params }: { params: { id: string } }) {
+export default async function EditMemberPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
   const { error } = await requireAdmin();
   if (error) redirect('/admin/login');
 
-  const { data } = await supabase.from('council_members').select('*').eq('id', params.id).single();
+  const { data } = await supabase.from('council_members').select('*').eq('id', id).single();
   if (!data) notFound();
 
   return (

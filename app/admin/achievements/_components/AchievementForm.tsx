@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
-import { Save } from 'lucide-react';
+import { Save, Upload } from 'lucide-react';
 
 const LEVELS = ['International', 'National', 'State', 'University'] as const;
 const DOMAIN_CODES = ['TEC', 'LCH', 'HWB', 'ESO', 'IIE'] as const;
@@ -53,7 +53,8 @@ type Props = { achievement?: any };
 export default function AchievementForm({ achievement }: Props) {
   const isNew = !achievement;
   const router = useRouter();
-  const [saving, setSaving] = useState(false);
+  const [saving, setSaving]     = useState(false);
+  const [uploading, setUploading] = useState(false);
 
   const [form, setForm] = useState({
     id:           achievement?.id           ?? '',
@@ -68,6 +69,27 @@ export default function AchievementForm({ achievement }: Props) {
   });
 
   const set = (k: string, v: any) => setForm(f => ({ ...f, [k]: v }));
+
+  async function uploadPhoto(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploading(true);
+    try {
+      const fd = new FormData();
+      fd.append('file', file);
+      fd.append('folder', 'achievements');
+      const res = await fetch('/api/admin/upload', { method: 'POST', body: fd });
+      const d = await res.json();
+      if (!res.ok) throw new Error(d.error);
+      set('photo', d.url);
+      toast.success('Photo uploaded');
+    } catch (err: any) {
+      toast.error(err.message);
+    } finally {
+      setUploading(false);
+      e.target.value = '';
+    }
+  }
 
   async function save() {
     if (!form.title.trim()) { toast.error('Title is required.'); return; }
@@ -123,9 +145,28 @@ export default function AchievementForm({ achievement }: Props) {
       <Field label="Description"
              hint="2–4 sentences about the achievement and its significance"
              textarea value={form.description} onChange={v => set('description', v)} />
-      <Field label="Photo URL"
-             hint="Optional · Square or 4:3 · Paste a URL or leave blank"
-             value={form.photo} onChange={v => set('photo', v)} />
+      {/* Photo */}
+      <div>
+        <label className="block text-sm font-bold mb-0.5" style={{ color: '#0D0D0D' }}>Photo</label>
+        <p className="text-xs mb-1.5" style={{ color: '#A1A1AA' }}>Optional · Square or 4:3 · Event photo or trophy shot</p>
+        <div className="flex flex-col gap-2">
+          {form.photo && (
+            <img src={form.photo} alt="preview"
+                 className="w-32 h-32 rounded-xl object-cover"
+                 style={{ border: '1px solid #E4E4E7' }} />
+          )}
+          <input type="text" value={form.photo}
+            onChange={e => set('photo', e.target.value)}
+            className={inputCls} style={inputStyle} placeholder="Paste URL or upload below"
+            onFocus={e => Object.assign(e.target.style, focusStyle)}
+            onBlur={e => Object.assign(e.target.style, inputStyle)} />
+          <label className="flex items-center gap-2 cursor-pointer text-sm font-semibold px-4 py-2.5 rounded-xl border transition-colors hover:bg-gray-50 w-fit"
+                 style={{ borderColor: '#E4E4E7', color: uploading ? '#A1A1AA' : '#0D0D0D' }}>
+            <Upload size={13} /> {uploading ? 'Uploading…' : 'Upload photo'}
+            <input type="file" accept="image/*" className="hidden" onChange={uploadPhoto} disabled={uploading} />
+          </label>
+        </div>
+      </div>
 
       <div className="flex gap-3 pt-2">
         <button onClick={save} disabled={saving}

@@ -7,11 +7,12 @@ import StoryForm from '../_components/StoryForm';
 
 export const metadata = { title: 'Edit Story — KL SAC Admin' };
 
-export default async function EditStoryPage({ params }: { params: { slug: string } }) {
+export default async function EditStoryPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
   const { error } = await requireAdmin();
   if (error) redirect('/admin/login');
 
-  const { data } = await supabase.from('stories').select('*').eq('slug', params.slug).single();
+  const { data } = await supabase.from('stories').select('*').eq('slug', slug).single();
   if (!data) notFound();
 
   return (

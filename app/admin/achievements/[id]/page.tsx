@@ -5,11 +5,12 @@ import AchievementForm from '../_components/AchievementForm';
 
 export const dynamic = 'force-dynamic';
 
-export default async function EditAchievementPage({ params }: { params: { id: string } }) {
+export default async function EditAchievementPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
   const { error } = await requireAdmin();
   if (error) redirect('/admin/login');
 
-  const { data } = await supabase.from('achievements').select('*').eq('id', params.id).single();
+  const { data } = await supabase.from('achievements').select('*').eq('id', id).single();
   if (!data) notFound();
 
   return (
