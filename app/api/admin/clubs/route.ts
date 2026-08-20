@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
   if (e) return NextResponse.json({ error: e.message }, { status: 400 });
 
   const { count } = await supabase.from('clubs').select('*', { count: 'exact', head: true });
-  await supabase.from('sac_stats').update({ value: count ?? 0, updated_at: new Date().toISOString() }).eq('key', 'clubs');
+  await supabase.from('sac_stats').upsert({ key: 'clubs', value: count ?? 0, updated_at: new Date().toISOString() }, { onConflict: 'key' });
 
   revalidatePath('/clubs');
   revalidatePath('/');
@@ -46,7 +46,7 @@ export async function DELETE(req: NextRequest) {
   if (e) return NextResponse.json({ error: e.message }, { status: 400 });
 
   const { count } = await supabase.from('clubs').select('*', { count: 'exact', head: true });
-  await supabase.from('sac_stats').update({ value: count ?? 0, updated_at: new Date().toISOString() }).eq('key', 'clubs');
+  await supabase.from('sac_stats').upsert({ key: 'clubs', value: count ?? 0, updated_at: new Date().toISOString() }, { onConflict: 'key' });
 
   revalidatePath('/clubs');
   revalidatePath('/');

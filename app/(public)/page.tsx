@@ -24,21 +24,30 @@ const JOURNEY_STEPS = [
 ];
 
 export default async function HomePage() {
-  const [events, stats, storiesRes, settingsRes, newsRes] = await Promise.all([
+  const [events, stats, storiesRes, settingsRes, newsRes, domainsRes, clubsRes] = await Promise.all([
     getHomepageEvents(4),
     getHomepageStats(),
     supabase.from('stories').select('slug, title, student_name, student_year, club_name, domain_code, excerpt, photo, featured, sort_order').order('sort_order', { ascending: true }).limit(3),
     supabase.from('site_settings').select('key, value'),
     supabase.from('news_articles').select('slug, title, excerpt, photo, category, date').order('date', { ascending: false }).limit(3),
+    supabase.from('domains').select('slug, code, name, tagline, color, accent_bg').order('sort_order', { ascending: true }),
+    supabase.from('clubs').select('domain_code'),
   ]);
 
   const stories = storiesRes.data ?? [];
   const newsArticles = newsRes.data ?? [];
+  const domains = domainsRes.data ?? [];
   const settingsMap: Record<string, string> = {};
   (settingsRes.data ?? []).forEach((s: any) => { if (s.value) settingsMap[s.key] = s.value; });
   const heroVideoUrl = settingsMap['hero_video_url'] || '/hero.mp4';
   const featuredStory = stories.find(s => s.featured) ?? stories[0] ?? null;
   const sideStories   = stories.filter(s => s.slug !== featuredStory?.slug).slice(0, 2);
+
+  const clubCountByDomain: Record<string, number> = {};
+  (clubsRes.data ?? []).forEach((c: any) => {
+    clubCountByDomain[c.domain_code] = (clubCountByDomain[c.domain_code] ?? 0) + 1;
+  });
+  const totalClubs = Object.values(clubCountByDomain).reduce((a, b) => a + b, 0);
 
   const today   = new Date().toISOString().split('T')[0];
   const upcomingEvents = events.filter((e: any) => e.activity_date >= today).slice(0, 4);
@@ -101,7 +110,7 @@ export default async function HomePage() {
             <p
               className="text-lg sm:text-xl leading-relaxed mb-10 animate-fade-up delay-100"
               style={{ color: 'rgba(255,255,255,0.65)', maxWidth: '48ch' }}>
-              KL SAC is where 25 clubs, 5 domains, and thousands of students come together to build something larger than a degree.
+              KL SAC is where {stats.clubs > 0 ? stats.clubs : ''} clubs, {stats.domains > 0 ? stats.domains : 'five'} domains, and thousands of students come together to build something larger than a degree.
             </p>
 
             {/* CTAs */}
@@ -218,7 +227,7 @@ export default async function HomePage() {
         <div className="w-full px-6 sm:px-12 xl:px-20 py-28">
           <FadeIn className="mb-12">
             <p className="text-[10px] font-black tracking-[0.22em] uppercase mb-4" style={{ color: '#8B0000' }}>
-              Five Domains · Twenty-Five Clubs
+              {domains.length} Domains · {totalClubs} Clubs
             </p>
             <h2
               className="font-black leading-tight"
@@ -229,24 +238,17 @@ export default async function HomePage() {
 
           <FadeIn>
             <div style={{ borderTop: '1px solid #E4E4E7' }}>
-              {DOMAINS.map((d, i) => (
+              {domains.map((d: any) => (
                 <Link
                   key={d.code}
                   href={`/domains/${d.slug}`}
                   className="group flex items-center gap-4 sm:gap-8 py-5 sm:py-6 transition-all"
-                  style={{
-                    borderBottom:  '1px solid #E4E4E7',
-                    paddingLeft:   '0',
-                    paddingRight:  '0',
-                  }}>
-                  {/* Code badge */}
+                  style={{ borderBottom: '1px solid #E4E4E7' }}>
                   <div
                     className="w-14 h-10 rounded-lg flex items-center justify-center font-black text-xs shrink-0 transition-colors"
-                    style={{ background: d.accentBg, color: d.color }}>
+                    style={{ background: d.accent_bg, color: d.color }}>
                     {d.code}
                   </div>
-
-                  {/* Name */}
                   <div className="flex-1 min-w-0">
                     <p className="font-bold text-base sm:text-lg leading-tight text-gray-900 group-hover:text-gray-600 transition-colors">
                       {d.name}
@@ -255,15 +257,11 @@ export default async function HomePage() {
                       {d.tagline}
                     </p>
                   </div>
-
-                  {/* Club count */}
                   <div className="text-right shrink-0">
                     <span className="text-sm font-semibold" style={{ color: '#A1A1AA' }}>
-                      {d.clubCount} clubs
+                      {clubCountByDomain[d.code] ?? 0} clubs
                     </span>
                   </div>
-
-                  {/* Arrow */}
                   <ArrowRight
                     size={18}
                     className="shrink-0 transition-transform group-hover:translate-x-1"
@@ -273,18 +271,15 @@ export default async function HomePage() {
             </div>
 
             <div className="mt-8 flex items-center gap-6">
-              <Link
-                href="/domains"
-                className="inline-flex items-center gap-2 font-bold text-sm transition-colors hover:opacity-75"
-                style={{ color: '#8B0000' }}>
-                View all domains
-                <ArrowRight size={14} />
+              <Link href="/domains"
+                    className="inline-flex items-center gap-2 font-bold text-sm transition-colors hover:opacity-75"
+                    style={{ color: '#8B0000' }}>
+                View all domains <ArrowRight size={14} />
               </Link>
-              <Link
-                href="/clubs"
-                className="inline-flex items-center gap-2 font-semibold text-sm transition-colors hover:opacity-75"
-                style={{ color: '#71717A' }}>
-                Browse all 25 clubs
+              <Link href="/clubs"
+                    className="inline-flex items-center gap-2 font-semibold text-sm transition-colors hover:opacity-75"
+                    style={{ color: '#71717A' }}>
+                Browse all clubs
               </Link>
             </div>
           </FadeIn>
