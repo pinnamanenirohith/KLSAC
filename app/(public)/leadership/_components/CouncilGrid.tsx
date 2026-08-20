@@ -1,16 +1,40 @@
-﻿'use client';
+'use client';
 
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import {
   X, Linkedin, Award, Users, Camera, ChevronRight,
 } from 'lucide-react';
-import type { CouncilMember, CouncilRole } from '@/lib/content/student-council';
-import type { Club } from '@/lib/content/clubs';
 
 const CRIMSON = '#8B0000';
 
-// â”€â”€â”€ Member Card â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// DB row types
+interface Member {
+  id: string;
+  name: string;
+  role: string;
+  subtitle?: string;
+  photo?: string;
+  year_of_study?: string;
+  branch?: string;
+  linkedin?: string;
+  journey?: string;
+  achievements?: string[];
+  clubs_list?: string[];
+  club_lead?: string;
+  is_faculty?: boolean;
+  designation?: string;
+  sort_order?: number;
+}
+
+interface ClubRow {
+  id: string;
+  slug: string;
+  name: string;
+  domain_code: string;
+}
+
+// ─── Member Card ──────────────────────────────────────────────────────────────
 function MemberCard({
   member,
   roleFallback,
@@ -18,11 +42,11 @@ function MemberCard({
   size = 'md',
   onClick,
 }: {
-  member?: CouncilMember;
+  member?: Member;
   roleFallback?: string;
   nameFallback?: string;
   size?: 'lg' | 'md' | 'sm';
-  onClick?: (m: CouncilMember) => void;
+  onClick?: (m: Member) => void;
 }) {
   const isPlaceholder = !member;
   const photoH = size === 'lg' ? 'h-56' : size === 'md' ? 'h-44' : 'h-32';
@@ -98,16 +122,16 @@ function MemberCard({
           {member?.name ?? nameFallback ?? 'Name TBA'}
         </p>
         <p className="text-xs mt-0.5 truncate" style={{ color: isPlaceholder ? '#D1D1D6' : CRIMSON }}>
-          {member?.role ?? roleFallback ?? 'â€”'}
+          {member?.role ?? roleFallback ?? '–'}
         </p>
         {member?.subtitle && (
           <p className="text-[10px] mt-0.5 leading-snug" style={{ color: '#71717A', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
             {member.subtitle}
           </p>
         )}
-        {member?.year && (
+        {member?.year_of_study && (
           <p className="text-[10px] mt-0.5 truncate" style={{ color: '#A1A1AA' }}>
-            {member.year}{member.branch ? ` Â· ${member.branch.split(' ')[0]}` : ''}
+            {member.year_of_study}{member.branch ? ` · ${member.branch.split(' ')[0]}` : ''}
           </p>
         )}
         {member?.designation && (
@@ -120,8 +144,8 @@ function MemberCard({
   );
 }
 
-// â”€â”€â”€ Profile Modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-function ProfileModal({ member, onClose }: { member: CouncilMember; onClose: () => void }) {
+// ─── Profile Modal ────────────────────────────────────────────────────────────
+function ProfileModal({ member, onClose }: { member: Member; onClose: () => void }) {
   const initials = member.name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
 
   useEffect(() => {
@@ -192,17 +216,17 @@ function ProfileModal({ member, onClose }: { member: CouncilMember; onClose: () 
                 )}
 
                 <div className="flex flex-wrap gap-x-3 gap-y-1 text-sm mb-4">
-                  {member.year && (
-                    <span style={{ color: '#3F3F46' }}>{member.year}</span>
+                  {member.year_of_study && (
+                    <span style={{ color: '#3F3F46' }}>{member.year_of_study}</span>
                   )}
                   {member.branch && (
-                    <span style={{ color: '#71717A' }}>Â· {member.branch}</span>
+                    <span style={{ color: '#71717A' }}>· {member.branch}</span>
                   )}
                   {member.designation && (
                     <span style={{ color: '#71717A' }}>{member.designation}</span>
                   )}
-                  {member.clubLead && (
-                    <span style={{ color: CRIMSON }}>Â· Leads {member.clubLead}</span>
+                  {member.club_lead && (
+                    <span style={{ color: CRIMSON }}>· Leads {member.club_lead}</span>
                   )}
                 </div>
 
@@ -273,7 +297,7 @@ function ProfileModal({ member, onClose }: { member: CouncilMember; onClose: () 
             </div>
 
             {/* Club involvement */}
-            {member.clubs && member.clubs.length > 0 && (
+            {member.clubs_list && member.clubs_list.length > 0 && (
               <div>
                 <p
                   className="text-[10px] font-black tracking-[0.22em] uppercase mb-4 flex items-center gap-2"
@@ -282,7 +306,7 @@ function ProfileModal({ member, onClose }: { member: CouncilMember; onClose: () 
                   Club Involvement
                 </p>
                 <div className="flex flex-wrap gap-2">
-                  {member.clubs.map((c, i) => (
+                  {member.clubs_list.map((c, i) => (
                     <span
                       key={i}
                       className="text-xs font-semibold px-3 py-1.5 rounded-full"
@@ -300,7 +324,7 @@ function ProfileModal({ member, onClose }: { member: CouncilMember; onClose: () 
   );
 }
 
-// â”€â”€â”€ Section label â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Section label ────────────────────────────────────────────────────────────
 function SectionLabel({ label, sub }: { label: string; sub?: string }) {
   return (
     <div className="mb-8">
@@ -318,63 +342,54 @@ function SectionLabel({ label, sub }: { label: string; sub?: string }) {
   );
 }
 
-// â”€â”€â”€ Main export â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Main export ──────────────────────────────────────────────────────────────
 export default function CouncilGrid({
   members,
   clubs,
 }: {
-  members: CouncilMember[];
-  clubs: Club[];
+  members: Member[];
+  clubs: ClubRow[];
 }) {
-  const [selected, setSelected] = useState<CouncilMember | null>(null);
-  const open = useCallback((m: CouncilMember) => setSelected(m), []);
+  const [selected, setSelected] = useState<Member | null>(null);
+  const open = useCallback((m: Member) => setSelected(m), []);
   const close = useCallback(() => setSelected(null), []);
 
-  const byRole = (role: CouncilRole) => members.filter(m => m.role === role);
+  const byRole = (role: string) => members.filter(m => m.role === role);
 
   const presidents = byRole('President');
   const vps        = byRole('Vice President');
   const secs       = byRole('Secretary');
   const jsecs      = byRole('Joint Secretary');
-
-  const mentors   = byRole('Faculty Mentor');
-  const incharges = byRole('Faculty In-Charge');
+  const mentors    = byRole('Faculty Mentor');
+  const incharges  = byRole('Faculty In-Charge');
 
   return (
     <>
-      {/* â”€â”€ Presidents â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      {/* ── Presidents ──────────────────────────────────────────────── */}
       <section style={{ background: '#fff' }}>
         <div className="w-full px-6 sm:px-12 xl:px-20 py-20">
           <SectionLabel label="Student Council Leadership" sub="Presidents of KL SAC." />
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 sm:gap-6">
             {presidents.length > 0
-              ? presidents.map(m => (
-                  <MemberCard key={m.id} member={m} size="lg" onClick={open} />
-                ))
-              : Array.from({ length: 3 }).map((_, i) => (
-                  <MemberCard key={i} roleFallback="President" size="lg" />
-                ))}
+              ? presidents.map(m => <MemberCard key={m.id} member={m} size="lg" onClick={open} />)
+              : Array.from({ length: 3 }).map((_, i) => <MemberCard key={i} roleFallback="President" size="lg" />)}
           </div>
         </div>
       </section>
 
-      {/* â”€â”€ Vice Presidents â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      {/* ── Vice Presidents ─────────────────────────────────────────── */}
       <section style={{ background: '#F7F7F8' }}>
         <div className="w-full px-6 sm:px-12 xl:px-20 py-20">
           <SectionLabel label="Vice Presidents" sub="Domain & division leadership." />
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5">
             {vps.length > 0
-              ? vps.map(m => (
-                  <MemberCard key={m.id} member={m} size="md" onClick={open} />
-                ))
-              : Array.from({ length: 7 }).map((_, i) => (
-                  <MemberCard key={i} roleFallback="Vice President" size="md" />
-                ))}
+              ? vps.map(m => <MemberCard key={m.id} member={m} size="md" onClick={open} />)
+              : Array.from({ length: 7 }).map((_, i) => <MemberCard key={i} roleFallback="Vice President" size="md" />)}
           </div>
         </div>
       </section>
 
-      {/* â”€â”€ Secretaries â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      {/* ── Secretaries ─────────────────────────────────────────────── */}
       {(secs.length > 0 || jsecs.length > 0) && (
         <section style={{ background: '#fff' }}>
           <div className="w-full px-6 sm:px-12 xl:px-20 py-20">
@@ -388,74 +403,65 @@ export default function CouncilGrid({
         </section>
       )}
 
-      {/* â”€â”€ Club Leads â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
-      <section style={{ background: '#fff' }}>
-        <div className="w-full px-6 sm:px-12 xl:px-20 py-20">
-          <SectionLabel label="Club Leads" sub="Coordinators of all 25 clubs." />
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-            {clubs.map(club => {
-              const lead = members.find(
-                m => m.role === 'Club Lead' && m.clubLead === club.name,
-              );
-              return (
-                <MemberCard
-                  key={club.slug}
-                  member={lead}
-                  roleFallback="Club Lead"
-                  nameFallback={`${club.name} Lead`}
-                  size="sm"
-                  onClick={lead ? open : undefined}
-                />
-              );
-            })}
+      {/* ── Club Leads ──────────────────────────────────────────────── */}
+      {clubs.length > 0 && (
+        <section style={{ background: '#fff' }}>
+          <div className="w-full px-6 sm:px-12 xl:px-20 py-20">
+            <SectionLabel label="Club Leads" sub={`Coordinators of all ${clubs.length} clubs.`} />
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+              {clubs.map(club => {
+                const lead = members.find(
+                  m => m.role === 'Club Lead' && m.club_lead === club.name,
+                );
+                return (
+                  <MemberCard
+                    key={club.slug}
+                    member={lead}
+                    roleFallback="Club Lead"
+                    nameFallback={`${club.name} Lead`}
+                    size="sm"
+                    onClick={lead ? open : undefined}
+                  />
+                );
+              })}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
-      {/* â”€â”€ Faculty â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      {/* ── Faculty ─────────────────────────────────────────────────── */}
       <section style={{ background: '#F7F7F8' }}>
         <div className="w-full px-6 sm:px-12 xl:px-20 py-20">
           <SectionLabel label="Faculty" sub="Mentors & In-Charges." />
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-14">
 
-            {/* Mentors */}
             <div>
               <p className="text-xs font-black tracking-widest uppercase mb-5" style={{ color: '#A1A1AA' }}>
                 Faculty Mentors
               </p>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                 {mentors.length > 0
-                  ? mentors.map(m => (
-                      <MemberCard key={m.id} member={m} size="sm" onClick={open} />
-                    ))
-                  : Array.from({ length: 3 }).map((_, i) => (
-                      <MemberCard key={i} roleFallback="Faculty Mentor" size="sm" />
-                    ))}
+                  ? mentors.map(m => <MemberCard key={m.id} member={m} size="sm" onClick={open} />)
+                  : Array.from({ length: 3 }).map((_, i) => <MemberCard key={i} roleFallback="Faculty Mentor" size="sm" />)}
               </div>
             </div>
 
-            {/* In-Charges */}
             <div>
               <p className="text-xs font-black tracking-widest uppercase mb-5" style={{ color: '#A1A1AA' }}>
                 Faculty In-Charges
               </p>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                 {incharges.length > 0
-                  ? incharges.map(m => (
-                      <MemberCard key={m.id} member={m} size="sm" onClick={open} />
-                    ))
-                  : Array.from({ length: 3 }).map((_, i) => (
-                      <MemberCard key={i} roleFallback="Faculty In-Charge" size="sm" />
-                    ))}
+                  ? incharges.map(m => <MemberCard key={m.id} member={m} size="sm" onClick={open} />)
+                  : Array.from({ length: 3 }).map((_, i) => <MemberCard key={i} roleFallback="Faculty In-Charge" size="sm" />)}
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* â”€â”€ Profile Modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      {/* ── Profile Modal ────────────────────────────────────────────── */}
       {selected && <ProfileModal member={selected} onClose={close} />}
     </>
   );
 }
-

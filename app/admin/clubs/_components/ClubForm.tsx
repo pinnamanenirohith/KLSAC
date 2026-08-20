@@ -2,14 +2,14 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
-import { Save, Upload } from 'lucide-react';
+import { Save, Upload, X, Image } from 'lucide-react';
 
 const DOMAINS = [
-  { code: 'TEC', slug: 'technology',     label: 'TEC — Technology' },
-  { code: 'LCH', slug: 'liberal-arts',   label: 'LCH — Liberal Arts, Cultural & Hobby' },
+  { code: 'TEC', slug: 'technology',       label: 'TEC — Technology' },
+  { code: 'LCH', slug: 'liberal-arts',     label: 'LCH — Liberal Arts, Cultural & Hobby' },
   { code: 'HWB', slug: 'health-wellbeing', label: 'HWB — Health & Wellbeing' },
-  { code: 'ESO', slug: 'social-outreach', label: 'ESO — Extension & Social Outreach' },
-  { code: 'IIE', slug: 'innovation',     label: 'IIE — Innovation, Incubation & Entrepreneurship' },
+  { code: 'ESO', slug: 'social-outreach',  label: 'ESO — Extension & Social Outreach' },
+  { code: 'IIE', slug: 'innovation',       label: 'IIE — Innovation, Incubation & Entrepreneurship' },
 ];
 
 interface Props { initial?: any; mode: 'create' | 'edit'; }
@@ -23,22 +23,22 @@ function fromLines(s: string) { return s.split('\n').map(l => l.trim()).filter(B
 export default function ClubForm({ initial, mode }: Props) {
   const router = useRouter();
   const [saving, setSaving] = useState(false);
-  const [uploading, setUploading] = useState(false);
-
-  const initDomain = DOMAINS.find(d => d.code === initial?.domain_code) ?? DOMAINS[0];
+  const [uploading, setUploading] = useState<string | null>(null);
 
   const [form, setForm] = useState({
-    slug:            initial?.slug           ?? '',
-    name:            initial?.name           ?? '',
-    domain_code:     initial?.domain_code    ?? 'TEC',
-    domain_slug:     initial?.domain_slug    ?? 'technology',
-    tagline:         initial?.tagline        ?? '',
-    about:           lines(initial?.about    ?? []),
-    purpose:         initial?.purpose        ?? '',
-    competencies:    lines(initial?.competencies ?? []),
+    slug:            initial?.slug            ?? '',
+    name:            initial?.name            ?? '',
+    domain_code:     initial?.domain_code     ?? 'TEC',
+    domain_slug:     initial?.domain_slug     ?? 'technology',
+    tagline:         initial?.tagline         ?? '',
+    about:           lines(initial?.about     ?? []),
+    purpose:         initial?.purpose         ?? '',
+    competencies:    lines(initial?.competencies   ?? []),
     activities_list: lines(initial?.activities_list ?? []),
-    logo_url:        initial?.logo_url       ?? '',
-    sort_order:      initial?.sort_order     ?? 0,
+    logo_url:        initial?.logo_url        ?? '',
+    cover_url:       initial?.cover_url       ?? '',
+    gallery:         (initial?.gallery ?? []) as string[],
+    sort_order:      initial?.sort_order      ?? 0,
   });
 
   function set(k: string, v: any) { setForm(f => ({ ...f, [k]: v })); }
@@ -48,24 +48,54 @@ export default function ClubForm({ initial, mode }: Props) {
     setForm(f => ({ ...f, domain_code: d.code, domain_slug: d.slug }));
   }
 
-  async function uploadLogo(e: React.ChangeEvent<HTMLInputElement>) {
+  async function uploadFile(
+    e: React.ChangeEvent<HTMLInputElement>,
+    onSuccess: (url: string) => void,
+    key: string,
+  ) {
     const file = e.target.files?.[0];
     if (!file) return;
-    setUploading(true);
+    setUploading(key);
     try {
       const fd = new FormData();
       fd.append('file', file);
       fd.append('folder', 'clubs');
       const res = await fetch('/api/admin/upload', { method: 'POST', body: fd });
-      const d   = await res.json();
+      const d = await res.json();
       if (!res.ok) throw new Error(d.error);
-      set('logo_url', d.url);
-      toast.success('Logo uploaded');
+      onSuccess(d.url);
+      toast.success('Uploaded');
     } catch (err: any) {
       toast.error(err.message);
     } finally {
-      setUploading(false);
+      setUploading(null);
+      e.target.value = '';
     }
+  }
+
+  async function addGalleryPhoto(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploading('gallery');
+    try {
+      const fd = new FormData();
+      fd.append('file', file);
+      fd.append('folder', 'clubs');
+      const res = await fetch('/api/admin/upload', { method: 'POST', body: fd });
+      const d = await res.json();
+      if (!res.ok) throw new Error(d.error);
+      setForm(f => ({ ...f, gallery: [...f.gallery, d.url] }));
+      toast.success('Photo added to gallery');
+    } catch (err: any) {
+      toast.error(err.message);
+    } finally {
+      setUploading(null);
+      e.target.value = '';
+    }
+  }
+
+  function removeGalleryPhoto(idx: number) {
+    setForm(f => ({ ...f, gallery: f.gallery.filter((_, i) => i !== idx) }));
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -130,7 +160,7 @@ export default function ClubForm({ initial, mode }: Props) {
                className={inp} style={sty} placeholder="e.g. Where logic meets ambition." />
       </Field>
 
-      <Field label="About (one paragraph per line — blank line = new paragraph)">
+      <Field label="About (one paragraph per line)">
         <textarea rows={5} value={form.about} onChange={e => set('about', e.target.value)}
                   className={inp} style={sty} />
       </Field>
@@ -150,7 +180,8 @@ export default function ClubForm({ initial, mode }: Props) {
                   className={inp} style={sty} placeholder="e.g.&#10;Weekly coding challenges&#10;National hackathon participation" />
       </Field>
 
-      <Field label="Logo URL">
+      {/* Logo */}
+      <Field label="Logo">
         <div className="flex flex-col gap-2">
           {form.logo_url && (
             <img src={form.logo_url} alt="logo preview"
@@ -158,12 +189,75 @@ export default function ClubForm({ initial, mode }: Props) {
                  style={{ borderColor: '#E4E4E7', background: '#F7F7F8' }} />
           )}
           <input value={form.logo_url} onChange={e => set('logo_url', e.target.value)}
-                 className={inp} style={sty} placeholder="Paste URL or upload" />
-          <label className="flex items-center gap-2 cursor-pointer text-sm font-semibold px-4 py-2.5 rounded-xl border w-fit transition-colors hover:bg-gray-50"
-                 style={{ borderColor: '#E4E4E7', color: '#0D0D0D' }}>
-            <Upload size={13} /> {uploading ? 'Uploading…' : 'Upload logo'}
-            <input type="file" accept="image/*" className="hidden" onChange={uploadLogo} disabled={uploading} />
+                 className={inp} style={sty} placeholder="Paste URL or upload below" />
+          <label className={uploadBtn}>
+            <Upload size={13} /> {uploading === 'logo' ? 'Uploading…' : 'Upload logo'}
+            <input type="file" accept="image/*" className="hidden"
+                   onChange={e => uploadFile(e, url => set('logo_url', url), 'logo')}
+                   disabled={uploading !== null} />
           </label>
+        </div>
+      </Field>
+
+      {/* Cover photo */}
+      <Field label="Cover Photo (banner shown on club page)">
+        <div className="flex flex-col gap-2">
+          {form.cover_url && (
+            <div className="relative rounded-xl overflow-hidden" style={{ aspectRatio: '16/5' }}>
+              <img src={form.cover_url} alt="cover preview"
+                   className="w-full h-full object-cover" />
+              <button type="button" onClick={() => set('cover_url', '')}
+                      className="absolute top-2 right-2 w-6 h-6 rounded-full flex items-center justify-center"
+                      style={{ background: 'rgba(0,0,0,0.6)' }}>
+                <X size={12} style={{ color: '#fff' }} />
+              </button>
+            </div>
+          )}
+          <input value={form.cover_url} onChange={e => set('cover_url', e.target.value)}
+                 className={inp} style={sty} placeholder="Paste URL or upload below" />
+          <label className={uploadBtn}>
+            <Image size={13} /> {uploading === 'cover' ? 'Uploading…' : 'Upload cover photo'}
+            <input type="file" accept="image/*" className="hidden"
+                   onChange={e => uploadFile(e, url => set('cover_url', url), 'cover')}
+                   disabled={uploading !== null} />
+          </label>
+        </div>
+      </Field>
+
+      {/* Gallery */}
+      <Field label="Gallery Photos (shown on club page)">
+        <div className="flex flex-col gap-3">
+          {form.gallery.length > 0 && (
+            <div className="grid grid-cols-3 gap-2">
+              {form.gallery.map((url, i) => (
+                <div key={i} className="relative rounded-lg overflow-hidden" style={{ aspectRatio: '4/3' }}>
+                  <img src={url} alt={`gallery ${i + 1}`} className="w-full h-full object-cover" />
+                  <button
+                    type="button"
+                    onClick={() => removeGalleryPhoto(i)}
+                    className="absolute top-1 right-1 w-5 h-5 rounded-full flex items-center justify-center"
+                    style={{ background: 'rgba(0,0,0,0.7)' }}>
+                    <X size={10} style={{ color: '#fff' }} />
+                  </button>
+                  <span className="absolute bottom-1 left-1 text-[9px] font-black px-1.5 py-0.5 rounded"
+                        style={{ background: 'rgba(0,0,0,0.6)', color: '#fff' }}>
+                    {i + 1}
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
+          <label className={uploadBtn}>
+            <Upload size={13} /> {uploading === 'gallery' ? 'Uploading…' : 'Add gallery photo'}
+            <input type="file" accept="image/*" className="hidden"
+                   onChange={addGalleryPhoto}
+                   disabled={uploading !== null} />
+          </label>
+          {form.gallery.length > 0 && (
+            <p className="text-xs" style={{ color: '#A1A1AA' }}>
+              {form.gallery.length} photo{form.gallery.length !== 1 ? 's' : ''} · First 2 display large, rest display as grid.
+            </p>
+          )}
         </div>
       </Field>
 
@@ -187,3 +281,4 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
 
 const inp = 'w-full px-4 py-2.5 rounded-xl border text-sm outline-none transition-all';
 const sty = { borderColor: '#E4E4E7', background: '#F7F7F8' } as React.CSSProperties;
+const uploadBtn = 'flex items-center gap-2 cursor-pointer text-sm font-semibold px-4 py-2.5 rounded-xl border w-fit transition-colors hover:bg-gray-50';

@@ -1,8 +1,9 @@
-﻿import { Camera } from 'lucide-react';
+import { Camera } from 'lucide-react';
 import Link from 'next/link';
-import { STUDENT_COUNCIL } from '@/lib/content/student-council';
-import { CLUBS } from '@/lib/content/clubs';
+import { supabase } from '@/lib/supabase-admin';
 import CouncilGrid from './_components/CouncilGrid';
+
+export const dynamic = 'force-dynamic';
 
 export const metadata = {
   title: 'Student Council — KL SAC',
@@ -10,7 +11,12 @@ export const metadata = {
     'The Student Council of KL University — presidents, vice presidents, secretaries, council members, club leads, and faculty leadership.',
 };
 
-export default function LeadershipPage() {
+export default async function LeadershipPage() {
+  const [{ data: members }, { data: clubs }] = await Promise.all([
+    supabase.from('council_members').select('*').order('sort_order', { ascending: true }),
+    supabase.from('clubs').select('id, slug, name, domain_code').order('sort_order', { ascending: true }),
+  ]);
+
   return (
     <>
       {/* ─── Hero ─────────────────────────────────────────────────────── */}
@@ -25,7 +31,7 @@ export default function LeadershipPage() {
             Student Council of KL University
           </h1>
           <p className="text-lg leading-relaxed" style={{ color: 'rgba(255,255,255,0.42)', maxWidth: '54ch' }}>
-            The elected and appointed student leaders who run KL SAC — 25 clubs, 5 domains, and the full breadth of campus life.
+            The elected and appointed student leaders who run KL SAC — {clubs?.length ?? 25} clubs, 5 domains, and the full breadth of campus life.
           </p>
         </div>
       </section>
@@ -37,7 +43,6 @@ export default function LeadershipPage() {
             Student Council Group Photo
           </p>
 
-          {/* Group photo placeholder — replace with an <img> tag when the photo is available */}
           <div
             className="w-full rounded-3xl overflow-hidden flex flex-col items-center justify-center gap-4"
             style={{
@@ -67,7 +72,7 @@ export default function LeadershipPage() {
       </section>
 
       {/* ─── Interactive Council Grid ─────────────────────────────────── */}
-      <CouncilGrid members={STUDENT_COUNCIL} clubs={CLUBS} />
+      <CouncilGrid members={members ?? []} clubs={clubs ?? []} />
 
       {/* ─── Governance Framework ─────────────────────────────────────── */}
       <section style={{ background: '#0A0A0F' }}>
@@ -85,7 +90,7 @@ export default function LeadershipPage() {
             {[
               { title: 'Faculty Oversight',              desc: 'SAC operates under direct university faculty supervision, ensuring alignment with academic and institutional values.' },
               { title: 'Student Leadership',             desc: 'Elected and appointed student officers manage day-to-day operations of each domain and its clubs.' },
-              { title: 'Five Domain Structure',          desc: 'All 25 clubs are organised into five domains — each with a dedicated coordinator and advisory faculty.' },
+              { title: 'Five Domain Structure',          desc: 'All clubs are organised into five domains — each with a dedicated coordinator and advisory faculty.' },
               { title: 'Student Development Commission', desc: 'An SDC framework awards credits for participation, enabling holistic development tracking across all activities.' },
               { title: 'Annual Review',                  desc: 'All clubs and domains undergo an annual performance review with student and faculty participation.' },
               { title: 'Open Membership',                desc: 'Any enrolled KL University student may join clubs and participate in activities regardless of branch or year.' },
@@ -101,4 +106,3 @@ export default function LeadershipPage() {
     </>
   );
 }
-

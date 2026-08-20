@@ -1,35 +1,36 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
-import { STUDENT_STORIES, STORY_SLUGS } from '@/lib/content/site-content';
+import { supabase } from '@/lib/supabase-admin';
 import { FadeIn } from '../../_components/FadeIn';
+
+export const dynamic = 'force-dynamic';
 
 const DOMAIN_COLORS: Record<string, string> = {
   TEC: '#8B0000', LCH: '#B91C1C', HWB: '#7C0000', ESO: '#991B1B', IIE: '#C53030',
 };
 
-export function generateStaticParams() {
-  return STORY_SLUGS.map(slug => ({ slug }));
-}
-
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const story = STUDENT_STORIES.find(s => s.slug === slug);
-  if (!story) return {};
-  return {
-    title: `${story.title} — KL SAC Stories`,
-    description: story.excerpt,
-  };
+  const { data } = await supabase.from('stories').select('title, excerpt').eq('slug', slug).single();
+  if (!data) return {};
+  return { title: `${data.title} — KL SAC Stories`, description: data.excerpt };
 }
 
 export default async function StoryDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const story = STUDENT_STORIES.find(s => s.slug === slug);
+
+  const [{ data: story }, { data: allStories }] = await Promise.all([
+    supabase.from('stories').select('*').eq('slug', slug).single(),
+    supabase.from('stories').select('slug, title, student_name, sort_order').order('sort_order', { ascending: true }),
+  ]);
+
   if (!story) notFound();
 
-  const idx = STUDENT_STORIES.indexOf(story);
-  const next = STUDENT_STORIES[(idx + 1) % STUDENT_STORIES.length];
-  const domainColor = DOMAIN_COLORS[story.domainCode] ?? '#8B0000';
+  const stories = allStories ?? [];
+  const idx = stories.findIndex(s => s.slug === slug);
+  const next = stories[(idx + 1) % stories.length] ?? null;
+  const domainColor = DOMAIN_COLORS[story.domain_code] ?? '#8B0000';
 
   return (
     <>
@@ -44,10 +45,8 @@ export default async function StoryDetailPage({ params }: { params: Promise<{ sl
             All Stories
           </Link>
 
-          <span
-            className="text-[10px] font-black uppercase tracking-widest mb-5 block"
-            style={{ color: domainColor }}>
-            {story.domainCode} · {story.clubName}
+          <span className="text-[10px] font-black uppercase tracking-widest mb-5 block" style={{ color: domainColor }}>
+            {story.domain_code} · {story.club_name}
           </span>
 
           <h1
@@ -57,91 +56,83 @@ export default async function StoryDetailPage({ params }: { params: Promise<{ sl
           </h1>
 
           <div className="flex items-center gap-4">
-            <div
-              className="w-10 h-10 rounded-full flex items-center justify-center font-black text-sm"
-              style={{ background: `${domainColor}25`, color: domainColor }}>
-              {story.studentName.charAt(0)}
+            <div>
+              {story.photo ? (
+                <img src={story.photo} alt={story.student_name}
+                     className="w-12 h-12 rounded-full object-cover object-top"
+                     style={{ border: '2px solid rgba(255,255,255,0.15)' }} />
+              ) : (
+                <div className="w-12 h-12 rounded-full flex items-center justify-center font-black text-sm"
+                     style={{ background: `${domainColor}22`, color: domainColor, border: '2px solid rgba(255,255,255,0.1)' }}>
+                  {story.student_name?.charAt(0) ?? '?'}
+                </div>
+              )}
             </div>
             <div>
-              <p className="font-bold text-sm" style={{ color: '#fff' }}>{story.studentName}</p>
-              <p className="text-xs" style={{ color: 'rgba(255,255,255,0.4)' }}>{story.studentYear}</p>
+              <p className="font-bold text-sm" style={{ color: '#fff' }}>{story.student_name}</p>
+              <p className="text-xs" style={{ color: 'rgba(255,255,255,0.42)' }}>{story.student_year}</p>
             </div>
           </div>
-
         </div>
       </section>
 
-      {/* ─── Story Body ───────────────────────────────────────────────── */}
+      {/* ─── Story photo banner ───────────────────────────────────────── */}
+      {story.photo && (
+        <div className="w-full" style={{ maxHeight: '420px', overflow: 'hidden' }}>
+          <img src={story.photo} alt={story.title}
+               className="w-full object-cover object-center"
+               style={{ maxHeight: '420px' }} />
+        </div>
+      )}
+
+      {/* ─── Body ─────────────────────────────────────────────────────── */}
       <section style={{ background: '#fff' }}>
         <div className="max-w-4xl mx-auto px-5 sm:px-10 py-20">
           <FadeIn>
-            {story.photo && (
-              <div className="rounded-2xl overflow-hidden mb-12" style={{ aspectRatio: '16/7' }}>
-                <img src={story.photo} alt={story.title} className="w-full h-full object-cover" />
-              </div>
-            )}
-
-            <blockquote
-              className="text-xl sm:text-2xl font-bold leading-relaxed mb-12 pl-6"
-              style={{
-                color: '#0D0D0D',
-                borderLeft: `4px solid ${domainColor}`,
-                letterSpacing: '-0.01em',
-              }}>
-              {story.excerpt}
-            </blockquote>
-
-            <div className="flex flex-col gap-5">
-              {story.body.split('\n\n').map((para, i) => (
+            <p className="text-xl sm:text-2xl font-bold leading-relaxed mb-12 italic" style={{ color: '#3F3F46' }}>
+              "{story.excerpt}"
+            </p>
+            <div className="flex flex-col gap-6">
+              {(story.body ?? '').split('\n\n').filter(Boolean).map((para: string, i: number) => (
                 <p key={i} className="text-base sm:text-lg leading-relaxed" style={{ color: '#3F3F46' }}>
-                  {para}
+                  {para.trim()}
                 </p>
               ))}
             </div>
           </FadeIn>
+
+          {story.tags && story.tags.length > 0 && (
+            <FadeIn>
+              <div className="flex flex-wrap gap-2 mt-12 pt-8" style={{ borderTop: '1px solid #E4E4E7' }}>
+                {story.tags.map((tag: string) => (
+                  <span key={tag} className="text-xs font-semibold px-3 py-1.5 rounded-full"
+                        style={{ background: `${domainColor}10`, color: domainColor }}>
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </FadeIn>
+          )}
         </div>
       </section>
 
-      {/* ─── Tags ─────────────────────────────────────────────────────── */}
-      {story.tags.length > 0 && (
-        <section style={{ background: '#F7F7F8' }}>
-          <div className="max-w-4xl mx-auto px-5 sm:px-10 py-10">
-            <div className="flex flex-wrap gap-2">
-              {story.tags.map(tag => (
-                <span
-                  key={tag}
-                  className="text-xs font-semibold px-3 py-1.5 rounded-full"
-                  style={{ background: '#fff', border: '1px solid #E4E4E7', color: '#71717A' }}>
-                  {tag}
-                </span>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
-
       {/* ─── Next story ───────────────────────────────────────────────── */}
-      {next && next.slug !== story.slug && (
-        <section style={{ background: '#fff' }}>
+      {next && next.slug !== slug && (
+        <section style={{ background: '#F7F7F8' }}>
           <div className="max-w-4xl mx-auto px-5 sm:px-10 py-16">
             <FadeIn>
-              <p className="text-[10px] font-black tracking-[0.22em] uppercase mb-5" style={{ color: '#A1A1AA' }}>
+              <p className="text-[10px] font-black tracking-[0.22em] uppercase mb-4" style={{ color: '#A1A1AA' }}>
                 Next Story
               </p>
               <Link
                 href={`/stories/${next.slug}`}
-                className="group flex items-center gap-6 py-6 transition-colors"
-                style={{ borderTop: '1px solid #E4E4E7', borderBottom: '1px solid #E4E4E7' }}>
-                <div className="flex-1">
-                  <h3 className="font-bold text-lg leading-tight" style={{ color: '#0D0D0D' }}>
-                    {next.title}
-                  </h3>
-                  <p className="text-sm mt-1" style={{ color: '#A1A1AA' }}>{next.studentName}</p>
+                className="group flex items-center justify-between gap-6 p-6 rounded-2xl transition-shadow hover:shadow-md"
+                style={{ background: '#fff', border: '1px solid #E4E4E7' }}>
+                <div>
+                  <p className="font-black text-lg leading-snug mb-1" style={{ color: '#0D0D0D' }}>{next.title}</p>
+                  <p className="text-sm" style={{ color: '#A1A1AA' }}>{next.student_name}</p>
                 </div>
-                <ArrowRight
-                  size={20}
-                  className="shrink-0 transition-transform group-hover:translate-x-1"
-                  style={{ color: '#D1D1D6' }} />
+                <ArrowRight size={20} className="shrink-0 transition-transform group-hover:translate-x-1" style={{ color: '#D1D1D6' }} />
               </Link>
             </FadeIn>
           </div>

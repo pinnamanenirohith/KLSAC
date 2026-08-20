@@ -2,10 +2,9 @@
 import { ArrowRight, ArrowUpRight, ChevronDown } from 'lucide-react';
 import { DOMAINS } from '@/lib/content/domains';
 import { DEMO_CLUBS, DOMAIN_META } from '@/lib/demo-data';
-import { NEWS_ARTICLES } from '@/lib/content/site-content';
-import { STUDENT_STORIES } from '@/lib/content/site-content';
 import { FadeIn } from './_components/FadeIn';
 import { getHomepageEvents, getHomepageStats } from '@/lib/data/homepage';
+import { supabase } from '@/lib/supabase-admin';
 
 export const dynamic = 'force-dynamic';
 
@@ -25,10 +24,21 @@ const JOURNEY_STEPS = [
 ];
 
 export default async function HomePage() {
-  const [events, stats] = await Promise.all([
+  const [events, stats, storiesRes, settingsRes, newsRes] = await Promise.all([
     getHomepageEvents(4),
     getHomepageStats(),
+    supabase.from('stories').select('slug, title, student_name, student_year, club_name, domain_code, excerpt, photo, featured, sort_order').order('sort_order', { ascending: true }).limit(3),
+    supabase.from('site_settings').select('key, value'),
+    supabase.from('news_articles').select('slug, title, excerpt, photo, category, date').order('date', { ascending: false }).limit(3),
   ]);
+
+  const stories = storiesRes.data ?? [];
+  const newsArticles = newsRes.data ?? [];
+  const settingsMap: Record<string, string> = {};
+  (settingsRes.data ?? []).forEach((s: any) => { if (s.value) settingsMap[s.key] = s.value; });
+  const heroVideoUrl = settingsMap['hero_video_url'] || '/hero.mp4';
+  const featuredStory = stories.find(s => s.featured) ?? stories[0] ?? null;
+  const sideStories   = stories.filter(s => s.slug !== featuredStory?.slug).slice(0, 2);
 
   const today   = new Date().toISOString().split('T')[0];
   const upcomingEvents = events.filter((e: any) => e.activity_date >= today).slice(0, 4);
@@ -44,7 +54,7 @@ export default async function HomePage() {
         <video
           autoPlay muted loop playsInline
           className="absolute inset-0 w-full h-full object-cover"
-          src="/hero.mp4"
+          src={heroVideoUrl}
           aria-hidden="true"
         />
 
@@ -304,81 +314,87 @@ export default async function HomePage() {
             </Link>
           </FadeIn>
 
-          <div className="grid grid-cols-1 lg:grid-cols-5 gap-5">
-            {/* Featured story */}
-            <FadeIn className="lg:col-span-3">
-              <Link href={`/stories/${STUDENT_STORIES[0].slug}`} className="group block h-full">
-                <div
-                  className="rounded-2xl overflow-hidden mb-5 relative"
-                  style={{ background: 'linear-gradient(135deg, #1a0005 0%, #5b0000 100%)', aspectRatio: '16/7' }}>
-                  {/* Photo */}
-                  {STUDENT_STORIES[0].photo && (
-                    <img
-                      src={STUDENT_STORIES[0].photo}
-                      alt={STUDENT_STORIES[0].title}
-                      className="absolute inset-0 w-full h-full"
-                      style={{ objectFit: 'cover', objectPosition: 'center center' }}
-                    />
-                  )}
-                  {/* Story meta overlay */}
-                  <div className="absolute bottom-0 left-0 right-0 p-6"
-                       style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 100%)' }}>
-                    <span
-                      className="text-[10px] font-black tracking-widest uppercase mb-2 inline-block"
-                      style={{ color: DOMAINS.find(d => d.code === STUDENT_STORIES[0].domainCode)?.color ?? '#8B0000' }}>
-                      {STUDENT_STORIES[0].clubName}
-                    </span>
-                    <h3 className="font-black text-xl leading-snug" style={{ color: '#fff' }}>
-                      {STUDENT_STORIES[0].title}
-                    </h3>
-                  </div>
-                </div>
-                <p className="text-base leading-relaxed" style={{ color: '#71717A' }}>
-                  {STUDENT_STORIES[0].excerpt}
-                </p>
-                <p className="text-sm font-bold mt-3 group-hover:gap-3 flex items-center gap-2 transition-all"
-                   style={{ color: '#8B0000' }}>
-                  Read story <ArrowRight size={14} />
-                </p>
-              </Link>
-            </FadeIn>
-
-            {/* Two smaller stories */}
-            <div className="lg:col-span-2 flex flex-col gap-5">
-              {STUDENT_STORIES.slice(1, 3).map((story, i) => (
-                <FadeIn key={story.slug} delay={0.1 + i * 0.1} className="flex-1">
-                  <Link href={`/stories/${story.slug}`} className="group block h-full">
-                    <div
-                      className="rounded-xl overflow-hidden mb-4 relative"
-                      style={{ background: i === 0 ? 'linear-gradient(135deg, #2D0000 0%, #8B0000 100%)' : 'linear-gradient(135deg, #1a0000 0%, #7C0000 100%)', aspectRatio: '16/9' }}>
-                      {story.photo && (
-                        <img
-                          src={story.photo}
-                          alt={story.title}
-                          className="absolute inset-0 w-full h-full"
-                          style={{ objectFit: 'cover', objectPosition: 'center center' }}
-                          loading="lazy"
-                        />
-                      )}
-                      <div className="absolute bottom-0 left-0 right-0 p-4"
-                           style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 100%)' }}>
-                        <span className="text-[9px] font-black tracking-widest uppercase"
-                              style={{ color: 'rgba(255,255,255,0.65)' }}>
-                          {story.clubName}
-                        </span>
-                      </div>
+          {featuredStory ? (
+            <div className="grid grid-cols-1 lg:grid-cols-5 gap-5">
+              {/* Featured story */}
+              <FadeIn className="lg:col-span-3">
+                <Link href={`/stories/${featuredStory.slug}`} className="group block h-full">
+                  <div
+                    className="rounded-2xl overflow-hidden mb-5 relative"
+                    style={{ background: 'linear-gradient(135deg, #1a0005 0%, #5b0000 100%)', aspectRatio: '16/7' }}>
+                    {featuredStory.photo && (
+                      <img
+                        src={featuredStory.photo}
+                        alt={featuredStory.title}
+                        className="absolute inset-0 w-full h-full"
+                        style={{ objectFit: 'cover', objectPosition: 'center center' }}
+                      />
+                    )}
+                    <div className="absolute bottom-0 left-0 right-0 p-6"
+                         style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 100%)' }}>
+                      <span
+                        className="text-[10px] font-black tracking-widest uppercase mb-2 inline-block"
+                        style={{ color: DOMAINS.find(d => d.code === featuredStory.domain_code)?.color ?? '#8B0000' }}>
+                        {featuredStory.club_name}
+                      </span>
+                      <h3 className="font-black text-xl leading-snug" style={{ color: '#fff' }}>
+                        {featuredStory.title}
+                      </h3>
                     </div>
-                    <h3 className="font-bold text-base leading-snug mb-1" style={{ color: '#0D0D0D' }}>
-                      {story.title}
-                    </h3>
-                    <p className="text-sm line-clamp-2" style={{ color: '#71717A' }}>
-                      {story.excerpt}
-                    </p>
-                  </Link>
-                </FadeIn>
-              ))}
+                  </div>
+                  <p className="text-base leading-relaxed" style={{ color: '#71717A' }}>
+                    {featuredStory.excerpt}
+                  </p>
+                  <p className="text-sm font-bold mt-3 group-hover:gap-3 flex items-center gap-2 transition-all"
+                     style={{ color: '#8B0000' }}>
+                    Read story <ArrowRight size={14} />
+                  </p>
+                </Link>
+              </FadeIn>
+
+              {/* Two smaller stories */}
+              <div className="lg:col-span-2 flex flex-col gap-5">
+                {sideStories.map((story, i) => (
+                  <FadeIn key={story.slug} delay={0.1 + i * 0.1} className="flex-1">
+                    <Link href={`/stories/${story.slug}`} className="group block h-full">
+                      <div
+                        className="rounded-xl overflow-hidden mb-4 relative"
+                        style={{ background: i === 0 ? 'linear-gradient(135deg, #2D0000 0%, #8B0000 100%)' : 'linear-gradient(135deg, #1a0000 0%, #7C0000 100%)', aspectRatio: '16/9' }}>
+                        {story.photo && (
+                          <img
+                            src={story.photo}
+                            alt={story.title}
+                            className="absolute inset-0 w-full h-full"
+                            style={{ objectFit: 'cover', objectPosition: 'center center' }}
+                            loading="lazy"
+                          />
+                        )}
+                        <div className="absolute bottom-0 left-0 right-0 p-4"
+                             style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 100%)' }}>
+                          <span className="text-[9px] font-black tracking-widest uppercase"
+                                style={{ color: 'rgba(255,255,255,0.65)' }}>
+                            {story.club_name}
+                          </span>
+                        </div>
+                      </div>
+                      <h3 className="font-bold text-base leading-snug mb-1" style={{ color: '#0D0D0D' }}>
+                        {story.title}
+                      </h3>
+                      <p className="text-sm line-clamp-2" style={{ color: '#71717A' }}>
+                        {story.excerpt}
+                      </p>
+                    </Link>
+                  </FadeIn>
+                ))}
+              </div>
             </div>
-          </div>
+          ) : (
+            <div className="rounded-2xl border p-12 text-center" style={{ borderColor: '#E4E4E7' }}>
+              <p className="text-sm" style={{ color: '#A1A1AA' }}>
+                Add student stories from the admin panel to display them here.
+              </p>
+            </div>
+          )}
 
           <div className="mt-8 sm:hidden">
             <Link
@@ -609,7 +625,7 @@ export default async function HomePage() {
           </FadeIn>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-            {NEWS_ARTICLES.slice(0, 3).map((article, i) => (
+            {newsArticles.map((article, i) => (
               <FadeIn key={article.slug} delay={i * 0.1}>
                 <Link href={`/news/${article.slug}`} className="group block h-full">
                   <article

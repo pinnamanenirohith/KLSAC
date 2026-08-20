@@ -125,6 +125,10 @@ create table if not exists clubs (
 );
 alter table clubs disable row level security;
 
+-- Photo columns added for gallery feature
+alter table clubs add column if not exists cover_url text;
+alter table clubs add column if not exists gallery jsonb default '[]';
+
 -- ── Council members ───────────────────────────────────────────────
 create table if not exists council_members (
   id            text primary key,
@@ -146,6 +150,43 @@ create table if not exists council_members (
   updated_at    timestamptz default now()
 );
 alter table council_members disable row level security;
+
+-- ── Student Stories ──────────────────────────────────────────────
+create table if not exists stories (
+  slug          text primary key,
+  title         text not null,
+  student_name  text not null,
+  student_year  text,
+  club_name     text,
+  domain_code   text,
+  excerpt       text default '',
+  body          text default '',
+  photo         text,
+  tags          jsonb default '[]',
+  featured      boolean default false,
+  sort_order    int default 0,
+  created_at    timestamptz default now(),
+  updated_at    timestamptz default now()
+);
+alter table stories disable row level security;
+
+-- ── Site Settings ─────────────────────────────────────────────────
+create table if not exists site_settings (
+  key        text primary key,
+  value      text default '',
+  label      text not null,
+  type       text default 'text',
+  updated_at timestamptz default now()
+);
+alter table site_settings disable row level security;
+
+insert into site_settings (key, value, label, type) values
+  ('hero_video_url',  '',  'Hero Background Video URL',   'url'),
+  ('hero_title',      '',  'Homepage Hero Title',          'text'),
+  ('hero_subtitle',   '',  'Homepage Hero Subtitle',       'textarea'),
+  ('about_tagline',   '',  'About Page Tagline',           'textarea'),
+  ('home_meta_desc',  '',  'Homepage Meta Description',    'textarea')
+on conflict (key) do nothing;
 
 -- ── Storage bucket for media uploads ────────────────────────────
 insert into storage.buckets (id, name, public)

@@ -5,14 +5,10 @@ import {
   Camera, Calendar, MapPin, Zap, Trophy,
 } from 'lucide-react';
 import { getDomainBySlug, DOMAIN_SLUGS } from '@/lib/content/domains';
-import { getClubsByDomain } from '@/lib/content/clubs';
-import { getUpcomingByDomain } from '@/lib/content/activities';
-import { getDomainGalleryPhotos } from '@/lib/content/gallery';
+import { supabase } from '@/lib/supabase-admin';
 import { FadeIn } from '../../_components/FadeIn';
 
-export function generateStaticParams() {
-  return DOMAIN_SLUGS.map(slug => ({ slug }));
-}
+export const dynamic = 'force-dynamic';
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -26,11 +22,24 @@ export default async function DomainDetailPage({ params }: { params: Promise<{ s
   const domain = getDomainBySlug(slug);
   if (!domain) notFound();
 
-  const clubs = getClubsByDomain(domain.code);
+  const [{ data: clubsData }, { data: upcomingActivitiesData }] = await Promise.all([
+    supabase
+      .from('clubs')
+      .select('id, slug, name, tagline, logo_url')
+      .eq('domain_slug', slug)
+      .order('sort_order', { ascending: true }),
+    supabase
+      .from('activities')
+      .select('*')
+      .eq('domain', domain.code)
+      .gte('activity_date', new Date().toISOString().split('T')[0])
+      .order('activity_date', { ascending: true })
+      .limit(6),
+  ]);
 
-  const today = new Date().toISOString().split('T')[0];
-  const upcomingActivities = getUpcomingByDomain(domain.code, today, 6);
-  const galleryPhotos = getDomainGalleryPhotos(domain.code, 6);
+  const clubs = clubsData ?? [];
+  const upcomingActivities = upcomingActivitiesData ?? [];
+  const galleryPhotos: string[] = [];
 
   return (
     <>
@@ -75,7 +84,7 @@ export default async function DomainDetailPage({ params }: { params: Promise<{ s
 
           <div className="flex flex-wrap gap-8 text-sm">
             <div>
-              <span className="font-black text-2xl" style={{ color: domain.color }}>{domain.clubCount}</span>
+              <span className="font-black text-2xl" style={{ color: domain.color }}>{(clubs ?? []).length}</span>
               <span className="ml-2" style={{ color: '#71717A' }}>Clubs</span>
             </div>
             <div>

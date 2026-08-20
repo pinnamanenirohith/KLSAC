@@ -4,18 +4,20 @@ import { usePathname, useRouter } from 'next/navigation';
 import {
   LayoutDashboard, BarChart2, Newspaper, Zap,
   BookOpen, Megaphone, LogOut, ExternalLink,
-  Users, Building2,
+  Users, Building2, BookMarked, Settings,
 } from 'lucide-react';
 
 const links = [
   { href: '/admin',               label: 'Dashboard',     icon: LayoutDashboard },
   { href: '/admin/stats',         label: 'Stats',         icon: BarChart2       },
   { href: '/admin/news',          label: 'News',          icon: Newspaper       },
+  { href: '/admin/stories',       label: 'Stories',       icon: BookMarked      },
   { href: '/admin/activities',    label: 'Activities',    icon: Zap             },
   { href: '/admin/clubs',         label: 'Clubs',         icon: Building2       },
   { href: '/admin/leadership',    label: 'Leadership',    icon: Users           },
   { href: '/admin/publications',  label: 'Publications',  icon: BookOpen        },
   { href: '/admin/announcements', label: 'Announcements', icon: Megaphone       },
+  { href: '/admin/settings',      label: 'Settings',      icon: Settings        },
 ];
 
 export default function AdminNav() {

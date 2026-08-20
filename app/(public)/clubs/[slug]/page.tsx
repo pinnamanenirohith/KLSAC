@@ -4,46 +4,49 @@ import {
   ArrowLeft, ArrowRight, ArrowUpRight, CheckCircle2,
   Camera, Calendar, MapPin, Zap, Trophy, Users,
 } from 'lucide-react';
-import { getClubBySlug, CLUB_SLUGS } from '@/lib/content/clubs';
+import { supabase } from '@/lib/supabase-admin';
 import { getDomainByCode } from '@/lib/content/domains';
-import { DEMO_CLUBS } from '@/lib/demo-data';
-import { getUpcomingByClub } from '@/lib/content/activities';
-import { getClubGalleryPhotos } from '@/lib/content/gallery';
 import { FadeIn } from '../../_components/FadeIn';
 
-export function generateStaticParams() {
-  return CLUB_SLUGS.map(slug => ({ slug }));
-}
+export const dynamic = 'force-dynamic';
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const club = getClubBySlug(slug);
-  if (!club) return {};
-  return { title: club.name, description: club.tagline };
+  const { data } = await supabase.from('clubs').select('name, tagline').eq('slug', slug).single();
+  if (!data) return {};
+  return { title: data.name, description: data.tagline };
 }
 
 const OFFICE_ROLES = [
-  { role: 'Club Coordinator',     abbr: 'CC'  },
-  { role: 'Vice-Coordinator',     abbr: 'VC'  },
-  { role: 'Secretary',            abbr: 'SEC' },
-  { role: 'Treasurer',            abbr: 'TR'  },
+  { role: 'Club Coordinator', abbr: 'CC'  },
+  { role: 'Vice-Coordinator', abbr: 'VC'  },
+  { role: 'Secretary',        abbr: 'SEC' },
+  { role: 'Treasurer',        abbr: 'TR'  },
 ];
 
 export default async function ClubDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const club = getClubBySlug(slug);
+
+  const [{ data: club }, { data: upcomingEvents }] = await Promise.all([
+    supabase.from('clubs').select('*').eq('slug', slug).single(),
+    supabase
+      .from('activities')
+      .select('*')
+      .eq('club_slug', slug)
+      .gte('activity_date', new Date().toISOString().split('T')[0])
+      .order('activity_date', { ascending: true })
+      .limit(3),
+  ]);
+
   if (!club) notFound();
 
-  const domain = getDomainByCode(club.domainCode);
+  const domain = getDomainByCode(club.domain_code);
   if (!domain) notFound();
 
-  const demoClub = DEMO_CLUBS.find(dc => dc.name === club.name);
-  const memberCount = demoClub?.memberCount ?? null;
-  const memberLimit = demoClub?.memberLimit ?? null;
-
-  const today = new Date().toISOString().split('T')[0];
-  const upcomingEvents = getUpcomingByClub(slug, today, 3);
-  const galleryPhotos = getClubGalleryPhotos(slug, 8);
+  const galleryPhotos: string[] = Array.isArray(club.gallery) ? club.gallery : [];
+  const about: string[]         = Array.isArray(club.about)   ? club.about   : [];
+  const competencies: string[]  = Array.isArray(club.competencies) ? club.competencies : [];
+  const activitiesList: string[]= Array.isArray(club.activities_list) ? club.activities_list : [];
 
   return (
     <>
@@ -52,33 +55,76 @@ export default async function ClubDetailPage({ params }: { params: Promise<{ slu
         style={{
           paddingTop: '92px',
           paddingBottom: '72px',
-          background: `linear-gradient(135deg, ${domain.color}18 0%, ${domain.color}06 100%)`,
+          background: club.cover_url
+            ? undefined
+            : `linear-gradient(135deg, ${domain.color}18 0%, ${domain.color}06 100%)`,
           borderBottom: `1px solid ${domain.color}18`,
+          position: 'relative',
+          overflow: 'hidden',
         }}>
-        <div className="w-full px-6 sm:px-12 xl:px-20">
+        {club.cover_url && (
+          <>
+            <img
+              src={club.cover_url}
+              alt={club.name}
+              style={{
+                position: 'absolute', inset: 0,
+                width: '100%', height: '100%',
+                objectFit: 'cover', objectPosition: 'center',
+              }}
+            />
+            <div
+              style={{
+                position: 'absolute', inset: 0,
+                background: `linear-gradient(135deg, ${domain.color}cc 0%, rgba(0,0,0,0.65) 100%)`,
+              }}
+            />
+          </>
+        )}
+
+        <div className="w-full px-6 sm:px-12 xl:px-20" style={{ position: 'relative' }}>
           <Link
             href={`/domains/${domain.slug}`}
             className="inline-flex items-center gap-2 text-xs font-bold mb-8 transition-opacity hover:opacity-70"
-            style={{ color: domain.color }}>
+            style={{ color: club.cover_url ? '#fff' : domain.color }}>
             <ArrowLeft size={12} />
             {domain.shortName} Domain
           </Link>
 
           <div className="flex items-center gap-3 mb-4">
+            {club.logo_url && (
+              <img
+                src={club.logo_url}
+                alt={club.name}
+                className="w-12 h-12 rounded-xl object-contain"
+                style={{
+                  background: club.cover_url ? 'rgba(255,255,255,0.15)' : domain.accentBg,
+                  padding: '6px',
+                }}
+              />
+            )}
             <span
               className="text-[10px] font-black tracking-widest uppercase px-2.5 py-1 rounded-full"
-              style={{ background: domain.accentBg, color: domain.color }}>
+              style={{
+                background: club.cover_url ? 'rgba(255,255,255,0.2)' : domain.accentBg,
+                color:      club.cover_url ? '#fff' : domain.color,
+              }}>
               {domain.code}
             </span>
           </div>
 
           <h1
             className="font-black leading-tight mb-3"
-            style={{ fontSize: 'clamp(2rem, 5vw, 3.75rem)', color: '#0D0D0D', letterSpacing: '-0.025em' }}>
+            style={{
+              fontSize: 'clamp(2rem, 5vw, 3.75rem)',
+              color: club.cover_url ? '#fff' : '#0D0D0D',
+              letterSpacing: '-0.025em',
+            }}>
             {club.name}
           </h1>
 
-          <p className="text-lg sm:text-xl font-medium mb-6 italic" style={{ color: domain.color }}>
+          <p className="text-lg sm:text-xl font-medium mb-6 italic"
+             style={{ color: club.cover_url ? 'rgba(255,255,255,0.85)' : domain.color }}>
             "{club.tagline}"
           </p>
 
@@ -92,12 +138,6 @@ export default async function ClubDetailPage({ params }: { params: Promise<{ slu
               Register on Student Dashboard
               <ArrowUpRight size={14} />
             </Link>
-            {memberCount != null && memberLimit != null && (
-              <span className="text-sm" style={{ color: '#71717A' }}>
-                <span className="font-bold" style={{ color: '#0D0D0D' }}>{memberCount}</span>
-                {' '}/{' '}{memberLimit} members
-              </span>
-            )}
           </div>
         </div>
       </section>
@@ -112,25 +152,32 @@ export default async function ClubDetailPage({ params }: { params: Promise<{ slu
                   About the Club
                 </p>
                 <div className="flex flex-col gap-5">
-                  {club.about.map((para, i) => (
+                  {about.map((para, i) => (
                     <p key={i} className="text-base sm:text-lg leading-relaxed" style={{ color: '#3F3F46' }}>
                       {para}
                     </p>
                   ))}
+                  {about.length === 0 && (
+                    <p className="text-base leading-relaxed" style={{ color: '#A1A1AA' }}>
+                      Information about this club will be added soon.
+                    </p>
+                  )}
                 </div>
               </FadeIn>
             </div>
 
             <div>
               <FadeIn delay={0.1}>
-                <div className="rounded-2xl p-6 mb-6" style={{ background: '#F7F7F8', border: '1px solid #E4E4E7' }}>
-                  <p className="text-[10px] font-black tracking-[0.18em] uppercase mb-3" style={{ color: '#A1A1AA' }}>
-                    Our Purpose
-                  </p>
-                  <p className="text-sm leading-relaxed" style={{ color: '#3F3F46' }}>
-                    {club.purpose}
-                  </p>
-                </div>
+                {club.purpose && (
+                  <div className="rounded-2xl p-6 mb-6" style={{ background: '#F7F7F8', border: '1px solid #E4E4E7' }}>
+                    <p className="text-[10px] font-black tracking-[0.18em] uppercase mb-3" style={{ color: '#A1A1AA' }}>
+                      Our Purpose
+                    </p>
+                    <p className="text-sm leading-relaxed" style={{ color: '#3F3F46' }}>
+                      {club.purpose}
+                    </p>
+                  </div>
+                )}
 
                 <Link
                   href={`/domains/${domain.slug}`}
@@ -221,16 +268,7 @@ export default async function ClubDetailPage({ params }: { params: Promise<{ slu
                   ))}
                 </div>
                 <p className="text-xs text-center" style={{ color: '#A1A1AA' }}>
-                  Activity photos submitted by club members via the{' '}
-                  <Link
-                    href="https://sacactivities.kluniversity.in"
-                    target="_blank"
-                    rel="noopener"
-                    className="font-bold hover:underline"
-                    style={{ color: domain.color }}>
-                    Student Dashboard
-                  </Link>
-                  {' '}will appear here.
+                  Activity photos uploaded by the admin will appear here.
                 </p>
               </>
             )}
@@ -239,23 +277,25 @@ export default async function ClubDetailPage({ params }: { params: Promise<{ slu
       </section>
 
       {/* ─── Competencies ─────────────────────────────────────────────── */}
-      <section style={{ background: '#fff' }}>
-        <div className="w-full px-6 sm:px-12 xl:px-20 py-20">
-          <FadeIn>
-            <p className="text-[10px] font-black tracking-[0.22em] uppercase mb-8" style={{ color: domain.color }}>
-              Competencies You'll Develop
-            </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {club.competencies.map(c => (
-                <div key={c} className="flex items-start gap-3">
-                  <CheckCircle2 size={16} className="mt-0.5 shrink-0" style={{ color: domain.color }} />
-                  <span className="text-sm font-semibold" style={{ color: '#3F3F46' }}>{c}</span>
-                </div>
-              ))}
-            </div>
-          </FadeIn>
-        </div>
-      </section>
+      {competencies.length > 0 && (
+        <section style={{ background: '#fff' }}>
+          <div className="w-full px-6 sm:px-12 xl:px-20 py-20">
+            <FadeIn>
+              <p className="text-[10px] font-black tracking-[0.22em] uppercase mb-8" style={{ color: domain.color }}>
+                Competencies You'll Develop
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {competencies.map(c => (
+                  <div key={c} className="flex items-start gap-3">
+                    <CheckCircle2 size={16} className="mt-0.5 shrink-0" style={{ color: domain.color }} />
+                    <span className="text-sm font-semibold" style={{ color: '#3F3F46' }}>{c}</span>
+                  </div>
+                ))}
+              </div>
+            </FadeIn>
+          </div>
+        </section>
+      )}
 
       {/* ─── Upcoming Events ──────────────────────────────────────────── */}
       <section style={{ background: '#F7F7F8' }}>
@@ -281,10 +321,10 @@ export default async function ClubDetailPage({ params }: { params: Promise<{ slu
             </div>
           </FadeIn>
 
-          {upcomingEvents.length > 0 ? (
+          {(upcomingEvents ?? []).length > 0 ? (
             <FadeIn>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                {upcomingEvents.slice(0, 3).map(event => {
+                {(upcomingEvents ?? []).map(event => {
                   const date = new Date(event.activity_date);
                   const month = date.toLocaleString('en-US', { month: 'short' }).toUpperCase();
                   const day = date.getDate();
@@ -293,13 +333,11 @@ export default async function ClubDetailPage({ params }: { params: Promise<{ slu
                       key={event.code}
                       className="rounded-2xl overflow-hidden flex flex-col"
                       style={{ border: '1px solid #E4E4E7', background: '#fff' }}>
-                      {/* Poster top stripe */}
                       <div className="h-2" style={{ background: `linear-gradient(90deg, ${domain.color}, ${domain.color}88)` }} />
                       <div className="px-6 pt-5 pb-4 flex-1 flex flex-col">
                         <div className="flex items-start justify-between gap-3 mb-4">
-                          <div
-                            className="rounded-xl px-3 py-2 text-center min-w-[3.5rem]"
-                            style={{ background: `${domain.color}12` }}>
+                          <div className="rounded-xl px-3 py-2 text-center min-w-[3.5rem]"
+                               style={{ background: `${domain.color}12` }}>
                             <p className="text-[9px] font-black tracking-widest uppercase" style={{ color: domain.color }}>{month}</p>
                             <p className="text-2xl font-black leading-none" style={{ color: domain.color }}>{day}</p>
                           </div>
@@ -313,7 +351,7 @@ export default async function ClubDetailPage({ params }: { params: Promise<{ slu
                           {event.title}
                         </h3>
                         <p className="text-sm leading-relaxed flex-1 mb-4" style={{ color: '#71717A' }}>
-                          {event.description.length > 100
+                          {event.description?.length > 100
                             ? event.description.slice(0, 100) + '…'
                             : event.description}
                         </p>
@@ -326,9 +364,7 @@ export default async function ClubDetailPage({ params }: { params: Promise<{ slu
                           {event.sdc_credits} SDC credits
                         </div>
                       </div>
-                      <div
-                        className="px-6 py-3"
-                        style={{ borderTop: '1px solid #E4E4E7', background: '#FAFAFA' }}>
+                      <div className="px-6 py-3" style={{ borderTop: '1px solid #E4E4E7', background: '#FAFAFA' }}>
                         <Link
                           href="https://sacactivities.kluniversity.in"
                           target="_blank"
@@ -346,9 +382,8 @@ export default async function ClubDetailPage({ params }: { params: Promise<{ slu
             </FadeIn>
           ) : (
             <FadeIn>
-              <div
-                className="rounded-2xl p-14 text-center"
-                style={{ background: '#fff', border: '1.5px dashed #D1D1D6' }}>
+              <div className="rounded-2xl p-14 text-center"
+                   style={{ background: '#fff', border: '1.5px dashed #D1D1D6' }}>
                 <Calendar size={32} className="mx-auto mb-4" style={{ color: '#D1D1D6' }} />
                 <p className="font-bold text-sm mb-1" style={{ color: '#71717A' }}>
                   No upcoming activities posted yet.
@@ -363,32 +398,34 @@ export default async function ClubDetailPage({ params }: { params: Promise<{ slu
       </section>
 
       {/* ─── What We Do ───────────────────────────────────────────────── */}
-      <section style={{ background: '#fff' }}>
-        <div className="w-full px-6 sm:px-12 xl:px-20 py-20">
-          <FadeIn>
-            <p className="text-[10px] font-black tracking-[0.22em] uppercase mb-8" style={{ color: domain.color }}>
-              What We Do
-            </p>
-            <div className="max-w-2xl" style={{ borderTop: '1px solid #E4E4E7' }}>
-              {club.activities.map((activity, i) => (
-                <div
-                  key={i}
-                  className="flex gap-6 py-5"
-                  style={{ borderBottom: '1px solid #E4E4E7' }}>
-                  <span
-                    className="font-black text-2xl leading-none shrink-0 pt-0.5"
-                    style={{ color: '#E8E8EC', width: '2rem', fontVariantNumeric: 'tabular-nums' }}>
-                    {String(i + 1).padStart(2, '0')}
-                  </span>
-                  <p className="text-base leading-relaxed" style={{ color: '#3F3F46' }}>
-                    {activity}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </FadeIn>
-        </div>
-      </section>
+      {activitiesList.length > 0 && (
+        <section style={{ background: '#fff' }}>
+          <div className="w-full px-6 sm:px-12 xl:px-20 py-20">
+            <FadeIn>
+              <p className="text-[10px] font-black tracking-[0.22em] uppercase mb-8" style={{ color: domain.color }}>
+                What We Do
+              </p>
+              <div className="max-w-2xl" style={{ borderTop: '1px solid #E4E4E7' }}>
+                {activitiesList.map((activity, i) => (
+                  <div
+                    key={i}
+                    className="flex gap-6 py-5"
+                    style={{ borderBottom: '1px solid #E4E4E7' }}>
+                    <span
+                      className="font-black text-2xl leading-none shrink-0 pt-0.5"
+                      style={{ color: '#E8E8EC', width: '2rem', fontVariantNumeric: 'tabular-nums' }}>
+                      {String(i + 1).padStart(2, '0')}
+                    </span>
+                    <p className="text-base leading-relaxed" style={{ color: '#3F3F46' }}>
+                      {activity}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </FadeIn>
+          </div>
+        </section>
+      )}
 
       {/* ─── Achievements ─────────────────────────────────────────────── */}
       <section style={{ background: '#F7F7F8' }}>
@@ -415,9 +452,8 @@ export default async function ClubDetailPage({ params }: { params: Promise<{ slu
           </FadeIn>
 
           <FadeIn>
-            <div
-              className="rounded-2xl p-12 text-center"
-              style={{ background: '#fff', border: '1.5px dashed #D1D1D6' }}>
+            <div className="rounded-2xl p-12 text-center"
+                 style={{ background: '#fff', border: '1.5px dashed #D1D1D6' }}>
               <Trophy size={32} className="mx-auto mb-4" style={{ color: '#D1D1D6' }} />
               <p className="font-bold text-sm mb-1" style={{ color: '#71717A' }}>
                 Competition wins and honours will be listed here.
@@ -468,12 +504,8 @@ export default async function ClubDetailPage({ params }: { params: Promise<{ slu
                     {abbr}
                   </div>
                   <div>
-                    <p className="font-black text-sm mb-0.5" style={{ color: '#0D0D0D' }}>
-                      Name TBA
-                    </p>
-                    <p className="text-xs font-semibold" style={{ color: '#A1A1AA' }}>
-                      {role}
-                    </p>
+                    <p className="font-black text-sm mb-0.5" style={{ color: '#0D0D0D' }}>Name TBA</p>
+                    <p className="text-xs font-semibold" style={{ color: '#A1A1AA' }}>{role}</p>
                   </div>
                 </div>
               ))}
@@ -502,12 +534,6 @@ export default async function ClubDetailPage({ params }: { params: Promise<{ slu
               <div>
                 <div className="flex items-center gap-3 mb-3">
                   <Users size={16} style={{ color: domain.color }} />
-                  {memberCount != null && memberLimit != null && (
-                    <span className="text-sm" style={{ color: 'rgba(255,255,255,0.4)' }}>
-                      <span className="font-bold" style={{ color: 'rgba(255,255,255,0.85)' }}>{memberCount}</span>
-                      {' '}of{' '}{memberLimit} spots filled
-                    </span>
-                  )}
                 </div>
                 <h2
                   className="font-black text-2xl sm:text-3xl mb-2 leading-tight"
@@ -524,15 +550,16 @@ export default async function ClubDetailPage({ params }: { params: Promise<{ slu
                   target="_blank"
                   rel="noopener"
                   className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-bold transition-all hover:scale-[1.03]"
-                  style={{ background: '#8B0000', color: '#fff' }}>
-                  Register on Dashboard
+                  style={{ background: domain.color, color: '#fff' }}>
+                  Join on Dashboard
                   <ArrowUpRight size={14} />
                 </Link>
                 <Link
                   href="/clubs"
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-bold transition-all hover:bg-white/10"
-                  style={{ border: '1px solid rgba(255,255,255,0.2)', color: '#fff' }}>
-                  Browse All Clubs
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-bold transition-all hover:opacity-80"
+                  style={{ background: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.7)', border: '1px solid rgba(255,255,255,0.12)' }}>
+                  Browse all clubs
+                  <ArrowRight size={14} />
                 </Link>
               </div>
             </div>
