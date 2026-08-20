@@ -31,7 +31,7 @@ export default async function LeadershipPage() {
             Student Council of KL University
           </h1>
           <p className="text-lg leading-relaxed" style={{ color: 'rgba(255,255,255,0.42)', maxWidth: '54ch' }}>
-            The elected and appointed student leaders who run KL SAC — {clubs?.length ?? 25} clubs, 5 domains, and the full breadth of campus life.
+            The elected and appointed student leaders who run KL SAC — {clubs?.length ?? 0} clubs, 5 domains, and the full breadth of campus life.
           </p>
         </div>
       </section>

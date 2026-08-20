@@ -1,6 +1,11 @@
 import { NextResponse } from 'next/server';
-import { DEMO_CLUBS } from '@/lib/demo-data';
+import { supabase } from '@/lib/supabase-admin';
 
 export async function GET() {
-  return NextResponse.json({ success: true, data: DEMO_CLUBS });
+  const { data, error } = await supabase
+    .from('clubs')
+    .select('id, slug, name, domain_code, domain_slug, tagline, logo_url')
+    .order('sort_order', { ascending: true });
+  if (error) return NextResponse.json({ success: false, data: [] }, { status: 500 });
+  return NextResponse.json({ success: true, data: data ?? [] });
 }
