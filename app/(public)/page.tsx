@@ -321,7 +321,7 @@ export default async function HomePage() {
                 <Link href={`/stories/${featuredStory.slug}`} className="group block h-full">
                   <div
                     className="rounded-2xl overflow-hidden mb-5 relative"
-                    style={{ background: 'linear-gradient(135deg, #1a0005 0%, #5b0000 100%)', aspectRatio: '16/7' }}>
+                    style={{ background: 'linear-gradient(135deg, #1a0005 0%, #5b0000 100%)', aspectRatio: '1/1' }}>
                     {featuredStory.photo && (
                       <img
                         src={featuredStory.photo}
@@ -359,7 +359,7 @@ export default async function HomePage() {
                     <Link href={`/stories/${story.slug}`} className="group block h-full">
                       <div
                         className="rounded-xl overflow-hidden mb-4 relative"
-                        style={{ background: i === 0 ? 'linear-gradient(135deg, #2D0000 0%, #8B0000 100%)' : 'linear-gradient(135deg, #1a0000 0%, #7C0000 100%)', aspectRatio: '16/9' }}>
+                        style={{ background: i === 0 ? 'linear-gradient(135deg, #2D0000 0%, #8B0000 100%)' : 'linear-gradient(135deg, #1a0000 0%, #7C0000 100%)', aspectRatio: '1/1' }}>
                         {story.photo && (
                           <img
                             src={story.photo}

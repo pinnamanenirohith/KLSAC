@@ -57,8 +57,8 @@ export default async function StoriesPage() {
                 style={{ border: '1px solid #E4E4E7' }}>
 
                 <div
-                  className="lg:col-span-2 min-h-64 lg:min-h-80 overflow-hidden"
-                  style={{ background: `linear-gradient(135deg, ${DOMAIN_COLORS[featured.domain_code] ?? '#8B0000'}18, ${DOMAIN_COLORS[featured.domain_code] ?? '#8B0000'}08)` }}>
+                  className="lg:col-span-2 overflow-hidden"
+                  style={{ background: `linear-gradient(135deg, ${DOMAIN_COLORS[featured.domain_code] ?? '#8B0000'}18, ${DOMAIN_COLORS[featured.domain_code] ?? '#8B0000'}08)`, aspectRatio: '1/1' }}>
                   {featured.photo ? (
                     <img src={featured.photo} alt={featured.title} className="w-full h-full object-cover" />
                   ) : (
@@ -119,8 +119,8 @@ export default async function StoriesPage() {
                   style={{ background: '#fff', border: '1px solid #E4E4E7' }}>
 
                   <div
-                    className="h-36 overflow-hidden"
-                    style={{ background: `linear-gradient(135deg, ${DOMAIN_COLORS[story.domain_code] ?? '#E4E4E7'}18, ${DOMAIN_COLORS[story.domain_code] ?? '#E4E4E7'}08)` }}>
+                    className="overflow-hidden"
+                    style={{ background: `linear-gradient(135deg, ${DOMAIN_COLORS[story.domain_code] ?? '#E4E4E7'}18, ${DOMAIN_COLORS[story.domain_code] ?? '#E4E4E7'}08)`, aspectRatio: '1/1' }}>
                     {story.photo ? (
                       <img src={story.photo} alt={story.title} className="w-full h-full object-cover" loading="lazy" />
                     ) : (
