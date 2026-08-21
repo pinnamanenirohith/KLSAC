@@ -55,7 +55,7 @@ export default function ActivitiesPage() {
           Activities
         </h1>
         <p className="text-lg max-w-2xl mx-auto" style={{ color: '#71717a' }}>
-          Browse all activities across domains. Register on the student portal to enroll and earn SDC credits.
+          Browse all activities across domains. Register on the student portal to enroll.
         </p>
       </div>
 
