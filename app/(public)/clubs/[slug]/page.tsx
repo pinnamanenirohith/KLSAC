@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import {
   ArrowLeft, ArrowRight, ArrowUpRight, CheckCircle2,
-  Camera, Calendar, MapPin, Zap, Trophy, Users,
+  Camera, Calendar, MapPin, Trophy, Users,
 } from 'lucide-react';
 import { supabase } from '@/lib/supabase-admin';
 import { getDomainByCode } from '@/lib/content/domains';
@@ -27,15 +27,13 @@ const OFFICE_ROLES = [
 export default async function ClubDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
 
-  const [{ data: club }, { data: upcomingEvents }] = await Promise.all([
+  const [{ data: club }, { data: allActivities }] = await Promise.all([
     supabase.from('clubs').select('*').eq('slug', slug).single(),
     supabase
       .from('activities')
       .select('*')
       .eq('club_slug', slug)
-      .gte('activity_date', new Date().toISOString().split('T')[0])
-      .order('activity_date', { ascending: true })
-      .limit(3),
+      .order('code', { ascending: true }),
   ]);
 
   if (!club) notFound();
@@ -297,83 +295,71 @@ export default async function ClubDetailPage({ params }: { params: Promise<{ slu
         </section>
       )}
 
-      {/* ─── Upcoming Events ──────────────────────────────────────────── */}
+      {/* ─── Activities Programme ─────────────────────────────────────── */}
       <section style={{ background: '#F7F7F8' }}>
         <div className="w-full px-6 sm:px-12 xl:px-20 py-20">
           <FadeIn>
             <div className="flex items-end justify-between mb-10 flex-wrap gap-4">
               <div>
                 <p className="text-[10px] font-black tracking-[0.22em] uppercase mb-3" style={{ color: domain.color }}>
-                  Upcoming Activities
+                  Activities Programme
                 </p>
                 <h2
                   className="font-black leading-tight"
                   style={{ fontSize: 'clamp(1.5rem, 3vw, 2.25rem)', color: '#0D0D0D', letterSpacing: '-0.02em' }}>
-                  Mark your calendar.
+                  What we do, all year.
                 </h2>
               </div>
-              <Link
-                href="/activities"
-                className="text-xs font-bold hover:opacity-70 transition-opacity"
-                style={{ color: domain.color }}>
-                All activities →
-              </Link>
+              {(allActivities ?? []).length > 0 && (
+                <span className="text-xs font-bold px-3 py-1.5 rounded-full"
+                      style={{ background: domain.accentBg, color: domain.color }}>
+                  {(allActivities ?? []).length} activities · AY 2026–27
+                </span>
+              )}
             </div>
           </FadeIn>
 
-          {(upcomingEvents ?? []).length > 0 ? (
+          {(allActivities ?? []).length > 0 ? (
             <FadeIn>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                {(upcomingEvents ?? []).map(event => {
-                  const date = new Date(event.activity_date);
-                  const month = date.toLocaleString('en-US', { month: 'short' }).toUpperCase();
-                  const day = date.getDate();
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {(allActivities ?? []).map(act => {
+                  const hasDate = !!act.activity_date;
+                  const dateLabel = hasDate
+                    ? new Date(act.activity_date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })
+                    : act.month ?? null;
                   return (
                     <div
-                      key={event.code}
+                      key={act.code}
                       className="rounded-2xl overflow-hidden flex flex-col"
                       style={{ border: '1px solid #E4E4E7', background: '#fff' }}>
-                      <div className="h-2" style={{ background: `linear-gradient(90deg, ${domain.color}, ${domain.color}88)` }} />
-                      <div className="px-6 pt-5 pb-4 flex-1 flex flex-col">
-                        <div className="flex items-start justify-between gap-3 mb-4">
-                          <div className="rounded-xl px-3 py-2 text-center min-w-[3.5rem]"
-                               style={{ background: `${domain.color}12` }}>
-                            <p className="text-[9px] font-black tracking-widest uppercase" style={{ color: domain.color }}>{month}</p>
-                            <p className="text-2xl font-black leading-none" style={{ color: domain.color }}>{day}</p>
-                          </div>
-                          <span
-                            className="text-[9px] font-black tracking-widest uppercase px-2.5 py-1 rounded-full mt-1"
-                            style={{ background: domain.accentBg, color: domain.color }}>
-                            {event.difficulty}
+                      <div className="h-1.5" style={{ background: `linear-gradient(90deg, ${domain.color}, ${domain.color}66)` }} />
+                      <div className="px-5 pt-4 pb-5 flex-1 flex flex-col gap-2">
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="text-[9px] font-black tracking-widest uppercase px-2 py-0.5 rounded-full"
+                                style={{ background: domain.accentBg, color: domain.color }}>
+                            {act.code}
                           </span>
+                          {dateLabel && (
+                            <span className="flex items-center gap-1 text-[10px] font-semibold shrink-0" style={{ color: '#A1A1AA' }}>
+                              <Calendar size={9} />
+                              {dateLabel}
+                            </span>
+                          )}
                         </div>
-                        <h3 className="font-black text-base leading-snug mb-2" style={{ color: '#0D0D0D' }}>
-                          {event.title}
+                        <h3 className="font-black text-sm leading-snug" style={{ color: '#0D0D0D' }}>
+                          {act.title}
                         </h3>
-                        <p className="text-sm leading-relaxed flex-1 mb-4" style={{ color: '#71717A' }}>
-                          {event.description?.length > 100
-                            ? event.description.slice(0, 100) + '…'
-                            : event.description}
+                        <p className="text-xs leading-relaxed flex-1" style={{ color: '#71717A' }}>
+                          {act.description?.length > 120
+                            ? act.description.slice(0, 120) + '…'
+                            : act.description}
                         </p>
-                        <div className="flex items-center gap-1.5 text-xs mb-1" style={{ color: '#A1A1AA' }}>
-                          <MapPin size={11} />
-                          <span className="truncate">{event.venue}</span>
-                        </div>
-                        <div className="flex items-center gap-1.5 text-xs font-bold" style={{ color: domain.color }}>
-                          <Zap size={11} />
-                          {event.sdc_credits} SDC credits
-                        </div>
-                      </div>
-                      <div className="px-6 py-3" style={{ borderTop: '1px solid #E4E4E7', background: '#FAFAFA' }}>
-                        <Link
-                          href="https://sacactivities.kluniversity.in"
-                          target="_blank"
-                          rel="noopener"
-                          className="flex items-center justify-center gap-2 w-full py-2 rounded-xl text-sm font-bold transition-all hover:opacity-80"
-                          style={{ background: domain.color, color: '#fff' }}>
-                          Register on Dashboard
-                          <ArrowUpRight size={13} />
-                        </Link>
+                        {act.venue && (
+                          <div className="flex items-center gap-1 text-[10px]" style={{ color: '#A1A1AA' }}>
+                            <MapPin size={9} />
+                            <span className="truncate">{act.venue}</span>
+                          </div>
+                        )}
                       </div>
                     </div>
                   );
@@ -386,10 +372,10 @@ export default async function ClubDetailPage({ params }: { params: Promise<{ slu
                    style={{ background: '#fff', border: '1.5px dashed #D1D1D6' }}>
                 <Calendar size={32} className="mx-auto mb-4" style={{ color: '#D1D1D6' }} />
                 <p className="font-bold text-sm mb-1" style={{ color: '#71717A' }}>
-                  No upcoming activities posted yet.
+                  No activities posted yet.
                 </p>
                 <p className="text-xs" style={{ color: '#A1A1AA' }}>
-                  Activity details will appear here once scheduled.
+                  Activity details will appear here once added by the admin.
                 </p>
               </div>
             </FadeIn>
