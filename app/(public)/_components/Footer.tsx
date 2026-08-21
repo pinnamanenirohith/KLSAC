@@ -154,24 +154,39 @@ export default function Footer() {
       </div>
 
       {/* ── Credits ── */}
-      <div className="w-full px-6 sm:px-12 xl:px-20 py-4 flex flex-col sm:flex-row items-start sm:items-center gap-4"
+      <div className="w-full px-6 sm:px-12 xl:px-20 py-4 flex flex-col sm:flex-row items-start sm:items-center gap-6"
            style={{ borderTop: '1px solid rgba(255,255,255,0.07)' }}>
-        <div className="flex flex-col gap-1.5">
-          <p className="text-[10px]" style={{ color: 'rgba(255,255,255,0.2)' }}>
-            <span style={{ color: 'rgba(255,255,255,0.35)' }}>First SAC Website</span>
-            {' '}— Designed &amp; Developed by{' '}
-            <span style={{ color: 'rgba(255,255,255,0.3)' }}>Deepak Reddy Gathpa</span>
-            {' '}&amp;{' '}
-            <span style={{ color: 'rgba(255,255,255,0.3)' }}>Tadikonda Sai Manikanta</span>
-          </p>
-          <p className="text-[10px]" style={{ color: 'rgba(255,255,255,0.2)' }}>
-            <span style={{ color: 'rgba(255,255,255,0.35)' }}>Current Website</span>
-            {' '}— Designed &amp; Developed by{' '}
-            <span style={{ color: 'rgba(255,255,255,0.3)' }}>Rohith Venkata Sai Pinnamaneni</span>
-            {' '}&amp;{' '}
-            <span style={{ color: 'rgba(255,255,255,0.3)' }}>Singana Nischal</span>
-          </p>
-        </div>
+        <p className="text-[10px]" style={{ color: 'rgba(255,255,255,0.2)' }}>
+          <span style={{ color: 'rgba(255,255,255,0.35)' }}>First SAC Website</span>
+          {' '}— Designed &amp; Developed by{' '}
+          <a href="https://www.linkedin.com/in/deepakreddygathpa/" target="_blank" rel="noopener"
+             className="transition-colors hover:text-white"
+             style={{ color: 'rgba(255,255,255,0.4)', textDecoration: 'underline', textUnderlineOffset: '2px' }}>
+            Deepak Reddy Gathpa
+          </a>
+          {' '}&amp;{' '}
+          <a href="https://www.linkedin.com/in/tadikondasaimanikanta/" target="_blank" rel="noopener"
+             className="transition-colors hover:text-white"
+             style={{ color: 'rgba(255,255,255,0.4)', textDecoration: 'underline', textUnderlineOffset: '2px' }}>
+            Tadikonda Sai Manikanta
+          </a>
+        </p>
+        <div className="hidden sm:block w-px self-stretch" style={{ background: 'rgba(255,255,255,0.08)' }} />
+        <p className="text-[10px]" style={{ color: 'rgba(255,255,255,0.2)' }}>
+          <span style={{ color: 'rgba(255,255,255,0.35)' }}>Current Website</span>
+          {' '}— Designed &amp; Developed by{' '}
+          <a href="https://www.linkedin.com/in/rohith-venkata-sai-pinnamaneni-38807a2b2/" target="_blank" rel="noopener"
+             className="transition-colors hover:text-white"
+             style={{ color: 'rgba(255,255,255,0.4)', textDecoration: 'underline', textUnderlineOffset: '2px' }}>
+            Rohith Venkata Sai Pinnamaneni
+          </a>
+          {' '}&amp;{' '}
+          <a href="https://www.linkedin.com/in/singananischal/" target="_blank" rel="noopener"
+             className="transition-colors hover:text-white"
+             style={{ color: 'rgba(255,255,255,0.4)', textDecoration: 'underline', textUnderlineOffset: '2px' }}>
+            Singana Nischal
+          </a>
+        </p>
       </div>
 
       {/* ── Bottom bar ── */}
