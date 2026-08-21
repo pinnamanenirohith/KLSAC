@@ -16,7 +16,7 @@ export const metadata = {
 
 const JOURNEY_STEPS = [
   { title: 'Discover',     description: 'Explore your interests across five domains and twenty-five clubs. Find the community that matches who you are — or who you want to become.' },
-  { title: 'Participate',  description: 'Join activities, competitions, workshops, and programmes that go beyond the curriculum. Every participation earns SDC credits and real-world experience.' },
+  { title: 'Participate',  description: 'Join activities, competitions, workshops, and programmes that go beyond the curriculum. Every participation builds real-world experience.' },
   { title: 'Develop',      description: 'Build competencies that employers and institutions recognise — technical, creative, leadership, and interpersonal skills that define the complete professional.' },
   { title: 'Lead',         description: 'Take responsibility within your club — as a coordinator, team leader, or domain representative. Leadership at SAC is earned through performance, not appointment.' },
   { title: 'Create',       description: 'Build something that matters: a product, a performance, a project, a venture. SAC gives you the platform, the mentors, and the collaborators you need.' },
@@ -710,7 +710,7 @@ export default async function HomePage() {
               Ready to make your university years count?
             </h2>
             <p className="text-lg mb-12 mx-auto" style={{ color: 'rgba(255,255,255,0.45)', maxWidth: '48ch' }}>
-              Join one of 25 clubs, participate in activities, earn SDC credits, and build experiences that will define your career.
+              Join one of 25 clubs, participate in activities, and build experiences that will define your career.
             </p>
             <div className="flex flex-wrap items-center justify-center gap-4">
               <Link

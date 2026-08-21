@@ -142,7 +142,6 @@ function EventRow({ ev, dim }: { ev: any; dim: boolean }) {
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs" style={{ color: '#A1A1AA' }}>
           <span className="font-black uppercase text-[10px]" style={{ color }}>{ev.domain}</span>
           {ev.venue && <><span>·</span><span>{ev.venue}</span></>}
-          {ev.sdc_credits > 0 && <><span>·</span><span className="font-semibold" style={{ color: '#8B0000' }}>{ev.sdc_credits} SDC Credits</span></>}
         </div>
         {ev.description && (
           <p className="text-sm mt-2 line-clamp-1" style={{ color: '#71717A' }}>

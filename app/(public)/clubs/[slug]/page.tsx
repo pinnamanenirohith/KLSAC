@@ -527,7 +527,7 @@ export default async function ClubDetailPage({ params }: { params: Promise<{ slu
                   Ready to join {club.name}?
                 </h2>
                 <p style={{ color: 'rgba(255,255,255,0.45)' }}>
-                  Register on the Student Dashboard to join this club and start earning SDC credits.
+                  Register on the Student Dashboard to join this club and be part of the community.
                 </p>
               </div>
               <div className="flex flex-wrap gap-4 shrink-0">

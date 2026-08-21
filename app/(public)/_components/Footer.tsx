@@ -141,7 +141,7 @@ export default function Footer() {
 
           <div className="pt-5" style={{ borderTop: '1px solid rgba(255,255,255,0.08)' }}>
             <p className="text-xs mb-3" style={{ color: 'rgba(255,255,255,0.3)' }}>
-              Register for clubs, track SDC credits and manage your student journey.
+              Register for clubs and manage your student journey.
             </p>
             <Link href="https://sacactivities.kluniversity.in" target="_blank" rel="noopener"
                   className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-bold transition-all hover:scale-[1.03]"

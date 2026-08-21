@@ -93,7 +93,7 @@ export default function ContactPage() {
                     Are you a KL student?
                   </p>
                   <p className="text-xs mb-4" style={{ color: 'rgba(255,255,255,0.45)' }}>
-                    For club registration, activity details, and SDC credits — use the Student Dashboard.
+                    For club registration and activity details — use the Student Dashboard.
                   </p>
                   <Link
                     href="https://sacactivities.kluniversity.in"
