@@ -18,7 +18,9 @@ interface Activity {
   title: string;
   description: string;
   competencies: string;
-  activity_date: string;
+  activity_date: string | null;
+  month?: string;
+  week?: string;
   venue: string;
   time_slot?: string;
   difficulty: string;
@@ -98,7 +100,7 @@ export default function ActivitiesPage() {
             const meta      = DOMAIN_META[act.domain];
             const color     = meta?.color ?? '#8b0000';
             const diffColor = DIFFICULTY_COLOR[act.difficulty ?? 'Beginner'] ?? '#6b7280';
-            const isPast    = act.activity_date < new Date().toISOString().split('T')[0];
+            const isPast    = !!act.activity_date && act.activity_date < new Date().toISOString().split('T')[0];
             return (
               <div
                 key={`${act.code}__${act.club_slug}__${idx}`}
