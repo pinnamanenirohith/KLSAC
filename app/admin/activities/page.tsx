@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
-import { Plus, Trash2, Pencil, Filter, AlertCircle } from 'lucide-react';
+import { Plus, Trash2, Pencil, Filter } from 'lucide-react';
 
 const DOMAINS = ['all', 'TEC', 'LCH', 'HWB', 'ESO', 'IIE'];
 const DOMAIN_COLOR: Record<string, string> = {
@@ -48,19 +48,6 @@ export default function ActivitiesAdminPage() {
               style={{ background: '#8B0000', color: '#fff' }}>
           <Plus size={14} /> New Activity
         </Link>
-      </div>
-
-      {/* Migration banner */}
-      <div className="mb-6 rounded-2xl border p-4 flex gap-3"
-           style={{ background: '#fffbeb', borderColor: '#fcd34d' }}>
-        <AlertCircle size={18} style={{ color: '#d97706', flexShrink: 0, marginTop: 1 }} />
-        <div>
-          <p className="text-sm font-bold" style={{ color: '#92400e' }}>Run this SQL in Supabase to enable month/week fields and make date optional:</p>
-          <code className="text-xs block mt-1 p-2 rounded font-mono whitespace-pre" style={{ background: '#fef3c7', color: '#78350f' }}>{`ALTER TABLE activities
-  ALTER COLUMN activity_date DROP NOT NULL,
-  ADD COLUMN IF NOT EXISTS month text DEFAULT '',
-  ADD COLUMN IF NOT EXISTS week  text DEFAULT '';`}</code>
-        </div>
       </div>
 
       {/* Domain filter */}
