@@ -6,7 +6,7 @@
 
 ## What this is
 
-The new KL SAC (Student Activity Center) website built with **Next.js**, replacing the old site at `sac.kluniversity.in`. It connects to a **Supabase** PostgreSQL database for clubs, activities, and events. The student dashboard (`sacactivities.kluniversity.in`) remains separate — this site links to it but doesn't replace it.
+The new KL SAC (Student Activity Center) website built with **Next.js**, replacing the old site at `sac.kluniversity.in`. It currently connects to a **Supabase** PostgreSQL database — but for the college server deployment, swap it out for the college PostgreSQL database (see below). The student dashboard (`sacactivities.kluniversity.in`) remains separate — this site just links to it.
 
 ---
 
@@ -16,7 +16,7 @@ The new KL SAC (Student Activity Center) website built with **Next.js**, replaci
 |---|---|
 | Framework | Next.js 16 (App Router) |
 | Styling | Tailwind CSS |
-| Database | Supabase (PostgreSQL) |
+| Database | Supabase (swap to college PostgreSQL — see below) |
 | Auth | JWT-based admin auth (custom) |
 | Hosting | College server (Node.js) |
 
@@ -34,7 +34,7 @@ npm install
 
 ### 2. Environment Variables
 
-Create a `.env.local` file in `my-app/` — get these values from Rohith:
+Create a `.env.local` file in `my-app/` — get Supabase values from Rohith:
 
 ```
 NEXT_PUBLIC_SUPABASE_URL=
@@ -72,7 +72,113 @@ server {
 }
 ```
 
-> Add SSL via Let's Encrypt (`certbot`) to get HTTPS — required to remove the globe icon from the browser address bar.
+> Add SSL via Let's Encrypt (`certbot`) to get HTTPS — required to show the padlock in the browser address bar.
+
+---
+
+## Migrating from Supabase to College PostgreSQL
+
+The current codebase uses the Supabase client. If you're moving the database to the college server, here's what needs to change:
+
+### 1. Install a PostgreSQL client
+
+```bash
+npm install pg
+```
+
+### 2. Replace the Supabase client
+
+The Supabase client is initialised in `lib/supabase/server.ts` and `lib/supabase/client.ts`. Replace those with a direct `pg` pool:
+
+```ts
+// lib/db.ts
+import { Pool } from 'pg';
+
+const pool = new Pool({
+  host: process.env.DB_HOST,
+  port: Number(process.env.DB_PORT) || 5432,
+  database: process.env.DB_NAME,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+});
+
+export default pool;
+```
+
+Add these to `.env.local`:
+
+```
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=klsac
+DB_USER=
+DB_PASSWORD=
+```
+
+### 3. Replace Supabase queries
+
+Every API route uses `supabase.from('table').select/insert/update/upsert`. Replace with `pool.query(...)`. Example:
+
+```ts
+// Before (Supabase)
+const { data } = await supabase.from('clubs').select('*').order('sort_order');
+
+// After (pg)
+const { rows: data } = await pool.query('SELECT * FROM clubs ORDER BY sort_order ASC');
+```
+
+### 4. Create the database tables
+
+Run this SQL on the college PostgreSQL to create the required tables:
+
+```sql
+CREATE TABLE clubs (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  name TEXT NOT NULL,
+  slug TEXT UNIQUE NOT NULL,
+  domain_code TEXT NOT NULL,
+  tagline TEXT,
+  description TEXT,
+  photo_url TEXT,
+  sort_order INT DEFAULT 0,
+  created_at TIMESTAMPTZ DEFAULT now()
+);
+
+CREATE TABLE activities (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  code TEXT UNIQUE NOT NULL,
+  club_slug TEXT NOT NULL,
+  domain TEXT NOT NULL,
+  title TEXT NOT NULL,
+  description TEXT,
+  competencies TEXT,
+  month TEXT,
+  week TEXT,
+  activity_date DATE,
+  venue TEXT,
+  time_slot TEXT,
+  difficulty TEXT DEFAULT 'Beginner',
+  created_at TIMESTAMPTZ DEFAULT now()
+);
+
+CREATE TABLE events (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  title TEXT NOT NULL,
+  description TEXT,
+  club_slug TEXT,
+  domain TEXT,
+  activity_date DATE,
+  venue TEXT,
+  created_at TIMESTAMPTZ DEFAULT now()
+);
+
+CREATE TABLE admin_users (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  email TEXT UNIQUE NOT NULL,
+  password_hash TEXT NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT now()
+);
+```
 
 ---
 
@@ -105,7 +211,7 @@ server {
 | HWB | 3 clubs |
 | IIE | — (activities pending) |
 
-### Activities Seeded (for testing only — add fresh from admin after deploy)
+### Activities Seeded (testing only — add fresh from admin after deploy)
 - LCH: 210 activities across 11 clubs
 - ESO: 60 activities across 3 clubs
 - HWB: 30 activities across 3 clubs
@@ -124,7 +230,7 @@ server {
 
 ## Seed Endpoints (Bulk Load Activities)
 
-If you want to re-load the activity data quickly without entering one by one, hit these endpoints with the setup key header:
+Hit these after deploy to load all activity data without entering one by one:
 
 ```bash
 # LCH — 210 activities
@@ -146,7 +252,7 @@ curl -X POST https://sac.kluniversity.in/api/admin/seed/hwb-activities \
 
 - **No SDC credits** — all mentions removed site-wide intentionally
 - **Student dashboard** — `sacactivities.kluniversity.in` is already linked everywhere, no changes needed
-- **Admin login** — credentials are set in Supabase, ask Rohith
+- **Admin login** — credentials are in the database, ask Rohith
 - **IIE activities** — not yet added, pending content from Rohith
 
 ---
