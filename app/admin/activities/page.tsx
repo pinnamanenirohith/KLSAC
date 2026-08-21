@@ -86,7 +86,7 @@ export default function ActivitiesAdminPage() {
                   <p className="font-bold text-sm truncate" style={{ color: '#0D0D0D' }}>{a.title}</p>
                   <p className="text-xs mt-0.5" style={{ color: '#A1A1AA' }}>
                     <span className="font-black" style={{ color }}>{a.domain}</span>
-                    {' · '}{a.difficulty}{' · '}{a.sdc_credits} SDC
+                    {' · '}{a.difficulty}
                     {' · '}{new Date(a.activity_date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
                   </p>
                 </div>

@@ -1,6 +1,6 @@
 import { supabase } from '@/lib/supabase-admin';
 
-export async function getHomepageEvents(limit = 4) {
+export async function getHomepageEvents(limit = 1) {
   const today = new Date().toISOString().split('T')[0];
   const { data } = await supabase
     .from('activities')

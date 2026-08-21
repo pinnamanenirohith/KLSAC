@@ -25,7 +25,7 @@ const JOURNEY_STEPS = [
 
 export default async function HomePage() {
   const [events, storiesRes, settingsRes, newsRes, domainsRes, clubsRes, statsRes] = await Promise.all([
-    getHomepageEvents(4),
+    getHomepageEvents(1),
     supabase.from('stories').select('slug, title, student_name, student_year, club_name, domain_code, excerpt, photo, homepage_order').gt('homepage_order', 0).order('homepage_order', { ascending: true }),
     supabase.from('site_settings').select('key, value'),
     supabase.from('news_articles').select('slug, title, excerpt, photo_url, category, date').gt('homepage_order', 0).order('homepage_order', { ascending: true }).limit(3),
@@ -55,7 +55,7 @@ export default async function HomePage() {
   const statActivities = sacStatsMap['activities'] ?? 0;
 
   const today   = new Date().toISOString().split('T')[0];
-  const upcomingEvents = events.filter((e: any) => e.activity_date >= today).slice(0, 4);
+  const upcomingEvents = events.filter((e: any) => e.activity_date >= today).slice(0, 1);
 
   return (
     <>
