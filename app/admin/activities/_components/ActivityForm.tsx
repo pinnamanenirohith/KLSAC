@@ -60,7 +60,6 @@ export default function ActivityForm({ initial, mode }: Props) {
     venue:         initial?.venue         ?? '',
     time_slot:     initial?.time_slot     ?? '',
     difficulty:    initial?.difficulty    ?? 'Beginner',
-    sdc_credits:   initial?.sdc_credits   ?? 3,
   });
 
   useEffect(() => {
@@ -159,19 +158,12 @@ export default function ActivityForm({ initial, mode }: Props) {
                className={inp} style={is} placeholder="e.g. SAC Hall, KL University" />
       </Field>
 
-      {/* Difficulty + Credits */}
-      <div className="grid grid-cols-2 gap-4">
-        <Field label="Difficulty">
-          <select value={form.difficulty} onChange={e => set('difficulty', e.target.value)} className={inp} style={is}>
-            {['Beginner','Intermediate','Advanced'].map(d => <option key={d}>{d}</option>)}
-          </select>
-        </Field>
-        <Field label="SDC Credits">
-          <select value={form.sdc_credits} onChange={e => set('sdc_credits', Number(e.target.value))} className={inp} style={is}>
-            {[3,4,5].map(n => <option key={n}>{n}</option>)}
-          </select>
-        </Field>
-      </div>
+      {/* Difficulty */}
+      <Field label="Difficulty">
+        <select value={form.difficulty} onChange={e => set('difficulty', e.target.value)} className={inp} style={is}>
+          {['Beginner','Intermediate','Advanced'].map(d => <option key={d}>{d}</option>)}
+        </select>
+      </Field>
 
       {/* Description */}
       <Field label="Description">

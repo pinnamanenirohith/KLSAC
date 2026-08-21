@@ -4,7 +4,7 @@ export async function getHomepageEvents(limit = 4) {
   const today = new Date().toISOString().split('T')[0];
   const { data } = await supabase
     .from('activities')
-    .select('code, title, domain, venue, activity_date, time_slot, sdc_credits, difficulty, club_slug')
+    .select('code, title, domain, venue, activity_date, time_slot, difficulty, club_slug')
     .gte('activity_date', today)
     .order('activity_date', { ascending: true })
     .limit(limit);

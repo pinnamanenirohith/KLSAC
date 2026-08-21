@@ -1,6 +1,6 @@
 ﻿'use client';
 import { useState, useEffect } from 'react';
-import { Zap, Calendar, MapPin, Clock, Filter } from 'lucide-react';
+import { Calendar, MapPin, Clock, Filter } from 'lucide-react';
 import { DOMAIN_META } from '@/lib/demo-data';
 
 const DOMAIN_ORDER = ['all', 'TEC', 'LCH', 'HWB', 'ESO', 'IIE'];
@@ -22,7 +22,6 @@ interface Activity {
   venue: string;
   time_slot?: string;
   difficulty: string;
-  sdc_credits: number;
 }
 
 export default function ActivitiesPage() {
@@ -90,7 +89,7 @@ export default function ActivitiesPage() {
         </div>
       ) : visible.length === 0 ? (
         <div className="text-center py-24" style={{ color: '#71717a' }}>
-          <Zap size={48} className="mx-auto mb-4 opacity-20" />
+          <Calendar size={48} className="mx-auto mb-4 opacity-20" />
           <p className="font-semibold">No activities found for this domain.</p>
         </div>
       ) : (
@@ -125,13 +124,10 @@ export default function ActivitiesPage() {
                     {act.description}
                   </p>
                   <div
-                    className="grid grid-cols-2 gap-2 text-xs mt-auto pt-3"
+                    className="flex flex-col gap-2 text-xs mt-auto pt-3"
                     style={{ borderTop: '1px solid #f0f0f0', color: '#71717a' }}>
-                    <span className="flex items-center gap-1.5 font-semibold" style={{ color: '#8B0000' }}>
-                      <Zap size={12} /> {act.sdc_credits ?? 0} SDC Credits
-                    </span>
                     {act.activity_date && (
-                      <span className="flex items-center gap-1.5 col-span-2">
+                      <span className="flex items-center gap-1.5">
                         <Calendar size={12} />
                         {new Date(act.activity_date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
                         {act.time_slot && (
@@ -142,7 +138,7 @@ export default function ActivitiesPage() {
                       </span>
                     )}
                     {act.venue && (
-                      <span className="flex items-center gap-1.5 col-span-2 truncate">
+                      <span className="flex items-center gap-1.5 truncate">
                         <MapPin size={12} /> {act.venue}
                       </span>
                     )}
