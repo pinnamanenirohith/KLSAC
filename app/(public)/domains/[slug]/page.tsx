@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import {
   ArrowRight, ArrowUpRight, ArrowLeft,
-  Camera, Calendar, MapPin, Zap, Trophy,
+  Camera, Calendar, MapPin, Trophy,
 } from 'lucide-react';
 import { supabase } from '@/lib/supabase-admin';
 import { FadeIn } from '../../_components/FadeIn';
@@ -262,12 +262,8 @@ export default async function DomainDetailPage({ params }: { params: Promise<{ s
                           <span className="truncate">{activity.venue}</span>
                         </div>
                       </div>
-                      <div className="flex items-center justify-between px-6 py-3"
+                      <div className="flex items-center justify-end px-6 py-3"
                            style={{ borderTop: '1px solid #E4E4E7', background: '#FAFAFA' }}>
-                        <div className="flex items-center gap-1.5 text-xs font-bold" style={{ color: domain.color }}>
-                          <Zap size={11} />
-                          {activity.sdc_credits} SDC credits
-                        </div>
                         <Link href="https://sacactivities.kluniversity.in" target="_blank" rel="noopener"
                               className="text-[11px] font-bold px-3.5 py-1.5 rounded-full transition-all hover:opacity-80"
                               style={{ background: domain.color, color: '#fff' }}>
