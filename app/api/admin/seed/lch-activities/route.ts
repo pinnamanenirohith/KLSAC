@@ -259,7 +259,6 @@ export async function POST(req: NextRequest) {
     venue:         null,
     time_slot:     null,
     difficulty:    'Beginner',
-    updated_at:    new Date().toISOString(),
   }));
 
   const { error } = await supabase.from('activities').upsert(rows, { onConflict: 'code' });
