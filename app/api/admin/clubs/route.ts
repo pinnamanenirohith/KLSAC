@@ -3,8 +3,11 @@ import { revalidatePath } from 'next/cache';
 import { requireAdmin } from '@/lib/auth';
 import { supabase } from '@/lib/supabase-admin';
 
-export async function GET() {
-  const { data } = await supabase.from('clubs').select('*').order('sort_order', { ascending: true });
+export async function GET(req: NextRequest) {
+  const domain = req.nextUrl.searchParams.get('domain');
+  let query = supabase.from('clubs').select('*').order('sort_order', { ascending: true });
+  if (domain && domain !== 'all') query = query.eq('domain_code', domain);
+  const { data } = await query;
   return NextResponse.json({ success: true, data: data ?? [] });
 }
 
