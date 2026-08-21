@@ -30,7 +30,7 @@ export default async function HomePage() {
     supabase.from('site_settings').select('key, value'),
     supabase.from('news_articles').select('slug, title, excerpt, photo_url, category, date').gt('homepage_order', 0).order('homepage_order', { ascending: true }).limit(3),
     supabase.from('domains').select('slug, code, name, tagline, color, accent_bg').order('sort_order', { ascending: true }),
-    supabase.from('clubs').select('domain_code'),
+    supabase.from('clubs').select('domain_code, slug, name'),
     supabase.from('sac_stats').select('key, value'),
   ]);
 
@@ -44,8 +44,10 @@ export default async function HomePage() {
   const sideStories   = stories.filter(s => (s.homepage_order ?? 0) > 1).slice(0, 2);
 
   const clubCountByDomain: Record<string, number> = {};
+  const clubNameMap: Record<string, string> = {};
   (clubsRes.data ?? []).forEach((c: any) => {
     clubCountByDomain[c.domain_code] = (clubCountByDomain[c.domain_code] ?? 0) + 1;
+    if (c.slug) clubNameMap[c.slug] = c.name;
   });
   const totalClubs = Object.values(clubCountByDomain).reduce((a, b) => a + b, 0);
 
@@ -462,6 +464,7 @@ export default async function HomePage() {
                       </h3>
                       <div className="flex flex-wrap items-center gap-2 text-xs" style={{ color: '#A1A1AA' }}>
                         <span className="font-black text-[10px] uppercase" style={{ color }}>{ev.domain}</span>
+                        {clubNameMap[ev.club_slug] && <><span>·</span><span className="font-semibold">{clubNameMap[ev.club_slug]}</span></>}
                         {ev.venue && <><span>·</span><span>{ev.venue}</span></>}
                       </div>
                     </div>

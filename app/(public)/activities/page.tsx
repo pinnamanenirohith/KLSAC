@@ -14,6 +14,7 @@ const DIFFICULTY_COLOR: Record<string, string> = {
 interface Activity {
   code: string;
   club_slug: string;
+  club_name?: string;
   domain: string;
   title: string;
   description: string;
@@ -122,6 +123,11 @@ export default function ActivitiesPage() {
                     )}
                   </div>
                   <h2 className="font-bold text-lg leading-snug text-gray-900">{act.title}</h2>
+                  {act.club_name && (
+                    <p className="text-xs font-semibold -mt-1" style={{ color }}>
+                      {act.club_name}
+                    </p>
+                  )}
                   <p className="text-sm line-clamp-2 flex-1" style={{ color: '#71717a' }}>
                     {act.description}
                   </p>

@@ -7,8 +7,15 @@ export async function GET(req: NextRequest) {
   let query = supabase.from('activities').select('*').order('activity_date', { ascending: false });
   if (domain && domain !== 'all') query = query.eq('domain', domain);
 
-  const { data, error } = await query;
+  const [{ data: activities, error }, { data: clubs }] = await Promise.all([
+    query,
+    supabase.from('clubs').select('slug, name'),
+  ]);
 
   if (error) return NextResponse.json({ success: false, data: [] }, { status: 500 });
-  return NextResponse.json({ success: true, data: data ?? [] });
+
+  const clubNameMap = Object.fromEntries((clubs ?? []).map((c: any) => [c.slug, c.name]));
+  const data = (activities ?? []).map((a: any) => ({ ...a, club_name: clubNameMap[a.club_slug] ?? '' }));
+
+  return NextResponse.json({ success: true, data });
 }

@@ -42,6 +42,7 @@ export default async function DomainDetailPage({ params }: { params: Promise<{ s
   const upcomingActivities = upcomingActivitiesData ?? [];
   const galleryPhotos     = (domain.gallery as string[]) ?? [];
   const competencies      = (domain.competencies as string[]) ?? [];
+  const clubNameMap       = Object.fromEntries(clubs.map((c: any) => [c.slug, c.name]));
 
   return (
     <>
@@ -249,9 +250,14 @@ export default async function DomainDetailPage({ params }: { params: Promise<{ s
                             {activity.difficulty}
                           </span>
                         </div>
-                        <h3 className="font-black text-base leading-snug mb-2" style={{ color: '#0D0D0D' }}>
+                        <h3 className="font-black text-base leading-snug mb-1" style={{ color: '#0D0D0D' }}>
                           {activity.title}
                         </h3>
+                        {clubNameMap[activity.club_slug] && (
+                          <p className="text-xs font-semibold mb-2" style={{ color: domain.color }}>
+                            {clubNameMap[activity.club_slug]}
+                          </p>
+                        )}
                         <p className="text-sm leading-relaxed flex-1 mb-4" style={{ color: '#71717A' }}>
                           {activity.description.length > 110
                             ? activity.description.slice(0, 110) + '…'
