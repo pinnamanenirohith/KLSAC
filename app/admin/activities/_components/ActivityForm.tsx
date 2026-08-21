@@ -43,6 +43,20 @@ const FALLBACK_CLUBS: Record<string, { slug: string; name: string }[]> = {
 
 const ALL_FALLBACK = Object.values(FALLBACK_CLUBS).flat();
 
+const MONTH_NAMES = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+function buildMonthOptions() {
+  const now = new Date();
+  const opts: string[] = [];
+  for (let i = 0; i < 18; i++) {
+    const d = new Date(now.getFullYear(), now.getMonth() + i, 1);
+    opts.push(`${MONTH_NAMES[d.getMonth()]} ${d.getFullYear()}`);
+  }
+  return opts;
+}
+const MONTH_OPTIONS = buildMonthOptions();
+const WEEK_OPTIONS  = ['Week 1', 'Week 2', 'Week 3', 'Week 4'];
+
 interface Props { initial?: any; mode: 'create' | 'edit'; }
 
 export default function ActivityForm({ initial, mode }: Props) {
@@ -56,7 +70,9 @@ export default function ActivityForm({ initial, mode }: Props) {
     title:         initial?.title         ?? '',
     description:   initial?.description   ?? '',
     competencies:  initial?.competencies  ?? '',
-    activity_date: initial?.activity_date ?? new Date().toISOString().split('T')[0],
+    month:         initial?.month         ?? MONTH_OPTIONS[0],
+    week:          initial?.week          ?? 'Week 1',
+    activity_date: initial?.activity_date ?? '',
     venue:         initial?.venue         ?? '',
     time_slot:     initial?.time_slot     ?? '',
     difficulty:    initial?.difficulty    ?? 'Beginner',
@@ -91,10 +107,14 @@ export default function ActivityForm({ initial, mode }: Props) {
     e.preventDefault();
     setSaving(true);
     try {
+      const payload = {
+        ...form,
+        activity_date: form.activity_date || null,
+      };
       const res = await fetch('/api/admin/activities', {
         method: mode === 'create' ? 'POST' : 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
+        body: JSON.stringify(payload),
       });
       const d = await res.json();
       if (!res.ok) throw new Error(d.error);
@@ -140,10 +160,24 @@ export default function ActivityForm({ initial, mode }: Props) {
                className={inp} style={is} />
       </Field>
 
-      {/* Date + Time */}
+      {/* Month + Week (required) */}
       <div className="grid grid-cols-2 gap-4">
-        <Field label="Date *">
-          <input required type="date" value={form.activity_date}
+        <Field label="Month *">
+          <select required value={form.month} onChange={e => set('month', e.target.value)} className={inp} style={is}>
+            {MONTH_OPTIONS.map(m => <option key={m}>{m}</option>)}
+          </select>
+        </Field>
+        <Field label="Week *">
+          <select required value={form.week} onChange={e => set('week', e.target.value)} className={inp} style={is}>
+            {WEEK_OPTIONS.map(w => <option key={w}>{w}</option>)}
+          </select>
+        </Field>
+      </div>
+
+      {/* Date + Time (optional) */}
+      <div className="grid grid-cols-2 gap-4">
+        <Field label="Exact Date (optional — add later when confirmed)">
+          <input type="date" value={form.activity_date}
                  onChange={e => set('activity_date', e.target.value)} className={inp} style={is} />
         </Field>
         <Field label="Time (optional)">

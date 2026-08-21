@@ -126,10 +126,12 @@ export default function ActivitiesPage() {
                   <div
                     className="flex flex-col gap-2 text-xs mt-auto pt-3"
                     style={{ borderTop: '1px solid #f0f0f0', color: '#71717a' }}>
-                    {act.activity_date && (
+                    {(act.activity_date || act.month) && (
                       <span className="flex items-center gap-1.5">
                         <Calendar size={12} />
-                        {new Date(act.activity_date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+                        {act.activity_date
+                          ? new Date(act.activity_date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })
+                          : `${act.month}${act.week ? ` · ${act.week}` : ''}`}
                         {act.time_slot && (
                           <span className="flex items-center gap-1 ml-1">
                             <Clock size={11} /> {act.time_slot}

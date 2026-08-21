@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
-import { Plus, Trash2, Pencil, Filter } from 'lucide-react';
+import { Plus, Trash2, Pencil, Filter, AlertCircle } from 'lucide-react';
 
 const DOMAINS = ['all', 'TEC', 'LCH', 'HWB', 'ESO', 'IIE'];
 const DOMAIN_COLOR: Record<string, string> = {
@@ -50,6 +50,19 @@ export default function ActivitiesAdminPage() {
         </Link>
       </div>
 
+      {/* Migration banner */}
+      <div className="mb-6 rounded-2xl border p-4 flex gap-3"
+           style={{ background: '#fffbeb', borderColor: '#fcd34d' }}>
+        <AlertCircle size={18} style={{ color: '#d97706', flexShrink: 0, marginTop: 1 }} />
+        <div>
+          <p className="text-sm font-bold" style={{ color: '#92400e' }}>Run this SQL in Supabase to enable month/week fields and make date optional:</p>
+          <code className="text-xs block mt-1 p-2 rounded font-mono whitespace-pre" style={{ background: '#fef3c7', color: '#78350f' }}>{`ALTER TABLE activities
+  ALTER COLUMN activity_date DROP NOT NULL,
+  ADD COLUMN IF NOT EXISTS month text DEFAULT '',
+  ADD COLUMN IF NOT EXISTS week  text DEFAULT '';`}</code>
+        </div>
+      </div>
+
       {/* Domain filter */}
       <div className="flex items-center gap-2 flex-wrap mb-6">
         <Filter size={13} style={{ color: '#71717A' }} />
@@ -87,7 +100,8 @@ export default function ActivitiesAdminPage() {
                   <p className="text-xs mt-0.5" style={{ color: '#A1A1AA' }}>
                     <span className="font-black" style={{ color }}>{a.domain}</span>
                     {' · '}{a.difficulty}
-                    {' · '}{new Date(a.activity_date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+                    {a.month && <>{' · '}{a.month}{a.week ? `, ${a.week}` : ''}</>}
+                    {a.activity_date && <>{' · '}{new Date(a.activity_date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</>}
                   </p>
                 </div>
                 <div className="flex items-center gap-1 shrink-0">
