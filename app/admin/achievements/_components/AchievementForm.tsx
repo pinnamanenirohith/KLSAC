@@ -5,7 +5,7 @@ import toast from 'react-hot-toast';
 import { Save, Upload } from 'lucide-react';
 
 const LEVELS = ['International', 'National', 'State', 'University'] as const;
-const DOMAIN_CODES = ['TEC', 'LCH', 'HWB', 'ESO', 'IIE'] as const;
+const DOMAIN_CODES = ['TEC', 'LCH', 'ESO', 'HWB', 'IIE'] as const;
 
 const inputCls = 'w-full px-4 py-2.5 rounded-xl border text-sm outline-none transition-all';
 const inputStyle = { borderColor: '#E4E4E7', background: '#F7F7F8' } as React.CSSProperties;

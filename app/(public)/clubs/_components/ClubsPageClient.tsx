@@ -10,8 +10,8 @@ const FILTER_OPTIONS: { value: Filter; label: string }[] = [
   { value: 'all', label: 'All Clubs' },
   { value: 'TEC', label: 'Technology' },
   { value: 'LCH', label: 'Liberal Arts' },
-  { value: 'HWB', label: 'Health & Wellbeing' },
   { value: 'ESO', label: 'Social Outreach' },
+  { value: 'HWB', label: 'Health & Wellbeing' },
   { value: 'IIE', label: 'Innovation' },
 ];
 

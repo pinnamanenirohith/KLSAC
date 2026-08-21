@@ -144,7 +144,7 @@ export default function ActivityForm({ initial, mode }: Props) {
       <div className="grid grid-cols-2 gap-4">
         <Field label="Domain *">
           <select value={form.domain} onChange={e => onDomainChange(e.target.value)} className={inp} style={is}>
-            {['TEC','LCH','HWB','ESO','IIE'].map(d => <option key={d}>{d}</option>)}
+            {['TEC','LCH','ESO','HWB','IIE'].map(d => <option key={d}>{d}</option>)}
           </select>
         </Field>
         <Field label="Club *">

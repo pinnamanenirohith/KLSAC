@@ -90,31 +90,6 @@ export const DOMAINS: Domain[] = [
     clubCount: 11,
   },
   {
-    slug: 'health-wellbeing',
-    code: 'HWB',
-    name: 'Health & Wellbeing Clubs',
-    shortName: 'Health & Wellbeing',
-    tagline: 'Move. Thrive. Inspire.',
-    headline: 'Where Students Come Alive.',
-    philosophy:
-      'A student who is physically active, mentally balanced, and emotionally resilient performs better in every dimension of life. The Health & Wellbeing domain at KL SAC exists because we believe wellness is not a luxury — it is a foundation. Our three clubs address the full spectrum of student wellness: SafeLife equips students with life-saving skills, Yoga Club creates daily practices of physical and mental balance, and Marathon Club builds the endurance and community that come from a shared commitment to movement.',
-    description:
-      'Three clubs committed to student wellness through first aid education, yoga and mindfulness, and campus running and fitness communities.',
-    color: '#7C0000',
-    accentBg: 'rgba(124,0,0,0.07)',
-    textColor: '#6B0000',
-    competencies: [
-      'First Aid & Emergency Response',
-      'Yoga Practice & Mindfulness',
-      'Physical Fitness & Endurance',
-      'Mental Wellness Education',
-      'Health Awareness Campaigns',
-      'Community Safety Training',
-    ],
-    clubSlugs: ['safelife-club', 'yoga-club', 'marathon-club'],
-    clubCount: 3,
-  },
-  {
     slug: 'social-outreach',
     code: 'ESO',
     name: 'Extension & Social Outreach Clubs',
@@ -143,6 +118,31 @@ export const DOMAINS: Domain[] = [
       'kl-youth-policy-club',
     ],
     clubCount: 4,
+  },
+  {
+    slug: 'health-wellbeing',
+    code: 'HWB',
+    name: 'Health & Wellbeing Clubs',
+    shortName: 'Health & Wellbeing',
+    tagline: 'Move. Thrive. Inspire.',
+    headline: 'Where Students Come Alive.',
+    philosophy:
+      'A student who is physically active, mentally balanced, and emotionally resilient performs better in every dimension of life. The Health & Wellbeing domain at KL SAC exists because we believe wellness is not a luxury — it is a foundation. Our three clubs address the full spectrum of student wellness: SafeLife equips students with life-saving skills, Yoga Club creates daily practices of physical and mental balance, and Marathon Club builds the endurance and community that come from a shared commitment to movement.',
+    description:
+      'Three clubs committed to student wellness through first aid education, yoga and mindfulness, and campus running and fitness communities.',
+    color: '#7C0000',
+    accentBg: 'rgba(124,0,0,0.07)',
+    textColor: '#6B0000',
+    competencies: [
+      'First Aid & Emergency Response',
+      'Yoga Practice & Mindfulness',
+      'Physical Fitness & Endurance',
+      'Mental Wellness Education',
+      'Health Awareness Campaigns',
+      'Community Safety Training',
+    ],
+    clubSlugs: ['safelife-club', 'yoga-club', 'marathon-club'],
+    clubCount: 3,
   },
   {
     slug: 'innovation',

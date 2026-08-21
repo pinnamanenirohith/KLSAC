@@ -7,8 +7,8 @@ import { Save, Upload, X, Image } from 'lucide-react';
 const DOMAINS = [
   { code: 'TEC', slug: 'technology',       label: 'TEC — Technology' },
   { code: 'LCH', slug: 'liberal-arts',     label: 'LCH — Liberal Arts, Cultural & Hobby' },
-  { code: 'HWB', slug: 'health-wellbeing', label: 'HWB — Health & Wellbeing' },
   { code: 'ESO', slug: 'social-outreach',  label: 'ESO — Extension & Social Outreach' },
+  { code: 'HWB', slug: 'health-wellbeing', label: 'HWB — Health & Wellbeing' },
   { code: 'IIE', slug: 'innovation',       label: 'IIE — Innovation, Incubation & Entrepreneurship' },
 ];
 

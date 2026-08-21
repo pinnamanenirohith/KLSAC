@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { Calendar, MapPin, Clock, Filter } from 'lucide-react';
 import { DOMAIN_META } from '@/lib/demo-data';
 
-const DOMAIN_ORDER = ['all', 'TEC', 'LCH', 'HWB', 'ESO', 'IIE'];
+const DOMAIN_ORDER = ['all', 'TEC', 'LCH', 'ESO', 'HWB', 'IIE'];
 
 const DIFFICULTY_COLOR: Record<string, string> = {
   Beginner:     '#7C0000',

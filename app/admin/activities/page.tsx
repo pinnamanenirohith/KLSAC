@@ -4,7 +4,7 @@ import Link from 'next/link';
 import toast from 'react-hot-toast';
 import { Plus, Trash2, Pencil, Filter } from 'lucide-react';
 
-const DOMAINS = ['all', 'TEC', 'LCH', 'HWB', 'ESO', 'IIE'];
+const DOMAINS = ['all', 'TEC', 'LCH', 'ESO', 'HWB', 'IIE'];
 const DOMAIN_COLOR: Record<string, string> = {
   TEC: '#8B0000', LCH: '#B91C1C', HWB: '#7C0000', ESO: '#991B1B', IIE: '#C53030',
 };
