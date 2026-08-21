@@ -153,9 +153,30 @@ export default function Footer() {
         </div>
       </div>
 
+      {/* ── Credits ── */}
+      <div className="w-full px-6 sm:px-12 xl:px-20 py-4 flex flex-col sm:flex-row items-start sm:items-center gap-4"
+           style={{ borderTop: '1px solid rgba(255,255,255,0.07)' }}>
+        <div className="flex flex-col gap-1.5">
+          <p className="text-[10px]" style={{ color: 'rgba(255,255,255,0.2)' }}>
+            <span style={{ color: 'rgba(255,255,255,0.35)' }}>First SAC Website</span>
+            {' '}— Designed &amp; Developed by{' '}
+            <span style={{ color: 'rgba(255,255,255,0.3)' }}>Deepak Reddy Gathpa</span>
+            {' '}&amp;{' '}
+            <span style={{ color: 'rgba(255,255,255,0.3)' }}>Tadikonda Sai Manikanta</span>
+          </p>
+          <p className="text-[10px]" style={{ color: 'rgba(255,255,255,0.2)' }}>
+            <span style={{ color: 'rgba(255,255,255,0.35)' }}>Current Website</span>
+            {' '}— Designed &amp; Developed by{' '}
+            <span style={{ color: 'rgba(255,255,255,0.3)' }}>Rohith Venkata Sai Pinnamaneni</span>
+            {' '}&amp;{' '}
+            <span style={{ color: 'rgba(255,255,255,0.3)' }}>Singana Nischal</span>
+          </p>
+        </div>
+      </div>
+
       {/* ── Bottom bar ── */}
       <div className="w-full px-6 sm:px-12 xl:px-20 py-5 flex flex-col sm:flex-row items-center justify-between gap-3"
-           style={{ borderTop: '1px solid rgba(255,255,255,0.07)' }}>
+           style={{ borderTop: '1px solid rgba(255,255,255,0.05)' }}>
         <p className="text-xs" style={{ color: 'rgba(255,255,255,0.22)' }}>
           © {new Date().getFullYear()} KL University — Student Activity Center. All rights reserved.
         </p>
