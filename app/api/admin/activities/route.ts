@@ -19,6 +19,7 @@ export async function POST(req: NextRequest) {
   const { data, error: e } = await supabase.from('activities').insert(body).select().single();
   if (e) return NextResponse.json({ error: e.message }, { status: 400 });
   revalidatePath('/activities');
+  revalidatePath('/');
   return NextResponse.json({ success: true, data });
 }
 
@@ -30,6 +31,7 @@ export async function PUT(req: NextRequest) {
   const { error: e } = await supabase.from('activities').update(rest).eq('code', code);
   if (e) return NextResponse.json({ error: e.message }, { status: 400 });
   revalidatePath('/activities');
+  revalidatePath('/');
   return NextResponse.json({ success: true });
 }
 
@@ -40,5 +42,6 @@ export async function DELETE(req: NextRequest) {
   const { code } = await req.json();
   await supabase.from('activities').delete().eq('code', code);
   revalidatePath('/activities');
+  revalidatePath('/');
   return NextResponse.json({ success: true });
 }

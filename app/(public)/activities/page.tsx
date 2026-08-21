@@ -86,7 +86,7 @@ export default function ActivitiesPage() {
 
       {loading ? (
         <div className="text-center py-24" style={{ color: '#71717a' }}>
-          <p className="font-semibold">Loading activitiesâ€¦</p>
+          <p className="font-semibold">Loading activities…</p>
         </div>
       ) : visible.length === 0 ? (
         <div className="text-center py-24" style={{ color: '#71717a' }}>

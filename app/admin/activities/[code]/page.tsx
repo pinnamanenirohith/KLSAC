@@ -1,4 +1,4 @@
-import { supabase } from '@/lib/supabase';
+import { supabase } from '@/lib/supabase-admin';
 import { notFound, redirect } from 'next/navigation';
 import { requireAdmin } from '@/lib/auth';
 import ActivityForm from '../_components/ActivityForm';

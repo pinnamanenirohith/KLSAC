@@ -1,10 +1,10 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 import { Save } from 'lucide-react';
 
-const CLUBS: Record<string, { slug: string; name: string }[]> = {
+const FALLBACK_CLUBS: Record<string, { slug: string; name: string }[]> = {
   TEC: [
     { slug: 'zeroone-code-club',    name: 'ZeroOne Code Club' },
     { slug: 'cyber-security-club',  name: 'Cyber Security Club' },
@@ -41,13 +41,14 @@ const CLUBS: Record<string, { slug: string; name: string }[]> = {
   ],
 };
 
-const ALL_CLUBS = Object.values(CLUBS).flat();
+const ALL_FALLBACK = Object.values(FALLBACK_CLUBS).flat();
 
 interface Props { initial?: any; mode: 'create' | 'edit'; }
 
 export default function ActivityForm({ initial, mode }: Props) {
   const router = useRouter();
   const [saving, setSaving] = useState(false);
+  const [clubs, setClubs] = useState<Record<string, { slug: string; name: string }[]>>(FALLBACK_CLUBS);
   const [form, setForm] = useState({
     code:          initial?.code          ?? '',
     club_slug:     initial?.club_slug     ?? 'zeroone-code-club',
@@ -62,11 +63,28 @@ export default function ActivityForm({ initial, mode }: Props) {
     sdc_credits:   initial?.sdc_credits   ?? 3,
   });
 
+  useEffect(() => {
+    fetch('/api/admin/clubs')
+      .then(r => r.json())
+      .then(d => {
+        const rows: any[] = d.data ?? [];
+        if (rows.length === 0) return;
+        const grouped: Record<string, { slug: string; name: string }[]> = {};
+        rows.forEach((c: any) => {
+          const dc = c.domain_code ?? 'TEC';
+          if (!grouped[dc]) grouped[dc] = [];
+          grouped[dc].push({ slug: c.slug, name: c.name });
+        });
+        setClubs(grouped);
+      })
+      .catch(() => {});
+  }, []);
+
   function set(k: string, v: any) { setForm(f => ({ ...f, [k]: v })); }
 
   function onDomainChange(d: string) {
     set('domain', d);
-    const first = CLUBS[d]?.[0];
+    const first = clubs[d]?.[0];
     if (first) set('club_slug', first.slug);
   }
 
@@ -91,7 +109,7 @@ export default function ActivityForm({ initial, mode }: Props) {
     }
   }
 
-  const clubsForDomain = CLUBS[form.domain] ?? ALL_CLUBS;
+  const clubsForDomain = clubs[form.domain] ?? ALL_FALLBACK;
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-5 max-w-2xl">
