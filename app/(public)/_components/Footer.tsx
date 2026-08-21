@@ -175,7 +175,7 @@ export default function Footer() {
         <p className="text-[10px]" style={{ color: 'rgba(255,255,255,0.2)' }}>
           <span style={{ color: 'rgba(255,255,255,0.35)' }}>Current Website</span>
           {' '}— Designed &amp; Developed by{' '}
-          <a href="https://www.linkedin.com/in/rohith-venkata-sai-pinnamaneni-38807a2b2/" target="_blank" rel="noopener"
+          <a href="https://www.linkedin.com/in/rohith-venkata-sai-pinnamaneni/" target="_blank" rel="noopener"
              className="transition-colors hover:text-white"
              style={{ color: 'rgba(255,255,255,0.4)', textDecoration: 'underline', textUnderlineOffset: '2px' }}>
             Rohith Venkata Sai Pinnamaneni
