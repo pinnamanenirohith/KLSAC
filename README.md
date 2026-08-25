@@ -2,7 +2,7 @@
 
 The official website for **KL University's Student Activity Council** — built from scratch as a modern, CMS-driven platform for clubs, domains, achievements, stories, and news.
 
-**Live:** [klsac.in](https://klsac.in) · **Official repo:** [github.com/KL-SAC](https://github.com/KL-SAC)
+**Live:** [sac.kluniversity.in](https://sac.kluniversity.in) · **Official repo:** [github.com/KL-SAC](https://github.com/KL-SAC)
 
 ---
 
@@ -51,7 +51,7 @@ NEXT_PUBLIC_SUPABASE_URL=
 NEXT_PUBLIC_SUPABASE_ANON_KEY=
 SUPABASE_SERVICE_ROLE_KEY=
 ADMIN_JWT_SECRET=
-NEXT_PUBLIC_BASE_URL=http://localhost:3000
+NEXT_PUBLIC_BASE_URL=https://sac.kluniversity.in
 ```
 
 ```bash
