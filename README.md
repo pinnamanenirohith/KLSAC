@@ -15,7 +15,7 @@ The official website for **KL University's Student Activity Council** — built 
 | Styling | Tailwind CSS v4 |
 | Database | Supabase (PostgreSQL) |
 | Auth | JWT-based custom admin auth |
-| Hosting | Vercel |
+| Hosting | KL University Server (Node.js + Nginx) |
 
 ---
 
@@ -33,6 +33,17 @@ The official website for **KL University's Student Activity Council** — built 
 - Full CMS for clubs, domains, achievements, stories, news, leadership, and stats
 - Image upload to Supabase Storage
 - Revalidation on every write — public pages always reflect latest data
+
+---
+
+## Deployment
+
+Hosted on the KL University server behind Nginx. Run with:
+
+```bash
+npm run build
+npm start        # runs on port 3000, proxied by Nginx
+```
 
 ---
 
